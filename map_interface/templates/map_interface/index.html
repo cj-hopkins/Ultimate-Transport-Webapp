@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>ULTIMATE TRANSPORT</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="">
 
-<head>
-  <meta charset="utf-8">
-  <title></title>
-  <meta name="author" content="">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link href="css/normalize.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
-</head>
-
-<body>
-
-  <p>Hello, world!</p>
-  TEMPLATE SUCCESS!!
-
-  {% load static %}
-  <img src="{% static "map_interface/fffd4260.jpg" %}" alt="My image"/>
+    <style>
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 
   {% load static %}
   <script src="{% static "map_interface/script.js" %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmN6X2XtBP92I8UJ_jlSo4x02EZ1xhPuE&callback=initMap"
+    async defer></script>
+  </head>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script src="js/script.js"></script>
-</body>
+  <body>
+    <div id="map"></div>
+  </body>
 
+</html>

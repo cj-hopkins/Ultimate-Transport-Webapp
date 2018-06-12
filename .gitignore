@@ -2,4 +2,5 @@ ultimate_transport/__pycache__/
 apps/__pycache__/ 
 map_interface/__pycache__/ 
 ultimate_transport/__pycache__/
+map_interface/migrations/
 map_interface/migrations/__pycache__/
