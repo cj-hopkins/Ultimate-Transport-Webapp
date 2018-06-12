@@ -25,7 +25,7 @@ SECRET_KEY = 'a_^)s2#*2&!yp4zc7mrz5x=op^y1u3i7xedhwh0pw4_qvsfn_-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'csi420-02-vm9.ucd.ie']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'csi420-02-vm9.ucd.ie']
 
 
 # Application definition
@@ -55,7 +55,8 @@ ROOT_URLCONF = 'ultimate_transport.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,
+                              'map_interface/templates/map_interface')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
