@@ -25,7 +25,7 @@ SECRET_KEY = 'a_^)s2#*2&!yp4zc7mrz5x=op^y1u3i7xedhwh0pw4_qvsfn_-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'csi420-02-vm9.ucd.ie']
 
 
 # Application definition
@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'ultimate_transport.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
+        'NAME': 'Django_Test',
         'USER': 'root',
         'PASSWORD': 'password',
     }
@@ -120,3 +120,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
