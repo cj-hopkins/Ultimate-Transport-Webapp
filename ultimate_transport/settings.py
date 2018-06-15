@@ -78,9 +78,11 @@ WSGI_APPLICATION = 'ultimate_transport.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Django_Test',
+        'NAME': 'maindb',
         'USER': 'root',
         'PASSWORD': 'password',
+        # 'HOST': '137.43.49.57',
+        # 'PORT': ''
     }
 }
 
