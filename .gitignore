@@ -1,6 +1,7 @@
-ultimate_transport/__pycache__/
-apps/__pycache__/ 
-map_interface/__pycache__/ 
-ultimate_transport/__pycache__/
-map_interface/migrations/
-map_interface/migrations/__pycache__/
+src/ultimate_transport/__pycache__/
+src/apps/__pycache__/ 
+src/map_interface/__pycache__/ 
+src/ultimate_transport/__pycache__/
+src/map_interface/migrations/
+src/map_interface/migrations/__pycache__/
+src/node_modules/

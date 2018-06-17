@@ -42,3 +42,8 @@ def use_template(request):
                "my_list": my_list}
 
     return render(request, "use_template.html", context)
+
+def react_test(request):
+    template = loader.get_template('react_test.html')
+    return HttpResponse(template.render({}, request))
+    # return render(request, "react_test.html")
