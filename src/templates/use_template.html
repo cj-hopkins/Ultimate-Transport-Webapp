@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Hello, world</h1>
+  <h3>{{ block.super }}</h3>
+<p>THis is {{ html_var }} coming through!</p>
+<p>
+  {% if my_bool %}
+  Check out this number: {{ cool_num }}. Wow!
+  {% endif %}
+</p>
+<p>
+  {% for item in my_list %}
+    {% if item|divisibleby:"2" %}
+      {{ item }} is even!<br/>
+    {% else %}
+      {{ item }}<br/>
+    {% endif %}
+  {% endfor %}
+  </p>
+{% endblock content %}
