@@ -6,7 +6,7 @@ from .models import Stop
 import random
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'map_interface/index.html')
 
 
 def dbTest(request):
