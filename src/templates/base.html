@@ -1,13 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>this</title>
-</head>
-<body>
-<h1>Welcome to Ultimate Transport!</h1>
-<div class="container">
-  {% block content %}Template inheritance ftw!{% endblock content %}
-</div>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% include 'css.html' %}
+    <title>Reactify Django</title>
+  </head>
+  <body>
+    <div class='container-fluid'>
+        {% include 'navbar.html' %}
+
+        {% block content %}
+            
+        {% endblock content %}
+
+    </div>  
+
+
+    {% include 'js.html' %}
+  </body>
 </html>
