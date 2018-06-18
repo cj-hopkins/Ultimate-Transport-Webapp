@@ -38,9 +38,13 @@ static-cdn-local/css/
 static-cdn-local/img/
 static-cdn-local/js/
 static-cdn-local/rest_framework/
+static-cdn-local/
 bin/
 include/
 lib/
+
+src/reactify-ui/build/*
+src/staticfiles/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

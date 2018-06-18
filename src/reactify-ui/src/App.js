@@ -6,7 +6,7 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <p>Conors react project</p>
+      <p>See changes</p>
     );
   }
 }
