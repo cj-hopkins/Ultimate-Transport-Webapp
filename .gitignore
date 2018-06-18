@@ -43,10 +43,11 @@ bin/
 include/
 lib/
 
-/src/reactify-ui/build/*
-/src/staticfiles/js/
-/src/staticfiles/css/
-/src/staticfiles/img/
+src/reactify-ui/build/*
+src/staticfiles/js/
+src/staticfiles/css/
+src/staticfiles/img/
+src/rest_api/migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
