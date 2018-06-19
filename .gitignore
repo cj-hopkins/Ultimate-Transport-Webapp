@@ -43,7 +43,7 @@ bin/
 include/
 lib/
 
-src/reactify-ui/build/*
+src/react_ui/build/*
 src/staticfiles/js/
 src/staticfiles/css/
 src/staticfiles/img/
