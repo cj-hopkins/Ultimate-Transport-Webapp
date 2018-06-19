@@ -8,7 +8,7 @@ class App extends Component {
     return (
 
       <div>
-      <p>and again!</p>
+      <p>React live</p>
       <Map />
       </div>
 
