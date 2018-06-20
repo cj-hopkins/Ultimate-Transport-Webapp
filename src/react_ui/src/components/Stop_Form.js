@@ -1,25 +1,49 @@
 import React, { Component } from 'react';
 // import Http from './Http';
+import 'whatwg-fetch';
 
 class StopForm extends Component {
   constructor () {
     super() 
-
+    this.state = {
+      // response: ''
+    };
     // this.handleClick = this.handleClick.bind(this);
-    handleClick = () => {
-      console.log(this)
     }
-  }
 
-    // handleClick(){
-    //   console.log("clicked");
-      
-    // };
+
+    // handleClick = () => {
+    //   console.log(this)
+    // }
+
+    componentDidMount(){
+    const endpoint = '/api'
+    let lookupOptions = {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+      }
+
+    fetch(endpoint, lookupOptions)
+    .then(results => results.json())
+    .then(reply => {
+    console.log(reply)
+    this.setState({
+      response: reply
+    })
+    console.log(this.state.response)
+    })
+    };
+
+
   render() {
+
+    if (!this.state.response) return (<p>Loading</p>);
 
     return (
     <div className='button_container'>
-      <button className='button' onClick={this.handleClick}>Click me!</button>
+      <p>{this.state.response[0].fields.stop_name}</p>
     </div>
      // <form onSubmit={this.handleSubmit}>
      //      <label>
@@ -31,5 +55,6 @@ class StopForm extends Component {
     );
   }
 }
+
 
 export default StopForm;
