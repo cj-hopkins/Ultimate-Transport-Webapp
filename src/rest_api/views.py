@@ -7,3 +7,6 @@ import random
 
 def test(request):
     return HttpResponse("api working")
+
+def request(request):
+    return HttpResponse("request made")
