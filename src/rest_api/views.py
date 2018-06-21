@@ -14,6 +14,8 @@ class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
     serializer_class = StopSerializer
 
+# class getAllWeather
+
 
 # def getAllStops(request):
 #     data = Stop.objects.values()

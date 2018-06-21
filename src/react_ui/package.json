@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:8000",
   "dependencies": {
+    "bootstrap": "^4.1.1",
     "moment": "^2.22.2",
     "react": "^16.4.0",
     "react-bootstrap": "^0.32.1",

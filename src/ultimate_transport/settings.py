@@ -83,8 +83,8 @@ DATABASES = {
         'NAME': 'maindb',
         'USER': 'root',
         'PASSWORD': 'password',
-        # 'HOST': 'csi420-02-vm9.ucd.ie',
-        # 'PORT': '',
+        'HOST': '127.0.0.1',
+        'PORT': '',
     }
 }
 
