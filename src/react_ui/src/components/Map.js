@@ -6,21 +6,21 @@ const MyMapComponent = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBRUrdJ4Tz9rLrHrOkwJWpA9QSYNJbWQ0Q&callback=initMap",
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
-    mapElement: <div style={{ height: `100%` }} />,
+    containerElement: <div style={{ height: `500px` }} />,
+    mapElement: <div style={{ height: `100%`, width: `75%`, float: `right` }} />,
   }),
   withScriptjs,
   withGoogleMap
 )((props) =>
   <GoogleMap
     defaultZoom={12}
-    defaultCenter={{ lat: 53.3323382, lng: -6.2383673 }}
+    defaultCenter={{ lat: 53.3498, lng: -6.2603 }}
   >
-    {props.isMarkerShown && <Marker position={{ lat: 53.3323382, lng: -6.2383673 }} onClick={props.onMarkerClick} />}
+    {props.isMarkerShown && <Marker position={{ lat: 53.3498, lng: -6.2603 }} onClick={props.onMarkerClick} />}
   </GoogleMap>
-)
+);
 
-class MyFancyComponent extends React.PureComponent {
+class Map extends React.PureComponent {
   state = {
     isMarkerShown: false,
   }
@@ -49,4 +49,4 @@ class MyFancyComponent extends React.PureComponent {
     )
   }
 }
-export default MyFancyComponent
+export default Map;
