@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Calendar from 'react-calendar';
+import TimePicker from 'react-bootstrap-time-picker';
+
 // import Http from './Http';
 
 //class StopForm extends Component {
@@ -70,7 +73,21 @@ class RouteForm extends React.Component {
         <input type="text" name="value2" onChange={this.handleChange2} />
         </label>
         <input type="submit" value="Submit" />
+        
+        <TimePicker
+       theme= "classic"
+       timeMode="12"
+       onChange={this.onChange}
+       />
+       <Calendar
+//         calendarType='US'
+         onChange={this.onChange}
+         value={this.state.date}
+       />
+    
       </form>
+        
+
 
     /*<form id="form" onSubmit={this.handleSubmit}>
         <label>

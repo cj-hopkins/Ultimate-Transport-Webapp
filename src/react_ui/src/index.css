@@ -39,3 +39,15 @@ header, #form {
 label {
     color: white;
 }
+
+
+.react-calendar {
+  font-size: 10pt;
+    padding: 5px;
+}
+
+.react-times {
+    font-size: 20pt;
+    width: 20%;
+}
+
