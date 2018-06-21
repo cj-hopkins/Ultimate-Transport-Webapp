@@ -5,7 +5,7 @@ from django.db import models
 
 
 class Stop(models.Model):
-    stop_id = models.IntegerField(primary_key=True)
+    stop_id = models.CharField(primary_key=True, max_length=200)
     stop_name = models.CharField(max_length=200)
     stop_lat = models.FloatField()
     stop_long = models.FloatField()

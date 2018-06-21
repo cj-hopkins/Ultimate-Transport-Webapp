@@ -4,14 +4,22 @@ from django.template import loader
 from django.conf.urls.static import static
 from django.core import serializers
 from .models import Stop
+from .serializers import StopSerializer
 from rest_framework.response import Response
+from rest_framework import generics
 import random
 import json
 
-def test(request):
-    x = Stop.objects.all()
-    data = serializers.serialize('json', x)
-    return HttpResponse(data)
+class getAllStops(generics.ListCreateAPIView):
+    queryset = Stop.objects.all()
+    serializer_class = StopSerializer
+
+
+# def getAllStops(request):
+#     data = Stop.objects.values()
+#     data = serializers.serialize('json', data)
+#     print(type(data))
+#     return HttpResponse(data, content_type="application/json")
 
 def request(request):
     return Response("request made")

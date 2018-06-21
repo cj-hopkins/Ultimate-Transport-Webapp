@@ -1,60 +1,60 @@
 import React, { Component } from 'react';
-// import Http from './Http';
-import 'whatwg-fetch';
+import LoadingSpinner from './Loading';
 
 class StopForm extends Component {
   constructor () {
     super() 
     this.state = {
-      // response: ''
+      // stops: [],
     };
-    // this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+    async componentDidMount(){
+
+      const endpoint = '/api';
+      try {
+      const res = await fetch(endpoint);
+      const stops = await res.json();
+      this.setState({
+        stops: stops
+      });
+      } catch(e) {
+        console.log(e);
+      }
+      console.log(this.state.stops)
+  };
+
+    handleChange(){
     }
 
-
-    // handleClick = () => {
-    //   console.log(this)
-    // }
-
-    componentDidMount(){
-    const endpoint = '/api'
-    let lookupOptions = {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-      }
-
-    fetch(endpoint, lookupOptions)
-    .then(results => results.json())
-    .then(reply => {
-    console.log(reply)
-    this.setState({
-      response: reply
-    })
-    console.log(this.state.response)
-    })
-    };
-
+    handleSubmit(){
+      
+    }
 
   render() {
 
-    if (!this.state.response) return (<p>Loading</p>);
+    if (!this.state.stops) return (<LoadingSpinner />);
 
     return (
     <div className='button_container'>
-      <p>{this.state.response[0].fields.stop_name}</p>
+     <form onSubmit={this.handleSubmit}>
+          <label>
+               Name:
+               <input type="text" value={this.state.value} onChange={this.handleChange} />
+          </label>
+          <input type="submit" value="Submit" />
+          </form>
+        {this.state.stops.map(item => (
+          <div>
+            <h1>{item.stop_id}</h1>
+            <span>{item.stop_name}</span>
+          </div>
+        ))}
     </div>
-     // <form onSubmit={this.handleSubmit}>
-     //      <label>
-     //           Name:
-     //           <input type="text" value={this.state.value} onChange={this.handleChange} />
-     //      </label>
-     //      <input type="submit" value="Submit" />
-     //      </form>
     );
   }
 }
-
 
 export default StopForm;

@@ -9,7 +9,6 @@ class App extends Component {
     return (
 
       <div>
-      <p>this</p>
       <Map />
       <StopForm />
       </div>
