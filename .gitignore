@@ -44,6 +44,7 @@ include/
 lib/
 
 src/react_ui/build/*
+src/react_ui/package-lock.json
 src/staticfiles/js/
 src/staticfiles/css/
 src/staticfiles/img/
