@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
-import Map from './components/Map';
-import StopForm from './components/Stop_Form';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
+import './App.css';
+
+import StopForm from './components/Stop_Form';
+import RouteForm from './components/RouteForm';
+
 
 class App extends Component {
 
@@ -11,7 +13,12 @@ class App extends Component {
 
       <div>
       <Map />
+      <RouteForm />
       <StopForm />
+        <div></div>
+    
+        
+      
       </div>
 
     );
