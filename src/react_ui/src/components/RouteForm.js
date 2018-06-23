@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
 import Calendar from 'react-calendar';
 import TimePicker from 'react-bootstrap-time-picker';
 
