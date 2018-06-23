@@ -48,18 +48,10 @@ class StopForm extends Component {
 
     return (
     <div className='button_container'>
-      {/*<form onSubmit={this.handleSubmit}>
-       <label>
-               Name:
-               <input type="text" value={this.state.value} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Submit" />
-          </form>
-          */}
           <button onClick={this.toggleContent}>show bus-stops</button>
           <div className={` ${this.state.showContent === true ? 'd-block' : 'd-none'}` }>
             {this.state.stops.map(item => (
-              <div>
+              <div key={item.stop_id}>
                 <h1>{item.stop_id}</h1>
                 <span>{item.stop_name}</span>
               </div>
