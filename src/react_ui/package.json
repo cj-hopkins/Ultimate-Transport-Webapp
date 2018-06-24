@@ -5,6 +5,7 @@
   "proxy": "http://localhost:8000",
   "dependencies": {
     "bootstrap": "^4.1.1",
+    "google-maps-react": "^2.0.2",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.20",
     "react": "^16.4.0",

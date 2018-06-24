@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import LoadingSpinner from './Loading';
 
 class StopForm extends Component {
   constructor () {

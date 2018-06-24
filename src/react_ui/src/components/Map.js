@@ -21,8 +21,16 @@ const MyMapComponent = compose(
 );
 
 class Map extends React.PureComponent {
-  state = {
-    isMarkerShown: false,
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isMarkerShown: false,
+      currentLocation: {
+      lat: 53.3498,
+      long: -6.2603,
+      }
+    }
   }
 
   componentDidMount() {
