@@ -6,7 +6,10 @@ import TimePicker from 'react-bootstrap-time-picker';
 class RouteForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: '', value2: ''};
+    this.state = {
+      value: '',
+      value2: '',
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleChange2 = this.handleChange2.bind(this);

@@ -4,8 +4,8 @@ class StopForm extends Component {
   constructor () {
     super() 
     this.state = {
-      showContent: false
-      // stops: [],
+      showContent: false,
+      stops: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,7 +43,7 @@ class StopForm extends Component {
 
   render() {
 
-    if (!this.state.stops) return (<LoadingSpinner />);
+    // if (!this.state.stops) return (<LoadingSpinner />);
 
     return (
     <div className='button_container'>

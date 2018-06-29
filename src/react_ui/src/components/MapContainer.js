@@ -25,7 +25,7 @@ export class MapContainer extends Component {
 
   render() {
     return (
-
+      <div>
       <Map google={this.props.google} 
         zoom={14}
         initialCenter={{
@@ -45,6 +45,7 @@ export class MapContainer extends Component {
         </InfoWindow>
 
       </Map>
+    </div>
     );
   }
 }

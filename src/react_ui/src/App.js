@@ -1,23 +1,42 @@
 import React, { Component } from 'react';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
+import { Grid, Row, Col, Container } from 'react-bootstrap';
 import './App.css';
-// import Map from './components/Map';
 import MapContainer from './components/MapContainer';
 
 import StopForm from './components/Stop_Form';
-import LoadingSpinner from './components/Loading';
-// import RouteForm from './components/RouteForm';
+import LoadingSpinner from './components/LoadingSpinner';
+import RouteForm from './components/RouteForm';
+import Example from './components/Example';
+import Sidebar from './components/sidebar';
+import ContentBlock from './components/ContentBlock';
+import CustomNavbar from './components/CustomNavbar';
 
 
 class App extends Component {
 
+
   render() {
     return (
       <div>
-    
-        
-        <StopForm />
+        <header> Ultimate Transport </header>
+        <ContentBlock />
         <MapContainer />
+    
+        {
+        // <Grid fluid='true'>
+        //   <Row>
+        //   <header> Ultimate Transport </header>
+        //   </Row>
+        //   <Col>
+        //   <MapContainer />
+        //   </Col>
+      // </Grid>
+        // <RouteForm />
+        // <StopForm />
+        // <LoadingSpinner />
+        // <Example />
+        }
       </div>
 
     );
