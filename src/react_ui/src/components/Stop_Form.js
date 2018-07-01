@@ -24,7 +24,7 @@ class StopForm extends Component {
       } catch(e) {
         console.log(e);
       }
-      console.log(this.state.stops)
+      // console.log(this.state.stops)
   };
 
     handleChange(){
@@ -50,9 +50,9 @@ class StopForm extends Component {
           <button onClick={this.toggleContent}>show bus-stops</button>
           <div className={` ${this.state.showContent === true ? 'd-block' : 'd-none'}` }>
             {this.state.stops.map(item => (
-              <div key={item.stop_id}>
-                <h1>{item.stop_id}</h1>
-                <span>{item.stop_name}</span>
+              <div key={item.ID}>
+                <h1>{item.ID}</h1>
+                <span>{item.name}</span>
               </div>
             ))}
           </div>

@@ -3,10 +3,14 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.conf.urls.static import static
 from django.core import serializers
-from .models import Stop
-from .serializers import StopSerializer
+from .models import Stop, Route, Composite
+from .serializers import StopSerializer, RouteSerializer, RouteStopSerializer
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
+from braces.views import CsrfExemptMixin
 import random
 import json
 
@@ -14,14 +18,33 @@ class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
     serializer_class = StopSerializer
 
-# class getAllWeather
+class getAllRoutes(generics.ListCreateAPIView):
+    queryset = Route.objects.all()
+    serializer_class = RouteSerializer
 
+class getRouteStopComposite(generics.ListCreateAPIView):
+    queryset = Composite.objects.all()
+    serializer_class = RouteStopSerializer
 
-# def getAllStops(request):
-#     data = Stop.objects.values()
-#     data = serializers.serialize('json', data)
-#     print(type(data))
-#     return HttpResponse(data, content_type="application/json")
+@csrf_exempt
+@api_view(['POST'])
+def getStopsForRoute(request):
+    route = request.data.get('route')
+    direction = request.data.get('direction')
+    print(route)
+    print(direction)
+    stops = Composite.objects.filter(name=route).filter(route_direction=direction)
+    # stop_coords = Stop.objects.filter()
+    # data = RouteStopSerializer(stops)
+    data = list(stops.values())
+    return Response(data)
 
-def request(request):
-    return Response("request made")
+# class getStopsForRoute(APIView):
+#     def post(self, request):
+#         print(request.data)
+#         route = request.data.get('route')
+#         print("Requested Route: %s", route)
+#         return HttpResponse(status=201)
+
+# def request(request):
+#     return Response("request made")

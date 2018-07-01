@@ -7,11 +7,43 @@ class ContentBlock extends Component {
 
     this.state = {
       open: true,
-      routes: ['1', '2', '3', '31'],
+      routes: [],
+      chosenRoute: "Select Route",
     }
+
+  // this.handleSelect = this.handleSelect.bind(this);
   }
 
-  async componentDidMount(){
+  handleSelect = (event) => {
+
+    console.log(event)
+    this.setState({
+      chosenRoute: event
+    });
+
+    const endpoint = '/api/getStopsForRoute' 
+    try {
+      const result = fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body : JSON.stringify({
+          route: event,
+          direction: 'I',
+        })
+      })
+        .then((response) => response.json())
+        .then((resp) => console.log(resp))
+    } catch(e) {
+        console.log(e)
+      }
+
+    // const res = result.json()
+  }
+
+  async componentWillMount(){
 
     const endpoint = '/api/getAllRoutes';
     try {
@@ -20,6 +52,7 @@ class ContentBlock extends Component {
       this.setState({
         routes: routeNames
       });
+      console.log(this.state.routes)
     } catch(e) {
       console.log(e);
     }
@@ -27,16 +60,21 @@ class ContentBlock extends Component {
   }
 
   render() {
+              // value: event.currentTarget.textContent
     return (
           <div>
-            <p> select route </p>
             <DropdownButton
+              id="routeSelect"
               bsStyle="primary"
-              title="Select Route"
+              title={ this.state.chosenRoute }
+              onSelect={ this.handleSelect }
             >
-              {this.state.routes.map(routeName => (
-                <MenuItem eventKey="1">{ routeName }</MenuItem>
+              
+              {this.state.routes.map(item => (
+                <MenuItem eventKey={ item.route }
+                  key={ item.route }>{ item.route }</MenuItem>
               ))}
+             }
             </DropdownButton>
           </div>
             )}

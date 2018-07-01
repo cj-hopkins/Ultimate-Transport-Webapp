@@ -4,11 +4,34 @@ from django.db import models
 #     db_table = 'stops'
 
 
+
+class Route(models.Model):
+    route = models.CharField(primary_key=True, max_length=200)
+
+class Composite(models.Model):
+    
+    # stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE)
+    # name = models.CharField(max_length=50, primary_key=True)
+    stop_id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50)
+    route_direction = models.CharField(max_length=1)
+    sequence = models.FloatField()
+    is_stage_point = models.CharField(max_length=1)
+    stage_number = models.FloatField()
+    journey_pattern_id = models.CharField(max_length=50)
+    rtpi_destination = models.CharField(max_length=50)
+    rtpi_origin = models.CharField(max_length=50)
+    rtpi_via = models.CharField(max_length=50)
+    sequence_number = models.IntegerField()
+    fare = models.FloatField()
+
+
 class Stop(models.Model):
-    stop_id = models.CharField(primary_key=True, max_length=200)
-    stop_name = models.CharField(max_length=200)
-    stop_lat = models.FloatField()
-    stop_long = models.FloatField()
+    stop = models.ForeignKey(Composite,
+                           primary_key=True, on_delete='CASCADE')
+    name = models.CharField(max_length=200)
+    lat = models.FloatField()
+    lon = models.FloatField()
 
     def __str__(self):
         return "id: {}\nname: {}\nlat: {}\nlong: {}".format(self.stop_id,
@@ -16,6 +39,7 @@ class Stop(models.Model):
                                                             self.stop_lat,
                                                             self.stop_long)
 
+# ID,NAME,ROUTE_DIRECTION,SEQUENCE,IS_STAGE_POINT,STAGE_NUMBER,JOURNEY_PATTERN_ID,RTPI_DESTINATION,RTPI_ORGIN,RTPI_VIA,SEQUENCE_NUMBER,FARE
 
 class Weather(models.Model):
     ID = models.IntegerField()

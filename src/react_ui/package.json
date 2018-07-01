@@ -6,10 +6,12 @@
   "dependencies": {
     "bootstrap": "^4.1.1",
     "google-maps-react": "^2.0.2",
+    "jquery": "^3.3.1",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.20",
     "react": "^16.4.0",
     "react-bootstrap": "^0.32.1",
+    "react-bootstrap-select": "^0.14.0",
     "react-bootstrap-time-picker": "^1.0.3",
     "react-calendar": "^2.15.2",
     "react-cookies": "^0.1.0",

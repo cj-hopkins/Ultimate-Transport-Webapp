@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'ultimate_transport.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'maindb',
+        'NAME': 'maindb2',
         'USER': 'root',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1',

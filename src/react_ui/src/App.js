@@ -17,9 +17,11 @@ class App extends Component {
 
 
   render() {
+    // var StatesField = require('./components/StatesField').StatesField;
     return (
       <div>
         <header> Ultimate Transport </header>
+        <StopForm />
         <ContentBlock />
         <MapContainer />
     
@@ -32,6 +34,7 @@ class App extends Component {
         //   <MapContainer />
         //   </Col>
       // </Grid>
+        // <ContentBlock />
         // <RouteForm />
         // <StopForm />
         // <LoadingSpinner />

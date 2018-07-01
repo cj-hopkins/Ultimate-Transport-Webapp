@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from rest_api.models import Stop, Route, Composite
 import unittest
 
 class basicTestCase(TestCase):
@@ -10,4 +11,13 @@ class basicTestCase(TestCase):
 
     def test_stops_request(self):
         response = basicTestCase.client.get('/api')
+        self.assertEqual(response.status_code, 301)
+
+    def test_composite_table(self):
+        objects = Composite.objects.all()
+        isSuccessful = True if objects is not None else False
+        self.assertEqual(isSuccessful, True)
+
+    def test_composite_url(self):
+        response = basicTestCase.client.get('/api/getRouteStopComposite')
         self.assertEqual(response.status_code, 200)
