@@ -37,6 +37,14 @@ export class MapContainer extends Component {
         <Marker onClick={this.onMarkerClick}
                 name={'Current location'} />
 
+          {this.props.selectedStops.map(item => (
+            <Marker
+              key={item.identifier}
+              title={item.stop_id.stringify}
+              name="stop name"
+              position={{lat: item.stop_lat, lng: item.stop_lon}} />
+          ))}
+
         <InfoWindow
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}>

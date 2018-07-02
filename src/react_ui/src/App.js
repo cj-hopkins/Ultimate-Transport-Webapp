@@ -5,12 +5,12 @@ import './App.css';
 import MapContainer from './components/MapContainer';
 
 import StopForm from './components/Stop_Form';
-import LoadingSpinner from './components/LoadingSpinner';
-import RouteForm from './components/RouteForm';
-import Example from './components/Example';
-import Sidebar from './components/sidebar';
+// import LoadingSpinner from './components/LoadingSpinner';
+// import RouteForm from './components/RouteForm';
+// import Example from './components/Example';
+// import Sidebar from './components/sidebar';
+// import CustomNavbar from './components/CustomNavbar';
 import ContentBlock from './components/ContentBlock';
-import CustomNavbar from './components/CustomNavbar';
 
 
 class App extends Component {
@@ -18,24 +18,28 @@ class App extends Component {
     super(props);
 
     this.state = {
-      testState: 'Sup children!'
+      testState: 'Sup children!',
+      selectedStops: [],
     }
   }
 
   onRouteUpdate(data) {
     this.setState({
-      testState: data
+      selectedStops: data
     })
+    console.log("recieved stops!")
+    console.log(data)
   }
 
   render() {
     // var StatesField = require('./components/StatesField').StatesField;
+    const myMarker = [{'stop_id': 1089, 'stop_lat': 53.3518, 'stop_lon': -6.2814}]
     return (
       <div>
         <header> Ultimate Transport </header>
         <StopForm />
-        <ContentBlock data={this.state.testState}/>
-        <MapContainer />
+        <ContentBlock data={this.state.testState} onUpdate={this.onRouteUpdate.bind(this)}/>
+        <MapContainer selectedStops={ this.state.selectedStops }/>
     
         {
         // <Grid fluid='true'>

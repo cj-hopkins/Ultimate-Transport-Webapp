@@ -17,6 +17,9 @@ class ContentBlock extends Component {
 
   handleSelect = (event) => {
 
+    if (event === this.state.chosenRoute) {
+      return;
+    }
     // console.log(event)
     this.setState({
       chosenRoute: event
@@ -36,7 +39,10 @@ class ContentBlock extends Component {
         })
       })
         .then((response) => response.json())
-        .then((resp) => console.log(resp))
+        // onUpdate is a setState function in App.js
+        // the state is updated with an array of stops
+        // and then passed as a prop to MapContainer
+        .then((resp) => this.props.onUpdate(resp))
     } catch(e) {
         console.log(e)
       }
@@ -59,6 +65,11 @@ class ContentBlock extends Component {
     }
 
   }
+
+  // updateStops(event) {
+  //   console.log(event)
+  //   this.props.onUpdate(event)
+  // }
 
   render() {
               // value: event.currentTarget.textContent
