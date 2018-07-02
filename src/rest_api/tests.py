@@ -2,9 +2,10 @@ from django.test import TestCase, Client
 from rest_api.models import Stop, Route, Composite
 import unittest
 
+
 class basicTestCase(TestCase):
     client = Client()
-    
+
     def test_index_page_load(self):
         response = basicTestCase.client.get('')
         self.assertEqual(response.status_code, 200)
@@ -20,4 +21,10 @@ class basicTestCase(TestCase):
 
     def test_composite_url(self):
         response = basicTestCase.client.get('/api/getRouteStopComposite')
+        self.assertEqual(response.status_code, 200)
+
+    def test_getStopsForRoute(self):
+        response = basicTestCase.client.post('/api/getStopsForRoute',
+                                             {'route': '31',
+                                              'direction': 'I'})
         self.assertEqual(response.status_code, 200)

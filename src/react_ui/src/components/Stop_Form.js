@@ -50,8 +50,8 @@ class StopForm extends Component {
           <button onClick={this.toggleContent}>show bus-stops</button>
           <div className={` ${this.state.showContent === true ? 'd-block' : 'd-none'}` }>
             {this.state.stops.map(item => (
-              <div key={item.ID}>
-                <h1>{item.ID}</h1>
+              <div key={item.identifier}>
+                <h1>{item.identifier}</h1>
                 <span>{item.name}</span>
               </div>
             ))}

@@ -3,16 +3,29 @@ from django.db import models
 # class Meta:
 #     db_table = 'stops'
 
+class Stop(models.Model):
+    identifier = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=200)
+    lat = models.FloatField()
+    lon = models.FloatField()
+
+    def __str__(self):
+        return "id: {}\nname: {}\nlat: {}\nlong: {}".format(self.identifier,
+                                                            self.name,
+                                                            self.lat,
+                                                            self.lon)
 
 
 class Route(models.Model):
     route = models.CharField(primary_key=True, max_length=200)
 
 class Composite(models.Model):
-    
+
     # stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE)
     # name = models.CharField(max_length=50, primary_key=True)
-    stop_id = models.IntegerField(primary_key=True)
+    # stop = models.ForeignKey(Stop, primary_key=True, on_delete=models.CASCADE)
+    identifier = models.IntegerField(primary_key=True)
+    stop_id = models.IntegerField()
     name = models.CharField(max_length=50)
     route_direction = models.CharField(max_length=1)
     sequence = models.FloatField()
@@ -24,20 +37,9 @@ class Composite(models.Model):
     rtpi_via = models.CharField(max_length=50)
     sequence_number = models.IntegerField()
     fare = models.FloatField()
+    stop_lat = models.FloatField()
+    stop_lon = models.FloatField()
 
-
-class Stop(models.Model):
-    stop = models.ForeignKey(Composite,
-                           primary_key=True, on_delete='CASCADE')
-    name = models.CharField(max_length=200)
-    lat = models.FloatField()
-    lon = models.FloatField()
-
-    def __str__(self):
-        return "id: {}\nname: {}\nlat: {}\nlong: {}".format(self.stop_id,
-                                                            self.stop_name,
-                                                            self.stop_lat,
-                                                            self.stop_long)
 
 # ID,NAME,ROUTE_DIRECTION,SEQUENCE,IS_STAGE_POINT,STAGE_NUMBER,JOURNEY_PATTERN_ID,RTPI_DESTINATION,RTPI_ORGIN,RTPI_VIA,SEQUENCE_NUMBER,FARE
 

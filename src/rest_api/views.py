@@ -26,25 +26,24 @@ class getRouteStopComposite(generics.ListCreateAPIView):
     queryset = Composite.objects.all()
     serializer_class = RouteStopSerializer
 
-@csrf_exempt
+# @csrf_exempt
 @api_view(['POST'])
 def getStopsForRoute(request):
     route = request.data.get('route')
     direction = request.data.get('direction')
-    print(route)
-    print(direction)
-    stops = Composite.objects.filter(name=route).filter(route_direction=direction)
-    # stop_coords = Stop.objects.filter()
-    # data = RouteStopSerializer(stops)
+    stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')
     data = list(stops.values())
     return Response(data)
 
-# class getStopsForRoute(APIView):
+# class getStopsForRoute(CsrfExemptMixin, APIView):
 #     def post(self, request):
-#         print(request.data)
 #         route = request.data.get('route')
-#         print("Requested Route: %s", route)
-#         return HttpResponse(status=201)
+#         direction = request.data.get('direction')
+#         # print(route)
+#         # print(direction)
+#         stops = Composite.objects.filter(name=route).filter(route_direction=direction)
+#         data = list(stops.values())
+#         return Response(data)
 
 # def request(request):
 #     return Response("request made")

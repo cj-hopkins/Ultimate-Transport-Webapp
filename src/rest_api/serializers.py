@@ -5,7 +5,7 @@ from .models import Stop, Route, Composite
 class StopSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
-            'stop',
+            'identifier',
             'name',
             'lat',
             'lon',
@@ -23,6 +23,7 @@ class RouteSerializer(serializers.ModelSerializer):
 class RouteStopSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
+            'identifier',
             'stop_id',
             'route_direction',
             'sequence',
@@ -34,5 +35,7 @@ class RouteStopSerializer(serializers.ModelSerializer):
             'rtpi_via',
             'sequence_number',
             'fare',
+            'stop_lat',
+            'stop_lon',
         )
         model = Composite

@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 export class Map extends React.Component {
+  constructor(props){
+    super(props);
+
+    this.loadMap = this.loadMap.bind(this);
+  }
 
   componentDidUpdate(prevProps, prevState) {
       if (prevProps.google !== this.props.google) {
+        console.log("map loading");
         this.loadMap();
       }
     }
@@ -34,7 +40,6 @@ export class Map extends React.Component {
   render() {
     return (
       <div ref='map'>
-        Loading map...
       </div>
     )
   }

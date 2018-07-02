@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Panel, Button, DropdownButton, MenuItem } from 'react-bootstrap';
+import MapContainer from './MapContainer';
 
 class ContentBlock extends Component {
   constructor(props){
@@ -16,7 +17,7 @@ class ContentBlock extends Component {
 
   handleSelect = (event) => {
 
-    console.log(event)
+    // console.log(event)
     this.setState({
       chosenRoute: event
     });
@@ -52,7 +53,7 @@ class ContentBlock extends Component {
       this.setState({
         routes: routeNames
       });
-      console.log(this.state.routes)
+      // console.log(this.state.routes)
     } catch(e) {
       console.log(e);
     }

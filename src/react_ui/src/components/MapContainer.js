@@ -24,6 +24,7 @@ export class MapContainer extends Component {
   }
 
   render() {
+    console.log(this.state.chosenRoute)
     return (
       <div>
       <Map google={this.props.google} 

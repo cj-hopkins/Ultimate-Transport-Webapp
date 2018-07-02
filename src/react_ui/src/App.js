@@ -14,7 +14,19 @@ import CustomNavbar from './components/CustomNavbar';
 
 
 class App extends Component {
+  constructor(props){
+    super(props);
 
+    this.state = {
+      testState: 'Sup children!'
+    }
+  }
+
+  onRouteUpdate(data) {
+    this.setState({
+      testState: data
+    })
+  }
 
   render() {
     // var StatesField = require('./components/StatesField').StatesField;
@@ -22,7 +34,7 @@ class App extends Component {
       <div>
         <header> Ultimate Transport </header>
         <StopForm />
-        <ContentBlock />
+        <ContentBlock data={this.state.testState}/>
         <MapContainer />
     
         {
