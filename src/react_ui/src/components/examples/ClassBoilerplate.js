@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import RouteSelect from './RouteSelect';
-import StopSelect from './StopSelect';
+import RouteSelect from 'RouteSelect';
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -17,11 +16,7 @@ class ContentBlock extends Component {
   render(){
 
     return (
-    <div>
-      <RouteSelect onRouteUpdate={this.props.onRouteUpdate.bind(this)}/>
-      <StopSelect />
-    </div>
-      );
+    );
   }
 };
 

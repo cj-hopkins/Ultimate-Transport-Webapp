@@ -15,7 +15,16 @@ export class MapContainer extends Component {
     this.onMarkerClick = this.onMarkerClick.bind(this)
   }
 
+  // componentWillMount() {
+  //   this.setState({
+  //     selectedStops: this.props.selectedStops
+  //   })
+  // }
+
   onMarkerClick(props, marker, e){
+    // console.log(props)
+    // console.log(marker)
+    // console.log(e)
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
@@ -24,7 +33,9 @@ export class MapContainer extends Component {
   }
 
   render() {
-    console.log(this.state.chosenRoute)
+    // console.log(this.state.chosenRoute)
+    // console.log(this.state.selectedStops)
+    console.log("rendering map!")
     return (
       <div>
       <Map google={this.props.google} 
@@ -40,8 +51,9 @@ export class MapContainer extends Component {
           {this.props.selectedStops.map(item => (
             <Marker
               key={item.identifier}
+              onClick={this.onMarkerClick}
               title={item.stop_id.stringify}
-              name="stop name"
+              name={item.stop_id}
               position={{lat: item.stop_lat, lng: item.stop_lon}} />
           ))}
 
