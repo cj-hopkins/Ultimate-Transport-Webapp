@@ -26,6 +26,8 @@ class Composite(models.Model):
     # stop = models.ForeignKey(Stop, primary_key=True, on_delete=models.CASCADE)
     identifier = models.IntegerField(primary_key=True)
     stop_id = models.IntegerField()
+    location_text = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
     route_direction = models.CharField(max_length=1)
     sequence = models.FloatField()

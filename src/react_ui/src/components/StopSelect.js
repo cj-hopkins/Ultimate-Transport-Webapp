@@ -21,15 +21,16 @@ class StopSelect extends Component {
     // }
   // }
   render() {
-    // const { selectedOption } = this.state;
+    // Format stops for the select elements
     let stopsAsOptions =[]
-    this.props.stops.map(item => (
-      // console.log(item),
-      stopsAsOptions.push({value: item.stop_id, label: item.stop_id})
-    ))
-    console.log("options")
-    console.log(stopsAsOptions)
-    console.log(stopsAsOptions.reverse())
+    {this.props.stops.map(item => (
+      // TODO: find out why defining a var inside map doesn't work
+      // let itemContent = {value: item.stop_id, label: item.stop_id.toString().concat
+      // (" ", item.location_text, " ", item.address)};
+      stopsAsOptions.push({value: item.stop_id, label: item.stop_id.toString()
+        .concat(" ", item.location_text, " ", item.address)})
+    ))}
+    let finishStopsAsOptions = [...stopsAsOptions].reverse();
 
     return (
       <div>
@@ -46,7 +47,7 @@ class StopSelect extends Component {
         <Select
           id="finishSelect"
           name="form-field-name"
-          options={stopsAsOptions.reverse()}
+          options={[...stopsAsOptions].reverse()}
           value={this.state.selectedOptionFinish}
           // onChange={this.handleChange}
           onChange={value => this.setState({ selectedOptionFinish: value })}  

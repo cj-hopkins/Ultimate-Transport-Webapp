@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import RouteSelect from "./RouteSelect";
-import StopSelect from "./StopSelect";
-import { Button } from "react-bootstrap";
+import React, { Component } from "react"
+import RouteSelect from "./RouteSelect"
+import StopSelect from "./StopSelect"
+import { Button } from "react-bootstrap"
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class ContentBlock extends Component {
       stops: route
     })
     this.props.onRouteUpdate(route)
-    console.log(this.state.route)
+    // console.log(this.state.route)
   }
 
   render(){

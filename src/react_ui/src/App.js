@@ -43,10 +43,10 @@ class App extends Component {
     return (
       <div>
         <header> Ultimate Transport </header>
-        <StopForm />
         <ContentBlock data={this.state.testState} onRouteUpdate={this.onRouteUpdate.bind(this)}/>
         <MapContainer selectedStops={ this.state.selectedStops }/>
         {
+        // <StopForm />
         // <Grid fluid='true'>
         //   <Row>
         //   <header> Ultimate Transport </header>
