@@ -4,37 +4,53 @@ import Select from 'react-select';
 class StopSelect extends Component {
   state = {
     selectedOption: '',
+    selectedOptionStart: 'Start',
+    selectedOptionFinish: 'Finish',
+    opts1: "",
   }
-  handleChange = (selectedOption) => {
-    this.setState({ selectedOption });
+  // handleChange = (event) => {
+  //   console.log(event)
+  //   this.setState({
+  //     selectedOptionStart: event
+  //   })
+    // console.log(name)
+    // this.setState({ selectedOption });
     // selectedOption can be null when the `x` (close) button is clicked
-    if (selectedOption) {
-      console.log(`Selected: ${selectedOption.label}`);
-    }
-  }
+    // if (selectedOption) {
+    //   console.log(`Selected: ${selectedOption.label}`);
+    // }
+  // }
   render() {
-    const { selectedOption } = this.state;
+    // const { selectedOption } = this.state;
+    let stopsAsOptions =[]
+    this.props.stops.map(item => (
+      // console.log(item),
+      stopsAsOptions.push({value: item.stop_id, label: item.stop_id})
+    ))
+    console.log("options")
+    console.log(stopsAsOptions)
+    console.log(stopsAsOptions.reverse())
 
     return (
       <div>
         <Select
+          id="startSelect"
           name="form-field-name"
-          value={selectedOption}
-          onChange={this.handleChange}
-          options={[
-            { value: 'one', label: 'One' },
-            { value: 'two', label: 'Two' },
-          ]}
+          options={stopsAsOptions}
+          value={this.state.selectedOptionStart}
+          // onChange={this.handleChange}
+          onChange={value => this.setState({ selectedOptionStart: value })}  
+          placeholder={"Start stop"}
         />
 
         <Select
+          id="finishSelect"
           name="form-field-name"
-          value={selectedOption}
-          onChange={this.handleChange}
-          options={[
-            { value: 'one', label: 'One' },
-            { value: 'two', label: 'Two' },
-          ]}
+          options={stopsAsOptions.reverse()}
+          value={this.state.selectedOptionFinish}
+          // onChange={this.handleChange}
+          onChange={value => this.setState({ selectedOptionFinish: value })}  
+          placeholder={"Finish stop"}
         />
       </div>
     );

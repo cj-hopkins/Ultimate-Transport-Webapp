@@ -26,8 +26,10 @@
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
-    "react-scripts": "1.1.4",
     "copyfiles": "^2.0.0",
+    "eslint": "^5.0.1",
+    "eslint-plugin-react": "^7.10.0",
+    "react-scripts": "1.1.4",
     "renamer": "^0.7.0"
   },
   "scripts": {

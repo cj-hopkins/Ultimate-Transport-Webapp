@@ -1,29 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 // import { Grid, Row, Col, Container } from 'react-bootstrap';
-import './App.css';
-import MapContainer from './components/MapContainer';
+import "./App.css";
+import MapContainer from "./components/MapContainer";
 // import DropdownInput from 'react-dropdown-input';
 // import Select from 'react-select';
 
-import StopForm from './components/Stop_Form';
+import StopForm from "./components/Stop_Form";
 // import MySelect from './components/examples/MySelect';
 // import LoadingSpinner from './components/LoadingSpinner';
 // import RouteForm from './components/RouteForm';
 // import Example from './components/Example';
 // import Sidebar from './components/sidebar';
 // import CustomNavbar from './components/CustomNavbar';
-import ContentBlock from './components/ContentBlock';
+import ContentBlock from "./components/ContentBlock";
 // import RouteForm from './components/RouteForm';
 
-require('bootstrap/dist/css/bootstrap.css');
-require('react-select/dist/react-select.css');
+require("bootstrap/dist/css/bootstrap.css")
+require("react-select/dist/react-select.css")
 
 class App extends Component {
   constructor(props){
-    super(props);
+    super(props)
 
     this.state = {
-      testState: 'Sup children!',
+      testState: "Sup children!",
       selectedStops: [],
     }
   }
@@ -39,7 +39,7 @@ class App extends Component {
   render() {
     // var StatesField = require('./components/StatesField').StatesField;
     // const myMarker = [{'stop_id': 1089, 'stop_lat': 53.3518, 'stop_lon': -6.2814}]
-        // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
+    // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
       <div>
         <header> Ultimate Transport </header>
@@ -54,7 +54,7 @@ class App extends Component {
         //   <Col>
         //   <MapContainer />
         //   </Col>
-      // </Grid>
+          // </Grid>
         // <ContentBlock />
         // <RouteForm />
         // <StopForm />
@@ -63,8 +63,8 @@ class App extends Component {
         }
       </div>
 
-    );
+    )
   }
 }
 
-export default App;
+export default App
