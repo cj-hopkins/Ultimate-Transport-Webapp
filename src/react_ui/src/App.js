@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import { Grid, Row, Col, Container } from 'react-bootstrap';
+import { Grid, Row, Col, Container } from 'react-bootstrap';
 import "./App.css";
 import MapContainer from "./components/MapContainer";
 // import DropdownInput from 'react-dropdown-input';
@@ -13,6 +13,7 @@ import StopForm from "./components/Stop_Form";
 // import Sidebar from './components/sidebar';
 // import CustomNavbar from './components/CustomNavbar';
 import ContentBlock from "./components/ContentBlock";
+//import {PageHeader} from 'react-bootstrap';
 // import RouteForm from './components/RouteForm';
 
 require("bootstrap/dist/css/bootstrap.css")
@@ -42,9 +43,19 @@ class App extends Component {
     // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
       <div>
-        <header> Ultimate Transport </header>
-        <ContentBlock data={this.state.testState} onRouteUpdate={this.onRouteUpdate.bind(this)}/>
-        <MapContainer selectedStops={ this.state.selectedStops }/>
+	
+       {/* <PageHeader><small> Ultimate Transport</small> </PageHeader> */}
+	<header>Ultimate Transport </header>
+        <Grid>
+	<Row>
+	<Col xs={6} md={4} >
+	<ContentBlock data={this.state.testState} onRouteUpdate={this.onRouteUpdate.bind(this)}/>
+        </Col><Col>
+	<MapContainer selectedStops={ this.state.selectedStops }/>
+	</Col>
+	</Row>
+	</Grid>
+
         {
         // <StopForm />
         // <Grid fluid='true'>

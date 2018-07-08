@@ -1,3 +1,4 @@
+
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
@@ -30,7 +31,7 @@ class ContentBlock extends Component {
       <div>
         <RouteSelect onRouteUpdate={this.routeUpdate.bind(this)}/>
         <StopSelect stops={this.state.stops}/>
-        <Button>Go!</Button>
+        <Button bsStyle='primary' bsSize='large'>Go</Button>
       </div>
     )
   }
