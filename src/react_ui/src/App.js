@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Container } from 'react-bootstrap';
+import { OpenWeatherMap } from 'react-weather';
 import "./App.css";
 import MapContainer from "./components/MapContainer";
 // import DropdownInput from 'react-dropdown-input';
@@ -13,7 +14,7 @@ import StopForm from "./components/Stop_Form";
 // import Sidebar from './components/sidebar';
 // import CustomNavbar from './components/CustomNavbar';
 import ContentBlock from "./components/ContentBlock";
-//import {PageHeader} from 'react-bootstrap';
+import {PageHeader} from 'react-bootstrap';
 // import RouteForm from './components/RouteForm';
 
 require("bootstrap/dist/css/bootstrap.css")
@@ -43,19 +44,19 @@ class App extends Component {
     // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
       <div>
-	
-       {/* <PageHeader><small> Ultimate Transport</small> </PageHeader> */}
-	<header>Ultimate Transport </header>
-        <Grid>
+       {/* <PageHeader><small> Ultimate Transport</small> </PageHeader> 
+	<header>Ultimate Transport </header>     */}
+       <Grid>
 	<Row>
-	<Col xs={6} md={4} >
+	<Col xs={5} md={4} mdPull={0}>
+	<PageHeader className='fontForTitle'> Ultimate Transport </PageHeader> 
 	<ContentBlock data={this.state.testState} onRouteUpdate={this.onRouteUpdate.bind(this)}/>
-        </Col><Col>
+        </Col><Col xs={20} md={20}  mdPush={4}>
 	<MapContainer selectedStops={ this.state.selectedStops }/>
 	</Col>
 	</Row>
 	</Grid>
-
+ 	{/*<OpenWeatherMap city="Dublin" country="IRL" appid="70ef396e3ce3949e0934b4428e41f453"/> */}
         {
         // <StopForm />
         // <Grid fluid='true'>

@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   padding: 0;
@@ -9,6 +10,15 @@ h1 {
     color: #f5f5f5;
     margin: 8px;
 }
+
+.fontForTitle{
+    font-family: 'Titillium Web', sans-serif
+}
+
+.otherOptionForTitle{
+   font-family: 'Bangers', cursive;
+}
+
 
 /*.sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */

@@ -1,4 +1,4 @@
-
+//import { Grid, Row, Col, Container } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
@@ -29,10 +29,10 @@ class ContentBlock extends Component {
 
     return (
       <div>
-        <RouteSelect onRouteUpdate={this.routeUpdate.bind(this)}/>
-        <StopSelect stops={this.state.stops}/>
-        <Button bsStyle='primary' bsSize='large'>Go</Button>
-      </div>
+        <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}/>
+	<StopSelect stops={this.state.stops}/>
+       <Button bsStyle='primary' bsSize='large' block>Go</Button>
+	</div>
     )
   }
 }
