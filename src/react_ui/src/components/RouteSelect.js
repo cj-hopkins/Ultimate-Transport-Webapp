@@ -22,6 +22,13 @@ class RouteSelect extends Component {
     if (event === this.state.chosenRoute) {
       return;
     }
+    else if (event === null) {
+      this.setState({
+        chosenRoute: "Select Route"
+      });
+      this.props.onRouteUpdate([])
+      return;
+    }
     console.log(event)
     this.setState({
       chosenRoute: event.value
