@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Container } from 'react-bootstrap';
-import { OpenWeatherMap } from 'react-weather';
+import  OpenWeatherMap  from 'react-weather';
+import  ReactWeather  from 'react-open-weather';
+import Time from 'react-time'
 import "./App.css";
 import MapContainer from "./components/MapContainer";
 // import DropdownInput from 'react-dropdown-input';
@@ -39,11 +41,13 @@ class App extends Component {
   }
 
   render() {
+	let now = new Date()
     // var StatesField = require('./components/StatesField').StatesField;
     // const myMarker = [{'stop_id': 1089, 'stop_lat': 53.3518, 'stop_lon': -6.2814}]
     // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
       <div>
+	
        {/* <PageHeader><small> Ultimate Transport</small> </PageHeader> 
 	<header>Ultimate Transport </header>     */}
        <Grid>
@@ -56,7 +60,11 @@ class App extends Component {
 	</Col>
 	</Row>
 	</Grid>
- 	{/*<OpenWeatherMap city="Dublin" country="IRL" appid="70ef396e3ce3949e0934b4428e41f453"/> */}
+	<div>
+	<p><Time value={now} format="HH:mm" /></p>
+	</div>
+	{/*<ReactWeather forecast="today" apikey="70ef396e3ce3949e0934b4428e41f453" type="city" city="Dublin"/>
+ 	<OpenWeatherMap city="Dublin" country="IRL" appid="70ef396e3ce3949e0934b4428e41f453"/> */}
         {
         // <StopForm />
         // <Grid fluid='true'>

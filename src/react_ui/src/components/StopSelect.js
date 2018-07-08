@@ -43,7 +43,7 @@ class StopSelect extends Component {
           onChange={value => this.setState({ selectedOptionStart: value })}  
           placeholder={"Start stop"}
         />
-
+	 <div style={{marginTop: '1em'}}> </div>
         <Select
           id="finishSelect"
           name="form-field-name"

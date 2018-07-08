@@ -30,7 +30,9 @@ class ContentBlock extends Component {
     return (
       <div>
         <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}/>
+	<div style={{marginTop: '2em'}}> </div>
 	<StopSelect stops={this.state.stops}/>
+	 <div style={{marginTop: '2em'}}> </div>
        <Button bsStyle='primary' bsSize='large' block>Go</Button>
 	</div>
     )
