@@ -32,7 +32,7 @@ def getStopsForRoute(request):
     route = request.data.get('route')
     direction = request.data.get('direction')
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')
-    data = list(stops.values())
+    data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address').distinct())
     return Response(data)
 
 # class getStopsForRoute(CsrfExemptMixin, APIView):

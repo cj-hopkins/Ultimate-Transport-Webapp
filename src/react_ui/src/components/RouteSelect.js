@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 // import { Panel, Button, DropdownButton, MenuItem } from 'react-bootstrap';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+// import { DropdownButton, MenuItem } from 'react-bootstrap';
 // import MapContainer from './MapContainer';
+import Select from 'react-select';
 
 class RouteSelect extends Component {
   constructor(props){
@@ -21,9 +22,9 @@ class RouteSelect extends Component {
     if (event === this.state.chosenRoute) {
       return;
     }
-    // console.log(event)
+    console.log(event)
     this.setState({
-      chosenRoute: event
+      chosenRoute: event.value
     });
 
     const endpoint = '/api/getStopsForRoute' 
@@ -36,7 +37,7 @@ class RouteSelect extends Component {
           'Content-Type': 'application/json',
         },
         body : JSON.stringify({
-          route: event,
+          route: event.value,
           direction: 'I',
         })
       })
@@ -68,22 +69,20 @@ class RouteSelect extends Component {
 
 
   render() {
-              // value: event.currentTarget.textContent
+              const routeItems = []
+              {this.state.routes.forEach(item => (
+                routeItems.push({value: item.route, label: item.route})
+              ))}
     return (
           <div>
-            <DropdownButton
+            <Select
               id="routeSelect"
-              bsStyle="primary"
-              title={ this.state.chosenRoute }
-              onSelect={ this.handleSelect }
-            >
-              
-              {this.state.routes.map(item => (
-                <MenuItem eventKey={ item.route }
-                  key={ item.route }>{ item.route }</MenuItem>
-              ))}
-             }
-            </DropdownButton>
+              name="form-field-name"
+              options={routeItems}
+              value={this.state.chosenRoute}
+              onChange={this.handleSelect}  
+              placeholder={"Select route"}
+        />
           </div>
             )}
     }
