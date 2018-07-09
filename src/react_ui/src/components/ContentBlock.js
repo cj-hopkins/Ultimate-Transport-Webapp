@@ -1,8 +1,12 @@
-//import { Grid, Row, Col, Container } from 'react-bootstrap';
+import { Grid, Row, Col, Container } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
+import CalendarFunctionality from "./CalendarFunctionality"
+import TimeDropdown from "./TimeDropdown"
 import { Button } from "react-bootstrap"
+import {PageHeader} from 'react-bootstrap';
+import dublin_bus_icon from './dublin_bus_icon.png';
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -29,10 +33,16 @@ class ContentBlock extends Component {
 
     return (
       <div>
-        <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}/>
+		<PageHeader className='fontForTitle'> Ultimate Transport </PageHeader>
+		{/*<img src={dublin_bus_icon} alt="dublin_bus_icon" />;*/}
+	<RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}/>
 	<div style={{marginTop: '2em'}}> </div>
 	<StopSelect stops={this.state.stops}/>
 	 <div style={{marginTop: '2em'}}> </div>
+	<TimeDropdown />
+	 <div style={{marginTop: '1em'}}> </div>
+	<CalendarFunctionality />
+	<div style={{marginTop: '2em'}}> </div>
        <Button bsStyle='primary' bsSize='large' block>Go</Button>
 	</div>
     )
