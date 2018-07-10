@@ -2,31 +2,24 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 
 class StopSelect extends Component {
-    constructor(props){
-        super(props);
-
-    this.state = {
-        selectedOption: '',
-        selectedOptionStart: 'Start',
-        selectedOptionFinish: 'Finish',
-        opts1: "",
-    }
-}
-
-    startSelect = (start) => {
-        this.setState({
-            selectedOptionStart: start.value
-        })
-        this.props.onStartSelect(start.value)
-    }
-
-    finishSelect = (finish) => {
-        this.setState({
-            selectedOptionFinish: finish.value
-        })
-        this.props.onFinishSelect(finish.value)
-    }
-
+  state = {
+    selectedOption: '',
+    selectedOptionStart: 'Start',
+    selectedOptionFinish: 'Finish',
+    opts1: "",
+  }
+  // handleChange = (event) => {
+  //   console.log(event)
+  //   this.setState({
+  //     selectedOptionStart: event
+  //   })
+    // console.log(name)
+    // this.setState({ selectedOption });
+    // selectedOption can be null when the `x` (close) button is clicked
+    // if (selectedOption) {
+    //   console.log(`Selected: ${selectedOption.label}`);
+    // }
+  // }
   render() {
     // Format stops for the select elements
     let stopsAsOptions =[]
@@ -47,7 +40,7 @@ class StopSelect extends Component {
           options={stopsAsOptions}
           value={this.state.selectedOptionStart}
           // onChange={this.handleChange}
-          onChange={this.startSelect}  
+          onChange={value => this.setState({ selectedOptionStart: value })}  
           placeholder={"Start stop"}
         />
 	 <div style={{marginTop: '1em'}}> </div>
@@ -57,7 +50,7 @@ class StopSelect extends Component {
           options={[...stopsAsOptions].reverse()}
           value={this.state.selectedOptionFinish}
           // onChange={this.handleChange}
-          onChange={this.finishSelect}  
+          onChange={value => this.setState({ selectedOptionFinish: value })}  
           placeholder={"Finish stop"}
         />
       </div>
