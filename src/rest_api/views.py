@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 #from braces.views import CsrfExemptMixin
 import random
 import json
+from rest_api.get_prediction import getPrediction, rf_model
 
 class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
@@ -34,6 +35,19 @@ def getStopsForRoute(request):
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')
     data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address').distinct())
     return Response(data)
+
+@api_view(['POST'])
+def getPredictionForJourney(request):
+    route = request.data.get('route')
+    start = request.data.get('start')
+    finish = request.data.get('finish')
+    stopNumber = request.data.get('stopNumber')
+    print(route, start, finish)
+    # stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')
+    # data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address').distinct())
+    result = getPrediction()
+    print(result[0])
+    return JsonResponse({'prediction':result[0]})
 
 # class getStopsForRoute(CsrfExemptMixin, APIView):
 #     def post(self, request):

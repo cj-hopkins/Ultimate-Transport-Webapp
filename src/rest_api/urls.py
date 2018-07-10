@@ -7,6 +7,7 @@ urlpatterns = [
     path('getAllRoutes', views.getAllRoutes.as_view(), name='getAllRoutes'),
     path('getStopsForRoute', views.getStopsForRoute,
          name='getStopsForRoute'),
+    path('getPredictionForJourney', views.getPredictionForJourney, name='getPredictionForJourney'),
     # path('weather', views.getAllWeather.as_view(), name='getAllWeather'),
     # path('', views.getAllStops, name='getAllStops'),
     # path('testRequest', views.request, name='request'),
