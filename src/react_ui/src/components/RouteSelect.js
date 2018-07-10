@@ -27,6 +27,7 @@ class RouteSelect extends Component {
         chosenRoute: "Select Route"
       });
       this.props.onRouteUpdate([])
+      this.props.selectRoute(event.value)
       return;
     }
     console.log(event)
