@@ -14,9 +14,11 @@ class ContentBlock extends Component {
 
     this.state = {
       stops: [],
+      chosenRoute: "",
+      startStop: "",
+      finishStop: "",
     }
 
-    // this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
 
   //Save the list of stops to contentBlock's state before
@@ -29,10 +31,69 @@ class ContentBlock extends Component {
     // console.log(this.state.route)
   }
 
+  async onChosenRouteUpdate(route) {
+    this.setState({
+      chosenRoute: route
+    })
+  }
+
+  async onStartStopUpdate(stop) {
+    this.setState({
+      startStop: stop
+    })
+  }
+
+  async onFinishStopUpdate(stop) {
+    this.setState({
+      finishStop: stop
+    })
+  }
+
+  // onSelectedJourneyUpdate(journey){
+  //   this.setState({
+  //     selectedJourney: {
+  //       route: this.state.chosenRoute,
+  //       start: this.state.startStop,
+  //       finish: this.state.finishStop,
+  //     }
+  //   })
+  // }
+
+  handleClick = () => {
+
+    // const numOfStops = this.calculateNumberOfStops()
+    const prediction = this.getPrediction()
+    // console.log(prediction.json())
+  }
+
+  getPrediction = () => {
+    const endpoint = '/api/getPredictionForJourney' 
+    try {
+      // const result = fetch(endpoint, {
+      fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body : JSON.stringify({
+          route: this.state.chosenRoute,
+          start: this.state.startStop,
+          start: this.state.startStop,
+        })
+      })
+        .then((response) => response.json())
+        .then((resp) => {return resp.prediction})
+    } catch(e) {
+        console.log(e)
+      }
+  }
+
   render(){
 
     return (
       <div>
+<<<<<<< HEAD
 		<PageHeader className='fontForTitle'> Ultimate Transport </PageHeader>
 		{/*<img src={dublin_bus_icon} alt="dublin_bus_icon" />;*/}
 	<RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}/>
@@ -45,6 +106,16 @@ class ContentBlock extends Component {
 	<div style={{marginTop: '2em'}}> </div>
        <Button bsStyle='primary' bsSize='large' block>Go</Button>
 	</div>
+=======
+        <RouteSelect onRouteUpdate={this.routeUpdate.bind(this)}
+                      onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)}/>
+        <StopSelect stops={this.state.stops}
+                    onStartStopUpdate={this.onStartStopUpdate.bind(this)}
+                    onFinishStopUpdate={this.onFinishStopUpdate.bind(this)}
+                    />
+        <Button onClick={this.handleClick}>Go!</Button>
+      </div>
+>>>>>>> model_integration
     )
   }
 }
