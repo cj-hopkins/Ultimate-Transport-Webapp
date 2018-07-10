@@ -8,6 +8,7 @@ import { Button } from "react-bootstrap"
 import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
+import PredictionContainer from './PredictionContainer';
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class ContentBlock extends Component {
       chosenRoute: "",
       startStop: "",
       finishStop: "",
+      predictionForJourney: null,
     }
 
   }
@@ -34,19 +36,22 @@ class ContentBlock extends Component {
 
   async onChosenRouteUpdate(route) {
     this.setState({
-      chosenRoute: route
+      chosenRoute: route,
+      predictionForJourney: null,
     })
   }
 
   async onStartStopUpdate(stop) {
     this.setState({
-      startStop: stop
+      startStop: stop,
+      predictionForJourney: null,
     })
   }
 
   async onFinishStopUpdate(stop) {
     this.setState({
-      finishStop: stop
+      finishStop: stop,
+      predictionForJourney: null,
     })
   }
 
@@ -63,8 +68,10 @@ class ContentBlock extends Component {
   handleClick = () => {
 
     // const numOfStops = this.calculateNumberOfStops()
-    const prediction = this.getPrediction()
-    // console.log(prediction.json())
+    this.getPrediction()
+    // this.setState({
+    //   predictionForJourney: prediction
+    // })
   }
 
   getPrediction = () => {
@@ -84,7 +91,13 @@ class ContentBlock extends Component {
         })
       })
         .then((response) => response.json())
-        .then((resp) => {return resp.prediction})
+        .then((resp) => {
+          const prediction = resp.prediction
+          this.setState({
+            predictionForJourney: prediction
+          })
+        })
+        // .then((resp) => console.log(resp.prediction))
     } catch(e) {
         console.log(e)
       }
@@ -108,6 +121,7 @@ class ContentBlock extends Component {
 	<CalendarFunctionality />
 	<div style={{marginTop: '2em'}}> </div>
        <Button onClick={this.handleClick} bsStyle='primary' bsSize='large' block>Go</Button>
+        <PredictionContainer prediction={this.state.predictionForJourney} />
   <WeatherWidget />
 	</div>
     )
