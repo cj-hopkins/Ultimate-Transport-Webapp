@@ -23,8 +23,8 @@ class App extends Component {
     super(props)
 
     this.state = {
-      testState: "Sup children!",
       selectedStops: [],
+      selectedJourney: {}
     }
   }
 
@@ -36,6 +36,13 @@ class App extends Component {
     // console.log(data)
   }
 
+  onSelectedJourneyUpdate(data) {
+    this.setState({
+      selectedJourney: data
+    })
+    console.log(data);
+  }
+
   render() {
     // var StatesField = require('./components/StatesField').StatesField;
     // const myMarker = [{'stop_id': 1089, 'stop_lat': 53.3518, 'stop_lon': -6.2814}]
@@ -43,7 +50,10 @@ class App extends Component {
     return (
       <div>
         <header> Ultimate Transport </header>
-        <ContentBlock data={this.state.testState} onRouteUpdate={this.onRouteUpdate.bind(this)}/>
+        <ContentBlock data={this.state.testState} 
+                      onRouteUpdate={this.onRouteUpdate.bind(this)}
+                      onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+                      />
         <MapContainer selectedStops={ this.state.selectedStops }/>
         {
         // <StopForm />
