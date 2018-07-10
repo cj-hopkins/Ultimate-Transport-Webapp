@@ -7,6 +7,7 @@ import TimeDropdown from "./TimeDropdown"
 import { Button } from "react-bootstrap"
 import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
+import WeatherWidget from "./Weather";
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -44,6 +45,7 @@ class ContentBlock extends Component {
 	<CalendarFunctionality />
 	<div style={{marginTop: '2em'}}> </div>
        <Button bsStyle='primary' bsSize='large' block>Go</Button>
+  <WeatherWidget />
 	</div>
     )
   }
