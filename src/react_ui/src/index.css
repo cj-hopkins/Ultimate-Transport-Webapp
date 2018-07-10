@@ -12,7 +12,7 @@ h1 {
 }
 
 .fontForTitle{
-    font-family: 'Titillium Web', sans-serif
+    font-family: 'Titillium Web', sans-serif;
 }
 
 .otherOptionForTitle{
@@ -50,6 +50,11 @@ label {
     color: white;
 }
 
+p {
+    padding: 5px;
+    font-size:10pt;
+    text-align: center;
+}
 
 .react-calendar {
   font-size: 10pt;
@@ -61,3 +66,13 @@ label {
     width: 20%;
 }
 
+.weather-icon {
+  height: 30px;
+  width: 30px;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
