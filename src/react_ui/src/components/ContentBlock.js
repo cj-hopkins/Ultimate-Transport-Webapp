@@ -9,6 +9,8 @@ import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
+import NowButton from './NowButton';
+import TimeButton from './TimeButton';
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -119,10 +121,13 @@ class ContentBlock extends Component {
         
         <Grid>
           <Row>
-            <Col>
-           <TimeDropdown />
+            <Col xsOffset={0}>
+              <NowButton />
+            </Col>
+            <Col  xsOffset={1}>
+           <TimeButton />
               </Col>
-            <Col>
+            <Col >
            <CalendarButton />
             </Col>
               </Row>
