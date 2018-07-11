@@ -1,10 +1,14 @@
-import React from "react";
+import React, {Component} from "react";
 import WeatherIcon from "react-open-weather-icons";
 
 
 const API_KEY = "2abe029b7b8d40e80d1ed447f4522f0d";
 
-class WeatherWidget extends React.Component{
+{/* Orla's key in case Conor's one stops woking
+const API_KEY = "70ef396e3ce3949e0934b4428e41f453";*/}
+
+
+class WeatherWidget extends Component{
   state = {
     temperature: undefined,
     description: undefined,
