@@ -13,7 +13,7 @@ class NowButton extends Component {
       <div>
         <Button 
           value={this.state.date}
-        bsStyle="primary"    > Leave now </Button>  
+        bsStyle="primary"> Leave now </Button>  
       </div>
     );
   }

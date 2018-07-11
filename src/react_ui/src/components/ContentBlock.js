@@ -4,13 +4,14 @@ import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 import CalendarButton from "./CalendarButton"
 import TimeDropdown from "./TimeDropdown"
-import { Button } from "react-bootstrap"
+import { Button, Media } from "react-bootstrap"
 import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
 import NowButton from './NowButton';
 import TimeButton from './TimeButton';
+
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -109,8 +110,13 @@ class ContentBlock extends Component {
 
     return (
       <div>
+       <Media>
 		<PageHeader className='fontForTitle'> Ultimate Transport </PageHeader>
-		{/*<img src={dublin_bus_icon} alt="dublin_bus_icon" />;*/}
+		<Media.Right>
+        
+        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />;
+          </Media.Right>
+        </Media>
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
