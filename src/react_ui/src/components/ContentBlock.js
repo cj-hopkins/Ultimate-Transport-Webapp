@@ -131,9 +131,12 @@ class ContentBlock extends Component {
             <Col xsOffset={0}>
               <NowButton />
             </Col>
-            <Col  xsOffset={1}>
+         
+        <Col  xsOffset={1}>
            <TimeButton />
-              </Col>
+              </Col>  
+          
+              
             <Col >
            <CalendarButton />
             </Col>
