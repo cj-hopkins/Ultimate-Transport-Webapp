@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import WeatherIcon from "react-open-weather-icons";
 
 
 const API_KEY = "2abe029b7b8d40e80d1ed447f4522f0d";

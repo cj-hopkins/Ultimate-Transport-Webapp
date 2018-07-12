@@ -11,6 +11,7 @@ import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
 import NowButton from './NowButton';
 import TimeButton from './TimeButton';
+import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 
 
 class ContentBlock extends Component {
@@ -143,6 +144,10 @@ class ContentBlock extends Component {
         <Button onClick={this.handleClick} bsStyle='primary' bsSize='large' block>Go!</Button>
         <PredictionContainer prediction={this.state.predictionForJourney} />
         <WeatherWidget />
+        <TwitterTimelineEmbed
+          sourceType="profile"
+          screenName="dublinbusnews"
+          options={{height: 400}} />
 	</div>
     )
   }
