@@ -1,6 +1,8 @@
 import React, { Component } from "react"
-import CalendarFunctionality from './CalendarFunctionality'
+import CalendarChooseDate from './CalendarChooseDate'
 import { Button } from "react-bootstrap"
+
+import DatePicker from './CalendarChooseDate'
 
 class CalendarButton extends Component {
   constructor () {
@@ -21,7 +23,9 @@ class CalendarButton extends Component {
                  Change Date
             </Button>
   
-        {!this.state.isHidden && <CalendarFunctionality />}
+  {/*      {!this.state.isHidden && <CalendarFunctionality />}   */}
+        
+        {!this.state.isHidden && < CalendarChooseDate />} 
       </div>
     )
   }
