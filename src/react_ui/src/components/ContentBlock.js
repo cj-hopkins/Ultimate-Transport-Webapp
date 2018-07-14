@@ -49,6 +49,8 @@ class ContentBlock extends Component {
   }
 
   async onStopUpdate(isStartStop = true, stop) {
+    // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
+    if (stop === "Start" || stop === "Finish") return;
     const startOrFinish = isStartStop ? "startStop" : "finishStop";
     this.setState({
       startOrFinish: stop,
