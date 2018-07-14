@@ -20,6 +20,7 @@ class ContentBlock extends Component {
 
     this.state = {
       stops: [],
+      chosenStops: null,
       chosenRoute: "",
       startStop: "",
       finishStop: "",
@@ -32,7 +33,9 @@ class ContentBlock extends Component {
   //Calling App.js setState function
   routeUpdate (route) {
     this.setState({
-      stops: route
+      stops: route,
+      chosenStops: null
+
     })
     this.props.onRouteUpdate(route)
     // console.log(this.state.route)
@@ -45,11 +48,33 @@ class ContentBlock extends Component {
     })
   }
 
+  async onStopUpdate(isStartStop = true, stop) {
+    const startOrFinish = isStartStop ? "startStop" : "finishStop";
+    this.setState({
+      startOrFinish: stop,
+      predictionForJourney: null,
+    })
+
+    const index = this.findStopIndex(stop);
+    let newStops;
+
+    if (startOrFinish === "startStop") {
+      newStops = this.state.stops.slice(index, this.state.stops.length);
+    } else {
+      newStops = this.state.stops.slice(0, index);
+    }
+    
+    this.props.onRouteUpdate(newStops);
+
+  }
   async onStartStopUpdate(stop) {
     this.setState({
       startStop: stop,
       predictionForJourney: null,
     })
+    const index = this.findStopIndex(stop);
+    let newStops = this.state.stops.slice(index, this.state.stops.length);
+    this.props.onRouteUpdate(newStops);
   }
 
   async onFinishStopUpdate(stop) {
@@ -57,16 +82,25 @@ class ContentBlock extends Component {
       finishStop: stop,
       predictionForJourney: null,
     })
+    const index = this.findStopIndex(stop);
+    let newStops = this.state.stops.slice(0, index);
+    this.props.onRouteUpdate(newStops);
   }
 
-  // onSelectedJourneyUpdate(journey){
-  //   this.setState({
-  //     selectedJourney: {
-  //       route: this.state.chosenRoute,
-  //       start: this.state.startStop,
-  //       finish: this.state.finishStop,
-  //     }
-  //   })
+  findStopIndex = (stop) => {
+    const allStops = this.state.chosenStops === null ? this.state.stops : this.state.chosenStops;
+    for (let i = 0; i < allStops.length; i++) {
+      if (allStops[i].stop_id === stop) return i;
+    }
+    return -1;
+  }
+  // componentWillUpdate(prevState, prevProps) {
+  //   if (this.state.chosenRoute === "" || this.state.startStop === "" || this.state.finishStop === "") {
+  //     // this.setState({predictionForJourney: null});
+  //     return;
+  //   }
+  //   if (prevState.startStop === this.state.startStop || prevState.finishStop === this.state.finishStop) return;
+  //   this.getPrediction();
   // }
 
   handleClick = () => {
@@ -91,7 +125,7 @@ class ContentBlock extends Component {
         body : JSON.stringify({
           route: this.state.chosenRoute,
           start: this.state.startStop,
-          start: this.state.startStop,
+          finish: this.state.finishStop,
         })
       })
         .then((response) => response.json())
@@ -123,7 +157,8 @@ class ContentBlock extends Component {
 	     <div style={{marginTop: '2em'}}> </div>
 	     <StopSelect stops={this.state.stops}
                     onStartStopUpdate={this.onStartStopUpdate.bind(this)}
-                    onFinishStopUpdate={this.onFinishStopUpdate.bind(this)}/>
+                    onFinishStopUpdate={this.onFinishStopUpdate.bind(this)}
+                    onStopUpdate={this.onStopUpdate.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
         
         <Grid>

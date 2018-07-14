@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
+// TODO: refactor to use a single handleSelect, pass the select name (start or finish)
+// 
 
 class StopSelect extends Component {
   constructor(props) {
@@ -15,14 +17,14 @@ class StopSelect extends Component {
     this.setState({
       selectedOptionFinish: finish.value
     })
-    this.props.onFinishStopUpdate(finish.value)
+    this.props.onStopUpdate(false, finish.value)
   }
 
   handleStartSelect = (start) => {
     this.setState({
       selectedOptionStart: start.value
     })
-    this.props.onStartStopUpdate(start.value)
+    this.props.onStopUpdate(true, start.value)
   }
   
   render() {
@@ -65,3 +67,25 @@ class StopSelect extends Component {
 }
 
 export default StopSelect
+
+// class CustomSelect extends Component {
+//   constructor(props){
+//     super(props);
+//   }
+
+//   render () {
+//     return (
+//       <Select
+//         id={this.props.id}
+//         name={this.props.name}
+//         options={this.props.options}
+//         value={this.state.selectedOptionFinish}
+//         // onChange={this.handleChange}
+//         // onChange={stop => this.setState({ selectedOptionFinish: stop.value })}  
+//         onChange={this.handleFinishSelect}  
+//         placeholder={"Finish stop"}
+//       />
+
+//     )
+//   }
+// }
