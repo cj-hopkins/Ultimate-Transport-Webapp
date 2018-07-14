@@ -27,14 +27,14 @@ class RouteSelect extends Component {
         chosenRoute: "Select Route"
       });
       this.props.onRouteUpdate([])
-      this.props.onChosenRouteUpdate("")
+      this.props.onSelectedJourneyUpdate([])
       return;
     }
     // console.log(event)
     this.setState({
       chosenRoute: event.value
     });
-    this.props.onChosenRouteUpdate(event.value)
+    // this.props.onRouteUpdate(event.value)
 
     const endpoint = '/api/getStopsForRoute' 
     try {

@@ -25,12 +25,13 @@ class ContentBlock extends Component {
       startStop: "",
       finishStop: "",
       predictionForJourney: null,
+      direction: 'I',
     }
 
   }
 
   //Save the list of stops to contentBlock's state before
-  //Calling App.js setState function
+  //Calling App.js setState function - pass stops to map
   routeUpdate (route) {
     this.setState({
       stops: route,
@@ -41,6 +42,10 @@ class ContentBlock extends Component {
     // console.log(this.state.route)
   }
 
+  async updateDirection(direction) {
+    this.setState({direction: direction});
+  }
+
   async onChosenRouteUpdate(route) {
     this.setState({
       chosenRoute: route,
@@ -48,49 +53,55 @@ class ContentBlock extends Component {
     })
   }
 
-  async onStopUpdate(isStartStop = true, stop) {
+  async onStopUpdate(start = null, finish = null) {
     // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
-    if (stop === "Start" || stop === "Finish") return;
-    const startOrFinish = isStartStop ? "startStop" : "finishStop";
-    this.setState({
-      startOrFinish: stop,
-      predictionForJourney: null,
-    })
+    if (start === null || finish === null) {
 
-    const index = this.findStopIndex(stop);
-    let newStops;
+      const isStart = (finish === null) ? true : false;
+      const stopState = isStart ? "startStop" : "finishStop"
+      const stop = isStart ? start : finish;
 
-    if (startOrFinish === "startStop") {
-      newStops = this.state.stops.slice(index, this.state.stops.length);
+      if (stop === "Start" || stop === "Finish") return;
+      this.setState({
+        stopState: stop,
+        predictionForJourney: null,
+      })
+
+      const index = this.findStopIndex(stop);
+      console.log(index)
+      let newStops;
+
+      if (isStart) {
+        newStops = this.state.stops.slice(index, this.state.stops.length);
+      } else {
+        newStops = this.state.stops.slice(0, index);
+      }
+      
+      this.setState({chosenStops: newStops});
+      this.props.onRouteUpdate(newStops);
     } else {
-      newStops = this.state.stops.slice(0, index);
+        this.setState({
+          startStop: start,
+          finishStop: finish,
+          predictionForJourney: null
+        });
+
+        const startIndex = this.findStopIndex(start);
+        console.log("start" + startIndex)
+        const finishIndex = this.findStopIndex(finish);
+        console.log("finish" + finishIndex)
+        let newStops = this.state.stops.slice(startIndex, finishIndex);
+        console.log(newStops);
+
+        this.setState({chosenStops: newStops});
+        this.props.onRouteUpdate(newStops);
     }
-    
-    this.props.onRouteUpdate(newStops);
 
-  }
-  async onStartStopUpdate(stop) {
-    this.setState({
-      startStop: stop,
-      predictionForJourney: null,
-    })
-    const index = this.findStopIndex(stop);
-    let newStops = this.state.stops.slice(index, this.state.stops.length);
-    this.props.onRouteUpdate(newStops);
-  }
-
-  async onFinishStopUpdate(stop) {
-    this.setState({
-      finishStop: stop,
-      predictionForJourney: null,
-    })
-    const index = this.findStopIndex(stop);
-    let newStops = this.state.stops.slice(0, index);
-    this.props.onRouteUpdate(newStops);
   }
 
   findStopIndex = (stop) => {
-    const allStops = this.state.chosenStops === null ? this.state.stops : this.state.chosenStops;
+    // const allStops = this.state.chosenStops === null ? this.state.stops : this.state.chosenStops;
+    const allStops = this.state.stops;
     for (let i = 0; i < allStops.length; i++) {
       if (allStops[i].stop_id === stop) return i;
     }
@@ -155,11 +166,10 @@ class ContentBlock extends Component {
           </Media.Right>
         </Media>
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
-                      onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)}/>
+                      onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-	     <StopSelect stops={this.state.stops}
-                    onStartStopUpdate={this.onStartStopUpdate.bind(this)}
-                    onFinishStopUpdate={this.onFinishStopUpdate.bind(this)}
+       <StopSelect stops={this.state.stops}
+                    onDirectionUpdate={this.updateDirection.bind(this)}
                     onStopUpdate={this.onStopUpdate.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
         

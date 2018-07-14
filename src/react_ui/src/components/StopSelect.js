@@ -15,28 +15,35 @@ class StopSelect extends Component {
   }
 
   handleFinishSelect = (finish) => {
-    const val = (finish !== null) ? finish.value : "Start"
+    const val = (finish === null) ? "Finish" : finish.value
     this.setState({
       selectedOptionFinish: val
     })
-    this.props.onStopUpdate(false, val)
+    this.props.onStopUpdate(null, val)
   }
 
   handleStartSelect = (start) => {
-    const val = (start !== null) ? start.value : "Start"
+    const val = (start === null) ? "Start" : start.value 
     this.setState({
       selectedOptionStart: val
     })
-    this.props.onStopUpdate(true, val)
+    this.props.onStopUpdate(val, null)
   }
   
   handleToggle = (event) => {
     const currentStart = this.state.selectedOptionStart;
     const currentFinish = this.state.selectedOptionFinish;
+    // this.setState({
+    //   selectedOptionStart: currentFinish,
+    //   selectedOptionFinish: currentStart
+    // });
+    // this.handleStartSelect(currentFinish);
+    // this.handleFinishSelect(currentStart);
     this.setState({
       selectedOptionStart: currentFinish,
       selectedOptionFinish: currentStart
     });
+    this.props.onStopUpdate(currentFinish, currentStart)
   }
 
   render() {
