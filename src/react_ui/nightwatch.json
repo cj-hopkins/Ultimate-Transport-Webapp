@@ -1,0 +1,44 @@
+{
+  "src_folders" : ["tests_nightwatch/tests"],
+  "output_folder" : ["tests_nightwatch/reports"],
+  "custom_commands_path" : "tests_nightwatch/custom_commands",
+  "custom_assertions_path" : "",
+  "page_objects_path" : "tests_nightwatch/pages",
+  "globals_path" : "tests_nightwatch/globals.js",
+
+  "selenium" : {
+    "start_process" : false,
+    "server_path" : "tests_nightwatch/bin/selenium-server-standalone-3.9.0.jar",
+    "log_path" : "",
+    "port" : 4444,
+    "cli_args" : {
+      "webdriver.chrome.driver" : "",
+      "webdriver.gecko.driver" : "",
+      "webdriver.edge.driver" : ""
+    }
+  },
+
+  "test_settings" : {
+    "default" : {
+      "launch_url" : "http://localhost:3000",
+      "selenium_port"  : 4444,
+      "selenium_host"  : "localhost",
+      "silent": true,
+      "screenshots" : {
+        "enabled" : false,
+        "path" : ""
+      },
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "marionette": true
+      }
+    },
+
+    "integration" : {
+      "launch_url" : "http://ultimate-transport.win",
+      "desiredCapabilities" : {
+        "browserName" : "chrome"
+      }
+    }
+  }
+}

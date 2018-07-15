@@ -1,8 +1,8 @@
 import React, { Component } from "react"
-import { Grid, Row, Col, Container } from "react-bootstrap";
-import  OpenWeatherMap  from "react-weather";
-import  ReactWeather  from "react-open-weather";
-import TimePicker from "react-bootstrap-time-picker";
+import { Grid, Row, Col, Container } from "react-bootstrap"
+import  OpenWeatherMap  from "react-weather"
+import  ReactWeather  from "react-open-weather"
+import TimePicker from "react-bootstrap-time-picker"
 import "./App.css"
 import MapContainer from "./components/MapContainer"
 import ContentBlock from "./components/ContentBlock"
@@ -20,14 +20,18 @@ class App extends Component {
     super(props)
 
     this.state = {
-      selectedStops: [],
-      selectedJourney: {}
+      stopsInRoute: [],
+      selectedJourney: [],
     }
   }
 
+  // this is only to be used when a new route is chosen (ie. by RouteSelect)
+  // Changes to the selected journey and markers within a given route should be
+  // handled with onSelectedJourneyUpdate
   onRouteUpdate(data) {
     this.setState({
-      selectedStops: data
+      stopsInRoute: data,
+      selectedJourney: data,
     })
   }
 
@@ -37,6 +41,15 @@ class App extends Component {
     })
     console.log(data)
   }
+
+  // componentDidUpdate(prevState) {
+  //   if (prevState.selectedJourney === []) {
+  //     const stops = this.state.stopsInRoute
+  //     this.setState({
+  //       selectedJourney: stops
+  //     })
+  //   }
+  // }
 
   render() {
     // var StatesField = require('./components/StatesField').StatesField;
@@ -50,7 +63,7 @@ class App extends Component {
               <ContentBlock data={this.state.testState} onRouteUpdate={this.onRouteUpdate.bind(this)}
                 onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}/>
             </Col><Col xs={20} md={20}  mdPush={4}>
-              <MapContainer selectedStops={ this.state.selectedStops }/>
+              <MapContainer selectedStops={ this.state.selectedJourney}/>
             </Col>
           </Row>
         </Grid>
