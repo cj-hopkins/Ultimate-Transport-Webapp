@@ -32,53 +32,84 @@ class ContentBlock extends Component {
 
   //Save the list of stops to contentBlock's state before
   //Calling App.js setState function - pass stops to map
-  routeUpdate (route) {
+  routeUpdate (route, isNewRoute) {
     this.setState({
       stops: route,
-      chosenStops: null
 
     })
+    if (isNewRoute === true) {
+      this.setState({
+        startStop: "start",
+        finishStop: "finish",
+        chosenStops: null,
+        direction: 'I',
+    })
+  }
     this.props.onRouteUpdate(route)
     // console.log(this.state.route)
-  }
-
-  async updateDirection(direction) {
-    this.setState({direction: direction});
   }
 
   async onChosenRouteUpdate(route) {
     this.setState({
       chosenRoute: route,
+      direction: 'I',
       predictionForJourney: null,
     })
+  }
+
+  onDirectionUpdate(dir){
+    this.setState({
+      direction: dir
+    })
+  }
+
+  onStopDeselect(stop) {
+    if (stop === 'start') {
+      this.setState({startStop: "start"})
+      const newRoute = this.state.stops.slice(0, this.findStopIndex(this.state.finishStop))
+      this.routeUpdate(newRoute, false)
+    } else {
+      this.setState({finishStop: "finish"})
+      const newRoute = this.state.stops.slice(this.findStopIndex(this.state.startStop, this.state.stops.length))
+      this.routeUpdate(newRoute, false)
+    }
   }
 
   async onStopUpdate(start = null, finish = null) {
     if (start === null || finish === null) {
 
       const isStart = (finish === null) ? true : false;
-      const stopState = isStart ? "startStop" : "finishStop"
       const stop = isStart ? start : finish;
+      const finishIndex = (this.state.finishStop === "") ? this.state.stops.length : this.findStopIndex(this.state.finishStop)
+      const startIndex = (this.state.startStop === "") ? 0 : this.findStopIndex(this.state.startStop)
 
       // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
-      if (stop === "Start" || stop === "Finish") return;
-      this.setState({
-        stopState: stop,
-        predictionForJourney: null,
-      })
+      // if (stop === "Start" || stop === "Finish") {
+      //   this.setState({
+      //     startStop: "Start",
+      //     finishStop: "Finish"
+      //   })
+      // }
+      // this.setState({
+      //   stopState: stop,
+      //   predictionForJourney: null,
+      // })
 
       const index = this.findStopIndex(stop);
       console.log(index)
       let newStops;
 
       if (isStart) {
-        newStops = this.state.stops.slice(index, this.state.stops.length);
+        newStops = this.state.stops.slice(index, finishIndex)
+        this.setState({startStop: stop})
       } else {
-        newStops = this.state.stops.slice(0, index);
+        newStops = this.state.stops.slice(startIndex, index);
+        this.setState({finishStop: stop})
       }
       
       this.setState({chosenStops: newStops});
       this.props.onSelectedJourneyUpdate(newStops);
+      // if neither values are null then we are doing a direction switch
     } else {
         this.setState({
           startStop: start,
@@ -101,6 +132,11 @@ class ContentBlock extends Component {
 
   findStopIndex = (stop) => {
     // const allStops = this.state.chosenStops === null ? this.state.stops : this.state.chosenStops;
+    if (stop === "start") { 
+      return 0 
+    } else if (stop === "finish") {
+      return this.state.stops.length
+    }
     const allStops = this.state.stops;
     for (let i = 0; i < allStops.length; i++) {
       if (allStops[i].stop_id === stop) return i;
@@ -168,12 +204,18 @@ class ContentBlock extends Component {
         </Media>
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
+                      direction={this.state.direction}
+                      onDirectionUpdate={this.onDirectionUpdate.bind(this)}
                       onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
                       onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
        <StopSelect stops={this.state.stops}
-                    onDirectionUpdate={this.updateDirection.bind(this)}
+                    startStop={this.state.startStop}
+                    finishStop={this.state.finishStop}
+                    direction={this.state.direction}
+                    onDirectionUpdate={this.onDirectionUpdate.bind(this)}
                     onStopUpdate={this.onStopUpdate.bind(this)}
+                    onStopDeselect={this.onStopDeselect.bind(this)}
                     chosenRoute={this.state.chosenRoute}
                     />
 	     <div style={{marginTop: '2em'}}> </div>

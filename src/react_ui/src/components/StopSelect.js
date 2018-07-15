@@ -8,42 +8,46 @@ class StopSelect extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      selectedOptionStart: "Start",
-      selectedOptionFinish: "Finish",
-    }
+    // this.state = {
+    //   selectedOptionStart: "Start",
+    //   selectedOptionFinish: "Finish",
+    // }
   }
 
   handleFinishSelect = (finish) => {
-    const val = (finish === null) ? "Finish" : finish.value
-    this.setState({
-      selectedOptionFinish: val
-    })
-    this.props.onStopUpdate(null, val)
+    if (finish === null) {
+      this.props.onStopDeselect("finish")
+    } else{
+    this.props.onStopUpdate(null, finish.value)
+    }
   }
 
   handleStartSelect = (start) => {
-    const val = (start === null) ? "Start" : start.value 
-    this.setState({
-      selectedOptionStart: val
-    })
-    this.props.onStopUpdate(val, null)
+    if (start === null) {
+      this.props.onStopDeselect("start")
+    } else {
+    this.props.onStopUpdate(start.value, null)
+    }
   }
   
   handleToggle = (event) => {
-    const currentStart = this.state.selectedOptionStart;
-    const currentFinish = this.state.selectedOptionFinish;
+    const currentStart = this.props.startStop
+    const currentFinish = this.props.finishStop
+    // const currentStart = this.state.selectedOptionStart;
+    // const currentFinish = this.state.selectedOptionFinish;
     // this.setState({
     //   selectedOptionStart: currentFinish,
     //   selectedOptionFinish: currentStart
     // });
     // this.handleStartSelect(currentFinish);
     // this.handleFinishSelect(currentStart);
-    this.setState({
-      selectedOptionStart: currentFinish,
-      selectedOptionFinish: currentStart
-    });
+    const newDirection = (this.props.direction === 'I') ? 'O' : 'I'
+    // this.props.onDirectionUpdate(newDirection)
     this.props.onStopUpdate(currentFinish, currentStart)
+    // this.setState({
+    //   selectedOptionStart: currentFinish,
+    //   selectedOptionFinish: currentStart
+    // });
   }
 
   render() {
@@ -66,7 +70,7 @@ class StopSelect extends Component {
           id="startSelect"
           name="form-field-name"
           options={stopsAsOptions}
-          value={this.state.selectedOptionStart}
+          value={this.props.startStop}
           // onChange={this.handleChange}
           onChange={this.handleStartSelect}  
           placeholder={"Start stop"}
@@ -77,7 +81,7 @@ class StopSelect extends Component {
           id="finishSelect"
           name="form-field-name"
           options={[...stopsAsOptions].reverse()}
-          value={this.state.selectedOptionFinish}
+          value={this.props.finishStop}
           // onChange={this.handleChange}
           // onChange={stop => this.setState({ selectedOptionFinish: stop.value })}  
           onChange={this.handleFinishSelect}  

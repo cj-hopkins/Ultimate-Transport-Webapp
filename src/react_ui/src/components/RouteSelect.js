@@ -8,10 +8,13 @@ class RouteSelect extends Component {
   constructor(props){
     super(props);
 
+    // Use props instead of state - the only thing that RouteSelect
+    // needs that isn't controlled by ContentBlock is the array of route names
     this.state = {
-      open: true,
+      // open: true,
       routes: [],
-      chosenRoute: this.props.chosenRoute,
+      // chosenRoute: this.props.chosenRoute,
+      // direction: this.props.direction,
     }
 
   // this.handleSelect = this.handleSelect.bind(this);
@@ -23,9 +26,11 @@ class RouteSelect extends Component {
       return;
     }
     else if (event === null) {
-      this.props.onChosenRouteUpdate("Select Route")
-      this.props.onRouteUpdate([])
-      this.props.onSelectedJourneyUpdate([])
+      console.log(event, "event null")
+      // this.props.onChosenRouteUpdate("Select Route")
+      this.props.onRouteUpdate([], true)
+      // this.props.onSelectedJourneyUpdate([])
+      // this.props.onDirectionUpdate('I')
       return;
     }
     // console.log(event)
@@ -34,11 +39,12 @@ class RouteSelect extends Component {
     // });
     // this.props.onRouteUpdate(event.value)
     this.props.onChosenRouteUpdate(event.value)
+    //default to 'I' direction when new route is chosen
     this.getStopsForRoute(event.value, 'I')
   }
 
 
-  getStopsForRoute = (routeName, direction) => {
+  getStopsForRoute = (routeName, direction, isNewRoute = true) => {
     const endpoint = '/api/getStopsForRoute' 
     try {
       // const result = fetch(endpoint, {
@@ -58,17 +64,17 @@ class RouteSelect extends Component {
         // onUpdate is a setState function in App.js
         // the state is updated with an array of stops
         // and then passed as a prop to MapContainer
-        .then((resp) => this.props.onRouteUpdate(resp))
+        .then((resp) => this.props.onRouteUpdate(resp, isNewRoute))
     } catch(e) {
         console.log(e)
       }
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextProps.chosenRoute !== this.props.chosenRoute) {
-      this.getStopsForRoute(nextProps.chosenRoute)
-    }
-  }
+  // componentWillUpdate(nextProps, nextState) {
+  //   if (nextProps.chosenRoute !== this.props.chosenRoute) {
+  //     this.getStopsForRoute(nextProps.chosenRoute)
+  //   }
+  // }
   // async componentWillMount(){
 
   //   const endpoint = '/api/getAllRoutes';
@@ -112,6 +118,11 @@ class RouteSelect extends Component {
     this.setState({routesAsOptions: routeItems})
   }
 
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.direction !== this.props.direction) {
+      this.getStopsForRoute(this.props.chosenRoute, nextProps.direction, false)
+    }
+  }
 
   render() {
     return (
@@ -120,7 +131,7 @@ class RouteSelect extends Component {
               id="routeSelect"
               name="form-field-name"
               options={this.state.routesAsOptions}
-              value={this.state.chosenRoute}
+              value={this.props.chosenRoute}
               onChange={this.handleSelect}  
               placeholder={"Select route"}
         />
