@@ -11,7 +11,7 @@ class RouteSelect extends Component {
     this.state = {
       open: true,
       routes: [],
-      chosenRoute: "Select Route",
+      chosenRoute: this.props.chosenRoute,
     }
 
   // this.handleSelect = this.handleSelect.bind(this);
@@ -23,19 +23,22 @@ class RouteSelect extends Component {
       return;
     }
     else if (event === null) {
-      this.setState({
-        chosenRoute: "Select Route"
-      });
+      this.props.onChosenRouteUpdate("Select Route")
       this.props.onRouteUpdate([])
       this.props.onSelectedJourneyUpdate([])
       return;
     }
     // console.log(event)
-    this.setState({
-      chosenRoute: event.value
-    });
+    // this.setState({
+    //   chosenRoute: event.value
+    // });
     // this.props.onRouteUpdate(event.value)
+    this.props.onChosenRouteUpdate(event.value)
+    this.getStopsForRoute(event.value, 'I')
+  }
 
+
+  getStopsForRoute = (routeName, direction) => {
     const endpoint = '/api/getStopsForRoute' 
     try {
       // const result = fetch(endpoint, {
@@ -46,11 +49,12 @@ class RouteSelect extends Component {
           'Content-Type': 'application/json',
         },
         body : JSON.stringify({
-          route: event.value,
-          direction: 'I',
+          route: routeName,
+          direction: direction,
         })
       })
         .then((response) => response.json())
+        // .then(response => console.log(response))
         // onUpdate is a setState function in App.js
         // the state is updated with an array of stops
         // and then passed as a prop to MapContainer
@@ -60,12 +64,39 @@ class RouteSelect extends Component {
       }
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (nextProps.chosenRoute !== this.props.chosenRoute) {
+      this.getStopsForRoute(nextProps.chosenRoute)
+    }
+  }
+  // async componentWillMount(){
+
+  //   const endpoint = '/api/getAllRoutes';
+  //   try {
+  //     fetch(endpoint)
+  //       .then(response => response.json())
+  //         .then(routeNames => {
+  //           this.setState({
+  //             routes: routeNames
+  //           });
+  //           const routeItems = []
+  //           {routeNames.forEach(item => (
+  //             routeItems.push({value: item.route, label: item.route})
+  //           ))}
+  //           this.setState({routesAsOptions: routeItems})
+  //           })
+  //   } catch(e) {
+  //     console.log(e);
+  //   }
+  // }
+
   async componentWillMount(){
 
+    let routeNames
     const endpoint = '/api/getAllRoutes';
     try {
       const result = await fetch(endpoint)
-      const routeNames = await result.json();
+      routeNames = await result.json();
       this.setState({
         routes: routeNames
       });
@@ -74,20 +105,21 @@ class RouteSelect extends Component {
       console.log(e);
     }
 
+    const routeItems = []
+    {routeNames.forEach(item => (
+      routeItems.push({value: item.route, label: item.route})
+    ))}
+    this.setState({routesAsOptions: routeItems})
   }
 
 
   render() {
-              const routeItems = []
-              {this.state.routes.forEach(item => (
-                routeItems.push({value: item.route, label: item.route})
-              ))}
     return (
           <div>
             <Select
               id="routeSelect"
               name="form-field-name"
-              options={routeItems}
+              options={this.state.routesAsOptions}
               value={this.state.chosenRoute}
               onChange={this.handleSelect}  
               placeholder={"Select route"}

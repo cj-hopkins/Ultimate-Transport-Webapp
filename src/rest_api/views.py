@@ -33,8 +33,13 @@ def getStopsForRoute(request):
     route = request.data.get('route')
     direction = request.data.get('direction')
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')
-    data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address').distinct())
+    # stops = Composite.objects.filter(name=route).order_by('sequence_number')
+    data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address', 'route_direction').distinct())
+    # iDirection = [i for i in data if i['route_direction'] == 'I']
+    # oDirection = [i for i in data if i['route_direction'] == 'O']
+    print(data)
     return Response(data)
+    # return JsonResponse({"iDirection": iDirection, "oDirection": oDirection})
 
 @api_view(['POST'])
 def getPredictionForJourney(request):

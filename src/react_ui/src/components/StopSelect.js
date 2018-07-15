@@ -47,7 +47,9 @@ class StopSelect extends Component {
   }
 
   render() {
+    // TODO put this in componentWillReceiveProps
     // Format stops for the select elements
+    console.log(this.props.stops)
     let stopsAsOptions =[]
     {this.props.stops.forEach(item => (
       // TODO: find out why defining a const/let inside map doesn't work

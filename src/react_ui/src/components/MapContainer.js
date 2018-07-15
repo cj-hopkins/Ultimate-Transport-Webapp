@@ -35,7 +35,7 @@ export class MapContainer extends Component {
   render() {
     // console.log(this.state.chosenRoute)
     // console.log(this.state.selectedStops)
-    console.log("rendering map!")
+    // console.log("rendering map!")
     return (
       <div>
         <Map google={this.props.google} 

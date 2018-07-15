@@ -21,7 +21,7 @@ class ContentBlock extends Component {
     this.state = {
       stops: [],
       chosenStops: null,
-      chosenRoute: "",
+      chosenRoute: "Select Route",
       startStop: "",
       finishStop: "",
       predictionForJourney: null,
@@ -54,13 +54,13 @@ class ContentBlock extends Component {
   }
 
   async onStopUpdate(start = null, finish = null) {
-    // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
     if (start === null || finish === null) {
 
       const isStart = (finish === null) ? true : false;
       const stopState = isStart ? "startStop" : "finishStop"
       const stop = isStart ? start : finish;
 
+      // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
       if (stop === "Start" || stop === "Finish") return;
       this.setState({
         stopState: stop,
@@ -78,7 +78,7 @@ class ContentBlock extends Component {
       }
       
       this.setState({chosenStops: newStops});
-      this.props.onRouteUpdate(newStops);
+      this.props.onSelectedJourneyUpdate(newStops);
     } else {
         this.setState({
           startStop: start,
@@ -94,7 +94,7 @@ class ContentBlock extends Component {
         console.log(newStops);
 
         this.setState({chosenStops: newStops});
-        this.props.onRouteUpdate(newStops);
+        this.props.onSelectedJourneyUpdate(newStops);
     }
 
   }
@@ -118,8 +118,9 @@ class ContentBlock extends Component {
 
   handleClick = () => {
 
+    this.setState({ chosenRoute: "31"})
     // const numOfStops = this.calculateNumberOfStops()
-    this.getPrediction()
+    // this.getPrediction()
     // this.setState({
     //   predictionForJourney: prediction
     // })
@@ -166,11 +167,15 @@ class ContentBlock extends Component {
           </Media.Right>
         </Media>
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
+                      chosenRoute={this.state.chosenRoute}
+                      onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
                       onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
        <StopSelect stops={this.state.stops}
                     onDirectionUpdate={this.updateDirection.bind(this)}
-                    onStopUpdate={this.onStopUpdate.bind(this)}/>
+                    onStopUpdate={this.onStopUpdate.bind(this)}
+                    chosenRoute={this.state.chosenRoute}
+                    />
 	     <div style={{marginTop: '2em'}}> </div>
         
         <Grid>

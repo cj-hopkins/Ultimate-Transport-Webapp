@@ -25,6 +25,9 @@ class App extends Component {
     }
   }
 
+  // this is only to be used when a new route is chosen (ie. by RouteSelect)
+  // Changes to the selected journey and markers within a given route should be
+  // handled with onSelectedJourneyUpdate
   onRouteUpdate(data) {
     this.setState({
       stopsInRoute: data,
