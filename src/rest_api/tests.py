@@ -8,7 +8,7 @@ class basicTestCase(TestCase):
 
     def test_index_page_load(self):
         response = basicTestCase.client.get('')
-        self.assertEqual(response.status_code, 900)
+        self.assertEqual(response.status_code, 800)
 
     def test_stops_request(self):
         response = basicTestCase.client.get('/api')
