@@ -2,15 +2,13 @@ import { Grid, Row, Col, Container } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
-import CalendarButton from "./CalendarButton"
-import TimeDropdown from "./TimeDropdown"
 import { Button, Media } from "react-bootstrap"
 import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
 import NowButton from './NowButton';
-import TimeButton from './TimeButton';
+import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
 import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 
 
@@ -28,8 +26,9 @@ class ContentBlock extends Component {
       finishStop: "finish",
       predictionForJourney: null,
       direction: 'I',
+      plannedDate:"",
+      plannedTime:"",
     }
-
   }
 
   routeReset () {
@@ -251,17 +250,14 @@ class ContentBlock extends Component {
             </Col>
          
         <Col  xsOffset={1}>
-           <TimeButton />
+        
+             <TimeButton />
               </Col>  
-          
-              
-            <Col >
-           <CalendarButton />
-            </Col>
+        
               </Row>
           </Grid>
         <div style={{marginTop: '1em'}}></div>
-        
+ 
         <Button onClick={this.handleClick} bsStyle='primary' bsSize='large' block>Go!</Button>
         <PredictionContainer prediction={this.state.predictionForJourney} />
         <WeatherWidget />
