@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.conf.urls.static import static
 from django.core import serializers
-from .models import Stop, Route, Composite
+from .models import Stop, Route, Composite, Currentweather
 from .serializers import StopSerializer, RouteSerializer, RouteStopSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -26,6 +26,15 @@ class getAllRoutes(generics.ListCreateAPIView):
 class getRouteStopComposite(generics.ListCreateAPIView):
     queryset = Composite.objects.all()
     serializer_class = RouteStopSerializer
+
+@api_view(['GET'])
+def getCurrentWeather(request):
+    weather = Currentweather.objects.all()
+    data = list(weather.values())
+    print(data)
+    return Response(data)
+    # return JsonResponse({'weather': data})
+
 
 # @csrf_exempt
 @api_view(['POST'])

@@ -14,19 +14,22 @@ class WeatherWidget extends Component{
     icon: undefined
   }
 
-  // componentDidMount() {
-  //   fetch(`http://api.openweathermap.org/data/2.5/weather?q=Dublin,ie&appid=${API_KEY}&units=metric`)
-  //     .then(res => res.json())
-  //     .then(
-  //       (data) => {
-  //         this.setState({
-  //           temperature: data.main.temp,
-  //           description: data.weather[0].description,
-  //           icon: data.weather[0].icon
-  //         });
-  //       },
-  //     )
-  // }
+  componentDidMount() {
+    // fetch(`http://api.openweathermap.org/data/2.5/weather?q=Dublin,ie&appid=${API_KEY}&units=metric`)
+    const endPoint = '/api/getCurrentWeather'
+    fetch(endPoint)
+      .then(res => res.json())
+      // .then(data => console.log(data)
+        .then(
+        (data) => {
+          this.setState({
+            temperature: data[0].temperature,
+            description: data[0].description,
+            icon: data[0].icon
+          });
+        },
+      )
+  }
 
 
   render() {
@@ -34,7 +37,7 @@ class WeatherWidget extends Component{
       <div>
       <p>Temperature: {this.state.temperature}</p>
       <p>Description: {this.state.description}</p> 
-      <img src={`http://openweathermap.org/img/w/${this.state.icon}.png`}/>    
+      <img src={`https://openweathermap.org/img/w/${this.state.icon}.png`}/>    
       </div>
       );
   }
