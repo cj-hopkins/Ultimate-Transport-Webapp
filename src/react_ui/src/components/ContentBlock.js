@@ -21,34 +21,51 @@ class ContentBlock extends Component {
     this.state = {
       stops: [],
       chosenStops: null,
+      route_destination: null,
+      route_origin: null,
       chosenRoute: "Select Route",
-      startStop: "",
-      finishStop: "",
+      startStop: "start",
+      finishStop: "finish",
       predictionForJourney: null,
       direction: 'I',
     }
 
   }
 
-  //Save the list of stops to contentBlock's state before
-  //Calling App.js setState function - pass stops to map
-  routeUpdate (route, isNewRoute) {
+  routeReset () {
+    console.log("reset")
     this.setState({
-      stops: route,
-
-    })
-    if (isNewRoute === true) {
-      this.setState({
+        stops: [],
+        chosenStops: null,
+        route_destination: null,
+        route_origin: null,
+        chosenRoute: "Select Route",
         startStop: "start",
         finishStop: "finish",
-        chosenStops: null,
+        predictionForJourney: null,
         direction: 'I',
     })
-  }
-    this.props.onRouteUpdate(route)
-    // console.log(this.state.route)
+    this.props.onRouteUpdate([])
   }
 
+  //Save the list of stops to contentBlock's state before
+  //Calling App.js setState function - pass stops to map
+  routeUpdate (route) {
+    console.log("route update")
+    console.log(route)
+    // TODO get rtpi dest and origin factoring in the time - currently
+    // they are often incorrect
+    const route_orig = route[0].rtpi_origin
+    const route_dest = route[route.length - 1].rtpi_destination
+    this.setState({
+      stops: route,
+      route_destination: route_dest,
+      route_origin: route_orig,
+    })
+    this.props.onRouteUpdate(route)
+  }
+
+  // chosen route NAME: '31', '11' etc. - TODO make this clearer
   async onChosenRouteUpdate(route) {
     this.setState({
       chosenRoute: route,
@@ -57,9 +74,13 @@ class ContentBlock extends Component {
     })
   }
 
-  onDirectionUpdate(dir){
+  // Flip the current direction
+  onDirectionUpdate(){
+    const newDirection = (this.state.direction === 'I') ? 'O' : 'I'
     this.setState({
-      direction: dir
+      direction: newDirection,
+      startStop: 'start',
+      finishStop: 'finish'
     })
   }
 
@@ -80,8 +101,8 @@ class ContentBlock extends Component {
 
       const isStart = (finish === null) ? true : false;
       const stop = isStart ? start : finish;
-      const finishIndex = (this.state.finishStop === "") ? this.state.stops.length : this.findStopIndex(this.state.finishStop)
-      const startIndex = (this.state.startStop === "") ? 0 : this.findStopIndex(this.state.startStop)
+      const finishIndex = (this.state.finishStop === "finish") ? this.state.stops.length : this.findStopIndex(this.state.finishStop)
+      const startIndex = (this.state.startStop === "start") ? 0 : this.findStopIndex(this.state.startStop)
 
       // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
       // if (stop === "Start" || stop === "Finish") {
@@ -205,9 +226,12 @@ class ContentBlock extends Component {
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
                       direction={this.state.direction}
+                      route_destination={this.state.route_destination}
+                      route_origin={this.state.route_origin}
                       onDirectionUpdate={this.onDirectionUpdate.bind(this)}
                       onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
-                      onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}/>
+                      onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
+                      routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
        <StopSelect stops={this.state.stops}
                     startStop={this.state.startStop}

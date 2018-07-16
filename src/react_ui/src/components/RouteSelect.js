@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 // import { Panel, Button, DropdownButton, MenuItem } from 'react-bootstrap';
 // import { DropdownButton, MenuItem } from 'react-bootstrap';
 // import MapContainer from './MapContainer';
@@ -11,13 +12,8 @@ class RouteSelect extends Component {
     // Use props instead of state - the only thing that RouteSelect
     // needs that isn't controlled by ContentBlock is the array of route names
     this.state = {
-      // open: true,
       routes: [],
-      // chosenRoute: this.props.chosenRoute,
-      // direction: this.props.direction,
     }
-
-  // this.handleSelect = this.handleSelect.bind(this);
   }
 
   handleSelect = (event) => {
@@ -26,25 +22,17 @@ class RouteSelect extends Component {
       return;
     }
     else if (event === null) {
-      console.log(event, "event null")
-      // this.props.onChosenRouteUpdate("Select Route")
-      this.props.onRouteUpdate([], true)
-      // this.props.onSelectedJourneyUpdate([])
-      // this.props.onDirectionUpdate('I')
+      // console.log(event, "event null")
+      this.props.routeReset()
       return;
     }
-    // console.log(event)
-    // this.setState({
-    //   chosenRoute: event.value
-    // });
-    // this.props.onRouteUpdate(event.value)
+    // console.log("getting new route")
     this.props.onChosenRouteUpdate(event.value)
     //default to 'I' direction when new route is chosen
     this.getStopsForRoute(event.value, 'I')
   }
 
-
-  getStopsForRoute = (routeName, direction, isNewRoute = true) => {
+  getStopsForRoute = (routeName, direction) => {
     const endpoint = '/api/getStopsForRoute' 
     try {
       // const result = fetch(endpoint, {
@@ -60,21 +48,15 @@ class RouteSelect extends Component {
         })
       })
         .then((response) => response.json())
-        // .then(response => console.log(response))
-        // onUpdate is a setState function in App.js
-        // the state is updated with an array of stops
+        // onUpdate is a setState function in App.js the state is updated with an array of stops
         // and then passed as a prop to MapContainer
-        .then((resp) => this.props.onRouteUpdate(resp, isNewRoute))
+        .then((resp) => this.props.onRouteUpdate(resp))
     } catch(e) {
         console.log(e)
       }
   }
 
-  // componentWillUpdate(nextProps, nextState) {
-  //   if (nextProps.chosenRoute !== this.props.chosenRoute) {
-  //     this.getStopsForRoute(nextProps.chosenRoute)
-  //   }
-  // }
+  // Leaving this here for now as the new version may have a concurrency issue
   // async componentWillMount(){
 
   //   const endpoint = '/api/getAllRoutes';
@@ -111,6 +93,7 @@ class RouteSelect extends Component {
       console.log(e);
     }
 
+    // Format routes to use with dropdown
     const routeItems = []
     {routeNames.forEach(item => (
       routeItems.push({value: item.route, label: item.route})
@@ -118,13 +101,15 @@ class RouteSelect extends Component {
     this.setState({routesAsOptions: routeItems})
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps.direction !== this.props.direction) {
-      this.getStopsForRoute(this.props.chosenRoute, nextProps.direction, false)
+  componentWillReceiveProps(nextProps) {
+    // Get new stops if direction changes, but only if a route reset has not been done
+    if (nextProps.direction !== this.props.direction && nextProps.chosenRoute !== "Select Route") {
+      this.getStopsForRoute(this.props.chosenRoute, nextProps.direction)
     }
   }
 
   render() {
+    console.log(this.props.route_destination)
     return (
           <div>
             <Select
@@ -135,8 +120,15 @@ class RouteSelect extends Component {
               onChange={this.handleSelect}  
               placeholder={"Select route"}
         />
+        {/* Only show the change direction buttons when a route has already been selected */}
+        <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
+        <Button onClick={this.props.onDirectionUpdate} bsStyle="primary">Towards: {this.props.route_destination}</Button>
+        <Button onClick={this.props.onDirectionUpdate}> Towards {this.props.route_origin}</Button>
+        </div>
           </div>
             )}
     }
+
+
 
 export default RouteSelect;

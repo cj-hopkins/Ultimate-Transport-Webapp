@@ -7,11 +7,6 @@ import Select from "react-select";
 class StopSelect extends Component {
   constructor(props) {
     super(props)
-
-    // this.state = {
-    //   selectedOptionStart: "Start",
-    //   selectedOptionFinish: "Finish",
-    // }
   }
 
   handleFinishSelect = (finish) => {
@@ -42,12 +37,8 @@ class StopSelect extends Component {
     // this.handleStartSelect(currentFinish);
     // this.handleFinishSelect(currentStart);
     const newDirection = (this.props.direction === 'I') ? 'O' : 'I'
-    // this.props.onDirectionUpdate(newDirection)
-    this.props.onStopUpdate(currentFinish, currentStart)
-    // this.setState({
-    //   selectedOptionStart: currentFinish,
-    //   selectedOptionFinish: currentStart
-    // });
+    this.props.onDirectionUpdate()
+    // this.props.onStopUpdate(currentFinish, currentStart)
   }
 
   render() {
@@ -75,7 +66,7 @@ class StopSelect extends Component {
           onChange={this.handleStartSelect}  
           placeholder={"Start stop"}
         />
-        <Button onClick={this.handleToggle}> Swap start/finish</Button>
+        {/* <Button onClick={this.handleToggle}> Swap start/finish</Button> */}
 	 <div style={{marginTop: '1em'}}> </div>
         <Select
           id="finishSelect"
