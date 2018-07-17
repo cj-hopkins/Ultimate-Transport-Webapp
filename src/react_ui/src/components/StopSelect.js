@@ -75,7 +75,7 @@ class StopSelect extends Component {
           onChange={this.handleStartSelect}  
           placeholder={"Start stop"}
         />
-        <Button onClick={this.handleToggle}> Swap start/finish</Button>
+        <Button onClick={this.handleToggle} bsStyle='info' bsSize='small'> Swap start/finish</Button>
 	 <div style={{marginTop: '1em'}}> </div>
         <Select
           id="finishSelect"

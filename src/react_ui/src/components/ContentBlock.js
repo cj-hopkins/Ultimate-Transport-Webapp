@@ -4,7 +4,7 @@ import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 import CalendarButton from "./CalendarButton"
 import TimeDropdown from "./TimeDropdown"
-import { Button, Media } from "react-bootstrap"
+import { Button, ButtonGroup, Media } from "react-bootstrap"
 import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
@@ -199,7 +199,7 @@ class ContentBlock extends Component {
 		<PageHeader className='fontForTitle'> Ultimate Transport </PageHeader>
 		<Media.Right>
         
-        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />;
+        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
           </Media.Right>
         </Media>
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
@@ -218,27 +218,27 @@ class ContentBlock extends Component {
                     onStopDeselect={this.onStopDeselect.bind(this)}
                     chosenRoute={this.state.chosenRoute}
                     />
-	     <div style={{marginTop: '2em'}}> </div>
-        
-        <Grid>
-          <Row>
-            <Col xsOffset={0}>
-              <NowButton />
-            </Col>
-         
-        <Col  xsOffset={1}>
-           <TimeButton />
-              </Col>  
-          
+              <div style={{marginTop: '2em'}}> </div>
+
+	            <Row><Col xs={2}></Col>
+              <Col xs={8}><NowButton /></Col>
+              <Col xs={2}></Col></Row>
+
+              <div style={{marginTop: '2em'}}> </div>
               
-            <Col >
-           <CalendarButton />
-            </Col>
-              </Row>
-          </Grid>
-        <div style={{marginTop: '1em'}}></div>
-        
-        <Button onClick={this.handleClick} bsStyle='primary' bsSize='large' block>Go!</Button>
+              <Row><Col xs={2}></Col>
+              <Col xs={8}><TimeButton /></Col>
+              <Col xs={2}></Col></Row>
+
+              <div style={{marginTop: '2em'}}> </div>
+              <Row><Col xs={2}></Col>
+              <Col xs={8}><CalendarButton /></Col>
+              <Col xs={2}></Col></Row>
+
+              <div style={{marginTop: '2em'}}> </div>
+        <Row><Col xs={2}></Col>
+        <Col xs={8}><Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!</Button></Col>
+        <Col xs={2}></Col></Row>
         <PredictionContainer prediction={this.state.predictionForJourney} />
         <WeatherWidget />
         <TwitterTimelineEmbed

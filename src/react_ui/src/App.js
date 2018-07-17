@@ -56,21 +56,13 @@ class App extends Component {
     // const myMarker = [{'stop_id': 1089, 'stop_lat': 53.3518, 'stop_lon': -6.2814}]
     // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
-      <div>
-        <Grid>
-          <Row>
-            <Col xs={5} md={4} mdPull={0}>
+      <Grid fluid={true}><Row><Col xs={4} md={4}>
               <ContentBlock data={this.state.testState} onRouteUpdate={this.onRouteUpdate.bind(this)}
-                onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}/>
-            </Col><Col xs={20} md={20}  mdPush={4}>
+                onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}/></Col>
+            <Col xs={12} md={8}>
               <MapContainer selectedStops={ this.state.selectedJourney}/>
-            </Col>
-          </Row>
-        </Grid>
-	
-        {/*<ReactWeather forecast="today" apikey="70ef396e3ce3949e0934b4428e41f453" type="city" city="Dublin"/>
- 	<OpenWeatherMap city="Dublin" country="IRL" appid="70ef396e3ce3949e0934b4428e41f453"/> */}
-      </div>
+            </Col></Row>
+      </Grid>
 
     )
   }

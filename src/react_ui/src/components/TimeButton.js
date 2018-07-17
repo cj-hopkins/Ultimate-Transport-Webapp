@@ -17,7 +17,7 @@ class TimeButton extends Component {
   render () {
     return (
       <div>
-        <Button onClick={this.toggleHidden.bind(this)}  bsStyle='primary' >
+        <Button onClick={this.toggleHidden.bind(this)}  bsStyle='primary' bsSize='small' block>
                  Change Time
             </Button>
   

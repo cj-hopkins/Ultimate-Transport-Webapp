@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from "react-bootstrap"
+import { Button } from "react-bootstrap";
 
 
 class NowButton extends Component {
@@ -13,7 +13,7 @@ class NowButton extends Component {
       <div>
         <Button 
           value={this.state.date}
-        bsStyle="primary"> Leave now </Button>  
+        bsStyle="primary" bsSize='small' block> Leave now </Button>  
       </div>
     );
   }
