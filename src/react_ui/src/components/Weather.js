@@ -31,18 +31,13 @@ class WeatherWidget extends Component{
         },
       )
   }
-
-
   render() {
     return(
       <div>
-      <p>Current Weather</p> 
-      
       <h3><Badge pullRight='true' bsStyle="warning">{this.state.temperature} °C</ Badge></h3>
       <img src={`https://openweathermap.org/img/w/${this.state.icon}.png`}/>  
       </div>
       );
   }
 };
-
 export default WeatherWidget;
