@@ -196,11 +196,11 @@ class ContentBlock extends Component {
     return (
       <div>
        <Media>
-		<PageHeader className='fontForTitle'> Ultimate Transport </PageHeader>
-		<Media.Right>
+		
+		<Media.Left>
         
         <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
-          </Media.Right>
+          </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader><WeatherWidget/>
         </Media>
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
@@ -240,11 +240,11 @@ class ContentBlock extends Component {
         <Col xs={8}><Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!</Button></Col>
         <Col xs={2}></Col></Row>
         <PredictionContainer prediction={this.state.predictionForJourney} />
-        <WeatherWidget />
+       <div style={{marginTop: '2em'}}> </div>
         <TwitterTimelineEmbed
           sourceType="profile"
           screenName="dublinbusnews"
-          options={{height: 400}} />
+          options={{height:'20%', width: '100%', theme:'dark'}} />
 	</div>
     )
   }
