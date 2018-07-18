@@ -80,17 +80,18 @@ constructor(props) {
     })
   }
   
-//  onSelectNow(time){
-//    this.setState({
-//       plannedTime:time
-//    })
-//  }
-//  
-//   onSelectTime(time){
-//    this.setState({
-//       plannedTime:time
-//    })
-//  }
+  onSelectNow(time){
+    this.setState({
+       plannedTime:time
+    })
+//    console.log(this.state.plannedTime);
+  }
+  
+   onSelectTime(time){
+    this.setState({
+       plannedTime:time
+    })
+  }
 //  
 //   onSelectDate(date){
 //    this.setState({
@@ -188,8 +189,12 @@ constructor(props) {
   // }
 
   handleClick = () => {
-
-    this.setState({ chosenRoute: "31"})
+     console.log('result of now button: '+this.state.plannedTime)     // when press go after leave button you get the current time 
+    
+    
+    
+    
+//    this.setState({ chosenRoute: "31"})
     // const numOfStops = this.calculateNumberOfStops()
     // this.getPrediction()
     // this.setState({
@@ -236,7 +241,8 @@ constructor(props) {
             </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader>
            <WeatherWidget/>
           </Media>
-	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
+	     <RouteSelect className="mb-3" 
+                      onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
                       direction={this.state.direction}
                       route_destination={this.state.route_destination}
@@ -257,13 +263,17 @@ constructor(props) {
                     />
         <div style={{marginTop: '2em'}}> </div>
 	   <Row><Col xs={2}></Col>
-            <Col xs={8}><NowButton /></Col> {/*onSelectNow = {this.onSelectNow.bind(this)}   */}
+            <Col xs={8}><NowButton  plannedTime = {this.state.plannedTime}
+                                    selectTime= {this.onSelectNow.bind(this)}  />
+            </Col> {/*onSelectNow = {this.onSelectNow.bind(this)}   */}
             <Col xs={2}></Col>
+       
         </Row>
         <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
-            <Col xs={8}><TimeButton 
-                         /*   onSelectTime= {this.onSelectTime.bind(this)}
+            <Col xs={8}><TimeButton plannedTime = {this.state.plannedTime}
+                                    selectTime= {this.onSelectTime.bind(this)} 
+                         /*  
                             onSelectDate= {this.onSelectDate.bind(this)} *//>
               </Col>
               <Col xs={2}></Col>
@@ -271,7 +281,10 @@ constructor(props) {
         <div style={{marginTop: '2em'}}> </div>
         <Row>
           <Col xs={2}></Col>
-          <Col xs={8}><Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!</Button></Col>
+          <Col xs={8}><Button onClick={this.handleClick} 
+                              bsStyle='warning' 
+                              bsSize='large' block>Go!</Button>
+          </Col>
           <Col xs={2}></Col>
         </Row>
         <PredictionContainer prediction={this.state.predictionForJourney} />
