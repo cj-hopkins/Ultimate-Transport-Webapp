@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from "google-maps-react";
+import {Map, Polyline, InfoWindow, Marker, GoogleApiWrapper} from "google-maps-react";
+import db2 from './db2.png';
 
 
 export class MapContainer extends Component {
@@ -36,6 +37,13 @@ export class MapContainer extends Component {
     // console.log(this.state.chosenRoute)
     // console.log(this.state.selectedStops)
     // console.log("rendering map!")
+    const polyPath = [
+      {lat: 53.3498, lng: -6.2603},
+      {lat: 53.3492, lng: -6.2609},
+      {lat: 53.3486, lng: -6.2619},
+      {lat: 53.3272, lng: -6.2629}
+    ];
+
     return (
       <div>
         <Map google={this.props.google} 
@@ -50,12 +58,28 @@ export class MapContainer extends Component {
 
           {this.props.selectedStops.map(item => (
             <Marker
+
               key={item.identifier}
               onClick={this.onMarkerClick}
               title={item.stop_id.toString()}
               name={item.location_text.concat(" ", item.address)}
-              position={{lat: item.stop_lat, lng: item.stop_lon}} />
+              position={{lat: item.stop_lat, lng: item.stop_lon}}
+              icon={{url: db2}} />
+
           ))}
+              
+          <Polyline 
+            path = {polyPath}
+            options={{
+                strokeColor: '#0000ff',
+                strokeOpacity: 1,
+                strokeWeight: 6,
+                icons: [{
+                    offset: '0',
+                    repeat: '10px'
+                }],
+            }}
+          />
 
           <InfoWindow
             marker={this.state.activeMarker}
