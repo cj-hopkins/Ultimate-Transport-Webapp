@@ -3,8 +3,6 @@ import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 
-import CalendarButton from "./CalendarButton"
-import TimeDropdown from "./TimeDropdown"
 import { Button, ButtonGroup, Media } from "react-bootstrap"
 
 import {PageHeader} from 'react-bootstrap';
@@ -258,10 +256,7 @@ class ContentBlock extends Component {
               <Col xs={8}><TimeButton /></Col>
               <Col xs={2}></Col></Row>
 
-              <div style={{marginTop: '2em'}}> </div>
-              <Row><Col xs={2}></Col>
-              <Col xs={8}><CalendarButton /></Col>
-              <Col xs={2}></Col></Row>
+             
 
               <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
