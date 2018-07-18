@@ -2,7 +2,11 @@ import { Grid, Row, Col, Container } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
-import { Button, Media } from "react-bootstrap"
+
+import CalendarButton from "./CalendarButton"
+import TimeDropdown from "./TimeDropdown"
+import { Button, ButtonGroup, Media } from "react-bootstrap"
+
 import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
@@ -216,11 +220,11 @@ class ContentBlock extends Component {
     return (
       <div>
        <Media>
-		<PageHeader className='fontForTitle'> Ultimate Transport </PageHeader>
-		<Media.Right>
+		
+		<Media.Left>
         
-        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />;
-          </Media.Right>
+        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
+          </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader><WeatherWidget/>
         </Media>
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
@@ -241,30 +245,34 @@ class ContentBlock extends Component {
                     onStopDeselect={this.onStopDeselect.bind(this)}
                     chosenRoute={this.state.chosenRoute}
                     />
-	     <div style={{marginTop: '2em'}}> </div>
-        
-        <Grid>
-          <Row>
-            <Col xsOffset={0}>
-              <NowButton />
-            </Col>
-         
-        <Col  xsOffset={1}>
-        
-             <TimeButton />
-              </Col>  
-        
-              </Row>
-          </Grid>
-        <div style={{marginTop: '1em'}}></div>
- 
-        <Button onClick={this.handleClick} bsStyle='primary' bsSize='large' block>Go!</Button>
+
+              <div style={{marginTop: '2em'}}> </div>
+
+	            <Row><Col xs={2}></Col>
+              <Col xs={8}><NowButton /></Col>
+              <Col xs={2}></Col></Row>
+
+              <div style={{marginTop: '2em'}}> </div>
+              
+              <Row><Col xs={2}></Col>
+              <Col xs={8}><TimeButton /></Col>
+              <Col xs={2}></Col></Row>
+
+              <div style={{marginTop: '2em'}}> </div>
+              <Row><Col xs={2}></Col>
+              <Col xs={8}><CalendarButton /></Col>
+              <Col xs={2}></Col></Row>
+
+              <div style={{marginTop: '2em'}}> </div>
+        <Row><Col xs={2}></Col>
+        <Col xs={8}><Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!</Button></Col>
+        <Col xs={2}></Col></Row>
         <PredictionContainer prediction={this.state.predictionForJourney} />
-        <WeatherWidget />
+       <div style={{marginTop: '2em'}}> </div>
         <TwitterTimelineEmbed
           sourceType="profile"
           screenName="dublinbusnews"
-          options={{height: 400}} />
+          options={{height:'20%', width: '100%', theme:'dark'}} />
 	</div>
     )
   }

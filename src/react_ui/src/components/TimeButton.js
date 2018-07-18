@@ -19,8 +19,9 @@ class TimeButton extends Component {
   render () {
     return (
       <div>
-        <Button onClick={this.toggleHidden.bind(this)}  bsStyle='primary' >
-                 Change time and date
+
+        <Button onClick={this.toggleHidden.bind(this)}  bsStyle='primary' bsSize='small' block>
+                 Change Time
             </Button>
   
         {!this.state.isHidden && <Grid><Row><Col><TimeDropdown /></Col><Col> <CalendarChooseDate/></Col></Row></Grid>}
