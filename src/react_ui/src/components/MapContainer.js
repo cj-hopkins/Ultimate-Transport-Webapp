@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {Map, Polyline, InfoWindow, Marker, GoogleApiWrapper} from "google-maps-react";
 import db2 from './db2.png';
-
+import MapMarker from './MapMarker.png'
 
 export class MapContainer extends Component {
   constructor(props){
@@ -11,10 +11,14 @@ export class MapContainer extends Component {
       selectedPlace: {},
       showingInfoWindow: false,
       activeMarker: {},
+      currentLocation: {lat: 53.3498,
+      lng: -6.2603}
     }
 
-    this.onMarkerClick = this.onMarkerClick.bind(this)
+    this.onRecenter = this.onRecenter.bind(this);
+    this.onMarkerClick = this.onMarkerClick.bind(this);
   }
+
 
   // componentWillMount() {
   //   this.setState({
@@ -33,10 +37,20 @@ export class MapContainer extends Component {
     })
   }
 
+  onRecenter(mapProps, map) {
+    this.setState({
+      currentLocation: {
+        lat: map.getCenter().lat(),
+        lng: map.getCenter().lng()
+      }
+    })
+  }
+
   render() {
     // console.log(this.state.chosenRoute)
     // console.log(this.state.selectedStops)
     // console.log("rendering map!")
+
     const polyPath = [
       {lat: 53.3498, lng: -6.2603},
       {lat: 53.3492, lng: -6.2609},
@@ -47,233 +61,125 @@ export class MapContainer extends Component {
     return (
       <div>
         <Map google={this.props.google} 
+          centerAroundCurrentLocation= {true}
+          onRecenter={this.onRecenter}
           zoom={12}
-          initialCenter={{
-            lat: 53.3498,
-            lng: -6.2603
-          }}
           styles={[
-                 {
-                "elementType": "geometry",
-                "stylers": [
-                  {
-                    "color": "#f5f5f5"
-                  },
-                  {
-                    "saturation": 100
-                  }
-                ]
-              },
-              {
-                "elementType": "labels.icon",
-                "stylers": [
-                  {
-                    "visibility": "off"
-                  }
-                ]
-              },
-              {
-                "elementType": "labels.text.fill",
-                "stylers": [
-                  {
-                    "color": "#616161"
-                  }
-                ]
-              },
-              {
-                "elementType": "labels.text.stroke",
-                "stylers": [
-                  {
-                    "color": "#f5f5f5"
-                  }
-                ]
-              },
-              {
-                "featureType": "administrative.land_parcel",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                  {
-                    "color": "#bdbdbd"
-                  }
-                ]
-              },
-              {
-                "featureType": "landscape.man_made",
-                "elementType": "geometry",
-                "stylers": [
-                  {
-                    "color": "#bababa"
-                  }
-                ]
-              },
-              {
-                "featureType": "landscape.natural",
-                "elementType": "geometry.fill",
-                "stylers": [
-                  {
-                    "color": "#72f894"
-                  },
-                  {
-                    "saturation": -80
-                  }
-                ]
-              },
-              {
-                "featureType": "poi",
-                "stylers": [
-                  {
-                    "visibility": "on"
-                  }
-                ]
-              },
-              {
-                "featureType": "poi",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                  {
-                    "color": "#757575"
-                  }
-                ]
-              },
-              {
-                "featureType": "poi.park",
-                "elementType": "geometry",
-                "stylers": [
-                  {
-                    "color": "#e5e5e5"
-                  }
-                ]
-              },
-              {
-                "featureType": "poi.park",
-                "elementType": "geometry.fill",
-                "stylers": [
-                  {
-                    "color": "#72f894"
-                  },
-                  {
-                    "saturation": -65
-                  },
-                  {
-                    "lightness": -15
-                  }
-                ]
-              },
-              {
-                "featureType": "poi.park",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                  {
-                    "color": "#9e9e9e"
-                  }
-                ]
-              },
-              {
-                "featureType": "road",
-                "elementType": "geometry",
-                "stylers": [
-                  {
-                    "color": "#ffffff"
-                  }
-                ]
-              },
-              {
-                "featureType": "road.arterial",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                  {
-                    "color": "#757575"
-                  }
-                ]
-              },
-              {
-                "featureType": "road.highway",
-                "elementType": "geometry",
-                "stylers": [
-                  {
-                    "color": "#dadada"
-                  }
-                ]
-              },
-              {
-                "featureType": "road.highway",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                  {
-                    "color": "#616161"
-                  }
-                ]
-              },
-              {
-                "featureType": "road.local",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                  {
-                    "color": "#9e9e9e"
-                  }
-                ]
-              },
-              {
-                "featureType": "transit",
-                "stylers": [
-                  {
-                    "visibility": "on"
-                  }
-                ]
-              },
-              {
-                "featureType": "transit.line",
-                "elementType": "geometry",
-                "stylers": [
-                  {
-                    "color": "#e5e5e5"
-                  }
-                ]
-              },
-              {
-                "featureType": "transit.station",
-                "elementType": "geometry",
-                "stylers": [
-                  {
-                    "color": "#eeeeee"
-                  }
-                ]
-              },
-              {
-                "featureType": "water",
-                "elementType": "geometry",
-                "stylers": [
-                  {
-                    "color": "#c9c9c9"
-                  }
-                ]
-              },
-              {
-                "featureType": "water",
-                "elementType": "geometry.fill",
-                "stylers": [
-                  {
-                    "color": "#aec4f9"
-                  }
-                ]
-              },
-              {
-                "featureType": "water",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                  {
-                    "color": "#9e9e9e"
-                  }
-                ]
-              }
-            ]} >
+  {
+    "stylers": [
+      {
+        "saturation": 0
+      }
+    ]
+  },
+  {
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.man_made",
+    "stylers": [
+      {
+        "color": "#f7f7f7"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#5bb631"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#b7b7b7"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#99d743"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.sports_complex",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#9dde47"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#96beb5"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#96beb5"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f7cd3a"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station.rail",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#6c99f7"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#4a99ff"
+      }
+    ]
+  }
+]} >        
 
           <Marker onClick={this.onMarkerClick}
-            name={"Current location"} />
+            name={"Current location"} 
+            icon={MapMarker}
+            position={this.state.currentLocation}
+            />
 
           {this.props.selectedStops.map(item => (
             <Marker
-
+              animation={this.props.google.maps.Animation.DROP}
               key={item.identifier}
               onClick={this.onMarkerClick}
               title={item.stop_id.toString()}
@@ -282,9 +188,9 @@ export class MapContainer extends Component {
               icon={{url: db2}} />
 
           ))}
-              
-          <Polyline 
-            path = {polyPath}
+
+           <Polyline 
+            //path= {polyPath}
             options={{
                 strokeColor: '#0000ff',
                 strokeOpacity: 1,
@@ -295,6 +201,8 @@ export class MapContainer extends Component {
                 }],
             }}
           />
+              
+          
 
           <InfoWindow
             marker={this.state.activeMarker}
