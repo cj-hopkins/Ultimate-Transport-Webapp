@@ -1,16 +1,8 @@
 import React, { Component } from "react"
-import { Grid, Row, Col, Container } from "react-bootstrap"
-import  OpenWeatherMap  from "react-weather"
-import  ReactWeather  from "react-open-weather"
-import TimePicker from "react-bootstrap-time-picker"
+import { Grid, Row, Col } from "react-bootstrap"
 import "./App.css"
 import MapContainer from "./components/MapContainer"
 import ContentBlock from "./components/ContentBlock"
-
-
-// import DropdownInput from 'react-dropdown-input';
-// import Select from 'react-select';
-
 
 require("bootstrap/dist/css/bootstrap.css")
 require("react-select/dist/react-select.css")
@@ -41,7 +33,6 @@ class App extends Component {
     })
     console.log(data)
   }
-
   // componentDidUpdate(prevState) {
   //   if (prevState.selectedJourney === []) {
   //     const stops = this.state.stopsInRoute
@@ -50,18 +41,21 @@ class App extends Component {
   //     })
   //   }
   // }
-
   render() {
     // var StatesField = require('./components/StatesField').StatesField;
     // const myMarker = [{'stop_id': 1089, 'stop_lat': 53.3518, 'stop_lon': -6.2814}]
     // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
-      <Grid fluid={true}><Row><Col xs={4} md={4}>
-              <ContentBlock data={this.state.testState} onRouteUpdate={this.onRouteUpdate.bind(this)}
-                onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}/></Col>
+      <Grid fluid={true}>
+        <Row><Col xs={4} md={4}>
+              <ContentBlock data={this.state.testState} 
+                            onRouteUpdate={this.onRouteUpdate.bind(this)}
+                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
+            `</Col>
             <Col xs={12} md={8}>
               <MapContainer selectedStops={ this.state.selectedJourney}/>
-            </Col></Row>
+            </Col>
+        </Row>
       </Grid>
 
     )

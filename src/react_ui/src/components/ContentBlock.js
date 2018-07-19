@@ -1,21 +1,16 @@
-import { Grid, Row, Col, Container } from 'react-bootstrap';
+import { Grid, Row, Col, Button, Media, PageHeader } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
-
-import { Button, ButtonGroup, Media } from "react-bootstrap"
-
-import {PageHeader} from 'react-bootstrap';
+import TwitterFeed from "./TwitterFeed"
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
-import NowButton from './NowButton';
-import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
-import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
+import TimeButton, {NowButton} from './TimeSelect';
 
 
 class ContentBlock extends Component {
-  constructor(props) {
+constructor(props) {
     super(props)
 
     this.state = {
@@ -30,11 +25,11 @@ class ContentBlock extends Component {
       direction: 'I',
       plannedDate:"",
       plannedTime:"",
+      planedTimeNotNow:"",
     }
   }
 
   routeReset () {
-    console.log("reset")
     this.setState({
         stops: [],
         chosenStops: null,
@@ -82,6 +77,24 @@ class ContentBlock extends Component {
       direction: newDirection,
       startStop: 'start',
       finishStop: 'finish'
+    })
+  }
+  
+  onSelectNow(time){
+    this.setState({
+       plannedTime:time
+    })
+  }
+  
+   onSelectTime(time){
+    this.setState({
+       plannedTimeNotNow:time
+    })
+  }
+  
+   onSelectDate(date){
+    this.setState({
+       plannedDate:date
     })
   }
 
@@ -175,8 +188,14 @@ class ContentBlock extends Component {
   // }
 
   handleClick = () => {
+    console.log('IN CONTENT BLOCK \n Now button: '+this.state.plannedTime +  
+                                  '\n Time Dropdown: '+this.state.plannedTimeNotNow+
+                                  '\n Calendar button: '+this.state.plannedDate 
+               ) 
 
-    this.setState({ chosenRoute: "31"})
+    
+    
+//    this.setState({ chosenRoute: "31"})
     // const numOfStops = this.calculateNumberOfStops()
     // this.getPrediction()
     // this.setState({
@@ -212,19 +231,18 @@ class ContentBlock extends Component {
         console.log(e)
       }
   }
-
+  
   render(){
-
     return (
-      <div>
-       <Media>
-		
-		<Media.Left>
-        
-        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
-          </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader><WeatherWidget/>
-        </Media>
-	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
+      <div><br/>
+         <Media>
+            <Media.Left>
+              <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
+            </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader>
+           <WeatherWidget/>
+          </Media>
+	     <RouteSelect className="mb-3" 
+                      onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
                       direction={this.state.direction}
                       route_destination={this.state.route_destination}
@@ -234,7 +252,7 @@ class ContentBlock extends Component {
                       onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
                       routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-       <StopSelect stops={this.state.stops}
+        <StopSelect stops={this.state.stops}
                     startStop={this.state.startStop}
                     finishStop={this.state.finishStop}
                     direction={this.state.direction}
@@ -243,31 +261,35 @@ class ContentBlock extends Component {
                     onStopDeselect={this.onStopDeselect.bind(this)}
                     chosenRoute={this.state.chosenRoute}
                     />
-
-              <div style={{marginTop: '2em'}}> </div>
-
-	            <Row><Col xs={2}></Col>
-              <Col xs={8}><NowButton /></Col>
-              <Col xs={2}></Col></Row>
-
-              <div style={{marginTop: '2em'}}> </div>
-              
-              <Row><Col xs={2}></Col>
-              <Col xs={8}><TimeButton /></Col>
-              <Col xs={2}></Col></Row>
-
-             
-
-              <div style={{marginTop: '2em'}}> </div>
+        <div style={{marginTop: '2em'}}> </div>
+	   <Row><Col xs={2}></Col>
+            <Col xs={8}><NowButton  plannedTime = {this.state.plannedTime}
+                                    selectTime= {this.onSelectNow.bind(this)}  />
+            </Col> 
+            <Col xs={2}></Col>
+       
+        </Row>
+        <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
-        <Col xs={8}><Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!</Button></Col>
-        <Col xs={2}></Col></Row>
+            <Col xs={8}><TimeButton plannedTime = {this.state.plannedTime}
+                                    onSelectTime= {this.onSelectTime.bind(this)} 
+                                     onSelectDate= {this.onSelectDate.bind(this)} 
+                       />
+              </Col>
+              <Col xs={2}></Col>
+        </Row>
+        <div style={{marginTop: '2em'}}> </div>
+        <Row>
+          <Col xs={2}></Col>
+          <Col xs={8}><Button onClick={this.handleClick} 
+                              bsStyle='warning' 
+                              bsSize='large' block>Go!</Button>
+          </Col>
+          <Col xs={2}></Col>
+        </Row>
         <PredictionContainer prediction={this.state.predictionForJourney} />
        <div style={{marginTop: '2em'}}> </div>
-        <TwitterTimelineEmbed
-          sourceType="profile"
-          screenName="dublinbusnews"
-          options={{height:'20%', width: '100%', theme:'dark'}} />
+        <TwitterFeed />
 	</div>
     )
   }
