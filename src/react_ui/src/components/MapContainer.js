@@ -3,6 +3,7 @@ import {Map, Polyline, InfoWindow, Marker, GoogleApiWrapper} from "google-maps-r
 import db2 from './db2.png';
 import MapMarker from './MapMarker.png'
 
+
 export class MapContainer extends Component {
   constructor(props){
     super(props)
@@ -185,7 +186,7 @@ export class MapContainer extends Component {
               title={item.stop_id.toString()}
               name={item.location_text.concat(" ", item.address)}
               position={{lat: item.stop_lat, lng: item.stop_lon}}
-              icon={{url: db2}} />
+         /*  icon={{url: db2}}  */ />
 
           ))}
 
@@ -201,9 +202,7 @@ export class MapContainer extends Component {
                 }],
             }}
           />
-              
-          
-
+}
           <InfoWindow
             marker={this.state.activeMarker}
             visible={this.state.showingInfoWindow}>
