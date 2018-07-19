@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Grid, Row, Col } from "react-bootstrap"
+import { Grid, Row, Col, Clearfix } from "react-bootstrap"
 import "./App.css"
 import MapContainer from "./components/MapContainer"
 import ContentBlock from "./components/ContentBlock"
@@ -45,13 +45,18 @@ class App extends Component {
     // const myMarker = [{'stop_id': 1089, 'stop_lat': 53.3518, 'stop_lon': -6.2814}]
     // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
-      <Grid fluid={true}>
-        <Row><Col xs={4} md={4}>
+      <Grid fluid={true} className="Grid">
+        <Row><Col xsHidden md={4}>
               <ContentBlock data={this.state.testState} 
                             onRouteUpdate={this.onRouteUpdate.bind(this)}
                             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
-            `</Col>
-            <Col xs={12} md={8}>
+            </Col>
+            <Col xsHidden md={8}>
+              <MapContainer selectedStops={ this.state.selectedJourney}/></Col></Row>
+              <Row>
+              <Col mdHidden lgHidden ><ContentBlock data={this.state.testState} 
+                            onRouteUpdate={this.onRouteUpdate.bind(this)}
+                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
               <MapContainer selectedStops={ this.state.selectedJourney}/>
             </Col>
         </Row>

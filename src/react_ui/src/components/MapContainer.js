@@ -176,17 +176,17 @@ export class MapContainer extends Component {
             name={"Current location"} 
             icon={MapMarker}
             position={this.state.currentLocation}
+            animation={this.props.google.maps.Animation.DROP}
             />
 
           {this.props.selectedStops.map(item => (
             <Marker
-              animation={this.props.google.maps.Animation.DROP}
               key={item.identifier}
               onClick={this.onMarkerClick}
               title={item.stop_id.toString()}
               name={item.location_text.concat(" ", item.address)}
               position={{lat: item.stop_lat, lng: item.stop_lon}}
-         /*  icon={{url: db2}}  */ />
+           icon={{url: db2}}   />
 
           ))}
 
@@ -202,7 +202,7 @@ export class MapContainer extends Component {
                 }],
             }}
           />
-}
+
           <InfoWindow
             marker={this.state.activeMarker}
             visible={this.state.showingInfoWindow}>

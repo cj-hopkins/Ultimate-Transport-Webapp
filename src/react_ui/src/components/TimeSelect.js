@@ -36,7 +36,7 @@ class TimeButton extends Component {
       <div>
         <Button onClick={this.toggleHidden.bind(this)}  
                 bsStyle='primary' 
-                bsSize='small' block> Change Time
+                bsSize='medium' block> Change Time
         </Button>
         {!this.state.isHidden && 
           <Grid>

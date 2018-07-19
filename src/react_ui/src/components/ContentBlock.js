@@ -235,6 +235,7 @@ constructor(props, context) {
   render(){
     return (
       <div><br/>
+      <Grid fluid={true}>
          <Media>
             <Media.Left>
               <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
@@ -290,6 +291,7 @@ constructor(props, context) {
         <PredictionContainer prediction={this.state.predictionForJourney} />
        <div style={{marginTop: '2em'}}> </div>
         <TwitterButton />
+        </Grid>
 	</div>
     )
   }
