@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {Map, Polyline, InfoWindow, Marker, GoogleApiWrapper} from "google-maps-react";
-import db2 from './db2.png';
+//import db2 from './db2.png';
 
 
 export class MapContainer extends Component {
@@ -279,10 +279,11 @@ export class MapContainer extends Component {
               title={item.stop_id.toString()}
               name={item.location_text.concat(" ", item.address)}
               position={{lat: item.stop_lat, lng: item.stop_lon}}
-              icon={{url: db2}} />
+         /*  icon={{url: db2}}  */ />
 
           ))}
               
+          {/*
           <Polyline 
             path = {polyPath}
             options={{
@@ -295,7 +296,7 @@ export class MapContainer extends Component {
                 }],
             }}
           />
-
+*/}
           <InfoWindow
             marker={this.state.activeMarker}
             visible={this.state.showingInfoWindow}>

@@ -31,7 +31,6 @@ class App extends Component {
     this.setState({
       selectedJourney: data
     })
-    console.log(data)
   }
   // componentDidUpdate(prevState) {
   //   if (prevState.selectedJourney === []) {

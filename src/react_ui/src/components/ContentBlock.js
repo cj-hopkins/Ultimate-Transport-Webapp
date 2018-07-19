@@ -2,7 +2,7 @@ import { Grid, Row, Col, Button, Media, PageHeader } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
-import TwitterFeed from "./TwitterFeed"
+import TwitterButton from "./TwitterFeed"
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
@@ -10,8 +10,8 @@ import TimeButton, {NowButton} from './TimeSelect';
 
 
 class ContentBlock extends Component {
-constructor(props) {
-    super(props)
+constructor(props, context) {
+    super(props, context)
 
     this.state = {
       stops: [],
@@ -289,7 +289,7 @@ constructor(props) {
         </Row>
         <PredictionContainer prediction={this.state.predictionForJourney} />
        <div style={{marginTop: '2em'}}> </div>
-        <TwitterFeed />
+        <TwitterButton />
 	</div>
     )
   }
