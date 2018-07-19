@@ -1,4 +1,4 @@
-import { Grid, Row, Col, Container, Button, ButtonGroup, Media, Panel , PageHeader } from 'react-bootstrap';
+import { Grid, Row, Col, Button, Media, PageHeader } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
@@ -6,7 +6,7 @@ import TwitterFeed from "./TwitterFeed"
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
-import TimeButton, {CalendarChooseDate, TimeDropdown, NowButton} from './TimeSelect';
+import TimeButton, {NowButton} from './TimeSelect';
 
 
 class ContentBlock extends Component {
@@ -25,11 +25,11 @@ constructor(props) {
       direction: 'I',
       plannedDate:"",
       plannedTime:"",
+      planedTimeNotNow:"",
     }
   }
 
   routeReset () {
-    console.log("reset")
     this.setState({
         stops: [],
         chosenStops: null,
@@ -84,20 +84,19 @@ constructor(props) {
     this.setState({
        plannedTime:time
     })
-//    console.log(this.state.plannedTime);
   }
   
    onSelectTime(time){
     this.setState({
-       plannedTime:time
+       plannedTimeNotNow:time
     })
   }
-//  
-//   onSelectDate(date){
-//    this.setState({
-//       plannedDate:date
-//    })
-//  }
+  
+   onSelectDate(date){
+    this.setState({
+       plannedDate:date
+    })
+  }
 
   onStopDeselect(stop) {
     if (stop === 'start') {
@@ -189,9 +188,11 @@ constructor(props) {
   // }
 
   handleClick = () => {
-     console.log('result of now button: '+this.state.plannedTime)     // when press go after leave button you get the current time 
-    
-    
+    console.log('IN CONTENT BLOCK \n Now button: '+this.state.plannedTime +  
+                                  '\n Time Dropdown: '+this.state.plannedTimeNotNow+
+                                  '\n Calendar button: '+this.state.plannedDate 
+               ) 
+
     
     
 //    this.setState({ chosenRoute: "31"})
@@ -230,9 +231,8 @@ constructor(props) {
         console.log(e)
       }
   }
-
+  
   render(){
-
     return (
       <div><br/>
          <Media>
@@ -265,16 +265,16 @@ constructor(props) {
 	   <Row><Col xs={2}></Col>
             <Col xs={8}><NowButton  plannedTime = {this.state.plannedTime}
                                     selectTime= {this.onSelectNow.bind(this)}  />
-            </Col> {/*onSelectNow = {this.onSelectNow.bind(this)}   */}
+            </Col> 
             <Col xs={2}></Col>
        
         </Row>
         <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
             <Col xs={8}><TimeButton plannedTime = {this.state.plannedTime}
-                                    selectTime= {this.onSelectTime.bind(this)} 
-                         /*  
-                            onSelectDate= {this.onSelectDate.bind(this)} *//>
+                                    onSelectTime= {this.onSelectTime.bind(this)} 
+                                     onSelectDate= {this.onSelectDate.bind(this)} 
+                       />
               </Col>
               <Col xs={2}></Col>
         </Row>
