@@ -13,7 +13,9 @@ export class MapContainer extends Component {
       showingInfoWindow: false,
       activeMarker: {},
       currentLocation: {lat: 53.3498,
-      lng: -6.2603}
+      lng: -6.2603},
+      directionsService: {},
+      directionsDisplay: {}
     }
 
     this.onRecenter = this.onRecenter.bind(this);
@@ -61,7 +63,14 @@ export class MapContainer extends Component {
 
     return (
       <div>
+           <input id="origin-input" class="controls" type="text"
+        placeholder="Enter an origin location"/>
+
+    <input id="destination-input" class="controls" type="text"
+        placeholder="Enter a destination location"/> 
         <Map google={this.props.google} 
+          mapTypeControl = {false}
+          streetViewControl = {false}
           centerAroundCurrentLocation= {true}
           onRecenter={this.onRecenter}
           zoom={12}
@@ -170,7 +179,7 @@ export class MapContainer extends Component {
       }
     ]
   }
-]} >        
+]} >      
 
           <Marker onClick={this.onMarkerClick}
             name={"Current location"} 
@@ -190,8 +199,10 @@ export class MapContainer extends Component {
 
           ))}
 
+            
+
            <Polyline 
-            //path= {polyPath}
+            path= {polyPath}
             options={{
                 strokeColor: '#0000ff',
                 strokeOpacity: 1,
