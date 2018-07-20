@@ -1,17 +1,23 @@
-import { Grid, Row, Col, Button, Media, PageHeader } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, MenuItem, NavDropdown, Grid, Row, Col, Container } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
-import TwitterButton from "./TwitterFeed"
+import NavigationTabs from './NavigationTabs';
+
+import { Button, ButtonGroup, Media } from "react-bootstrap"
+
+import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
-import TimeButton, {NowButton} from './TimeSelect';
+import NowButton from './NowButton';
+import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
+import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 
 
 class ContentBlock extends Component {
-constructor(props, context) {
-    super(props, context)
+  constructor(props) {
+    super(props)
 
     this.state = {
       stops: [],
@@ -25,11 +31,11 @@ constructor(props, context) {
       direction: 'I',
       plannedDate:"",
       plannedTime:"",
-      planedTimeNotNow:"",
     }
   }
 
   routeReset () {
+    console.log("reset")
     this.setState({
         stops: [],
         chosenStops: null,
@@ -77,24 +83,6 @@ constructor(props, context) {
       direction: newDirection,
       startStop: 'start',
       finishStop: 'finish'
-    })
-  }
-  
-  onSelectNow(time){
-    this.setState({
-       plannedTime:time
-    })
-  }
-  
-   onSelectTime(time){
-    this.setState({
-       plannedTimeNotNow:time
-    })
-  }
-  
-   onSelectDate(date){
-    this.setState({
-       plannedDate:date
     })
   }
 
@@ -188,14 +176,8 @@ constructor(props, context) {
   // }
 
   handleClick = () => {
-    console.log('IN CONTENT BLOCK \n Now button: '+this.state.plannedTime +  
-                                  '\n Time Dropdown: '+this.state.plannedTimeNotNow+
-                                  '\n Calendar button: '+this.state.plannedDate 
-               ) 
 
-    
-    
-//    this.setState({ chosenRoute: "31"})
+    this.setState({ chosenRoute: "31"})
     // const numOfStops = this.calculateNumberOfStops()
     // this.getPrediction()
     // this.setState({
@@ -231,19 +213,43 @@ constructor(props, context) {
         console.log(e)
       }
   }
-  
+
   render(){
+
     return (
-      <div><br/>
-      <Grid fluid={true}>
-         <Media>
-            <Media.Left>
-              <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
-            </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader>
-           <WeatherWidget/>
-          </Media>
-	     <RouteSelect className="mb-3" 
-                      onRouteUpdate={this.routeUpdate.bind(this)}
+      <div>
+       <Media>
+		
+		<Media.Left>
+        
+        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
+          </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader><WeatherWidget/>
+        </Media>
+        {/* <NavigationTabs /> */}
+        <Navbar>
+  <Navbar.Header>
+    <Navbar.Brand>
+      <a href="#home">React-Bootstrap</a>
+    </Navbar.Brand>
+  </Navbar.Header>
+  <Nav>
+    <NavItem eventKey={1} href="#">
+      Link
+    </NavItem>
+    <NavItem eventKey={2} href="#">
+      Link
+    </NavItem>
+    <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+      <MenuItem eventKey={3.1}>Action</MenuItem>
+      <MenuItem eventKey={3.2}>Another action</MenuItem>
+      <MenuItem eventKey={3.3}>Something else here</MenuItem>
+      <MenuItem divider />
+      <MenuItem eventKey={3.4}>Separated link</MenuItem>
+    </NavDropdown>
+  </Nav>
+</Navbar>;
+
+	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
                       direction={this.state.direction}
                       route_destination={this.state.route_destination}
@@ -253,7 +259,7 @@ constructor(props, context) {
                       onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
                       routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-        <StopSelect stops={this.state.stops}
+       <StopSelect stops={this.state.stops}
                     startStop={this.state.startStop}
                     finishStop={this.state.finishStop}
                     direction={this.state.direction}
@@ -262,36 +268,31 @@ constructor(props, context) {
                     onStopDeselect={this.onStopDeselect.bind(this)}
                     chosenRoute={this.state.chosenRoute}
                     />
-        <div style={{marginTop: '2em'}}> </div>
-	   <Row><Col xs={2}></Col>
-            <Col xs={8}><NowButton  plannedTime = {this.state.plannedTime}
-                                    selectTime= {this.onSelectNow.bind(this)}  />
-            </Col> 
-            <Col xs={2}></Col>
-       
-        </Row>
-        <div style={{marginTop: '2em'}}> </div>
+
+              <div style={{marginTop: '2em'}}> </div>
+
+	            <Row><Col xs={2}></Col>
+              <Col xs={8}><NowButton /></Col>
+              <Col xs={2}></Col></Row>
+
+              <div style={{marginTop: '2em'}}> </div>
+              
+              <Row><Col xs={2}></Col>
+              <Col xs={8}><TimeButton /></Col>
+              <Col xs={2}></Col></Row>
+
+             
+
+              <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
-            <Col xs={8}><TimeButton plannedTime = {this.state.plannedTime}
-                                    onSelectTime= {this.onSelectTime.bind(this)} 
-                                     onSelectDate= {this.onSelectDate.bind(this)} 
-                       />
-              </Col>
-              <Col xs={2}></Col>
-        </Row>
-        <div style={{marginTop: '2em'}}> </div>
-        <Row>
-          <Col xs={2}></Col>
-          <Col xs={8}><Button onClick={this.handleClick} 
-                              bsStyle='warning' 
-                              bsSize='large' block>Go!</Button>
-          </Col>
-          <Col xs={2}></Col>
-        </Row>
+        <Col xs={8}><Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!</Button></Col>
+        <Col xs={2}></Col></Row>
         <PredictionContainer prediction={this.state.predictionForJourney} />
        <div style={{marginTop: '2em'}}> </div>
-        <TwitterButton />
-        </Grid>
+        <TwitterTimelineEmbed
+          sourceType="profile"
+          screenName="dublinbusnews"
+          options={{height:'20%', width: '100%', theme:'dark'}} />
 	</div>
     )
   }
