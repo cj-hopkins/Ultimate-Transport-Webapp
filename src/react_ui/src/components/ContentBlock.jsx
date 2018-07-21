@@ -1,8 +1,7 @@
-import { Navbar, Nav, NavItem, MenuItem, NavDropdown, Grid, Row, Col, Container } from 'react-bootstrap';
+import { Grid, Row, Col, Container } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
-import NavigationTabs from './NavigationTabs';
 
 import { Button, ButtonGroup, Media } from "react-bootstrap"
 
@@ -13,6 +12,8 @@ import PredictionContainer from './PredictionContainer';
 import NowButton from './NowButton';
 import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
 import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
+import CustomNavbar from './CustomNavBar';
+import CustomGeolocation from './examples/GeoLocation';
 
 
 class ContentBlock extends Component {
@@ -226,28 +227,6 @@ class ContentBlock extends Component {
           </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader><WeatherWidget/>
         </Media>
         {/* <NavigationTabs /> */}
-        <Navbar>
-  <Navbar.Header>
-    <Navbar.Brand>
-      <a href="#home">React-Bootstrap</a>
-    </Navbar.Brand>
-  </Navbar.Header>
-  <Nav>
-    <NavItem eventKey={1} href="#">
-      Link
-    </NavItem>
-    <NavItem eventKey={2} href="#">
-      Link
-    </NavItem>
-    <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-      <MenuItem eventKey={3.1}>Action</MenuItem>
-      <MenuItem eventKey={3.2}>Another action</MenuItem>
-      <MenuItem eventKey={3.3}>Something else here</MenuItem>
-      <MenuItem divider />
-      <MenuItem eventKey={3.4}>Separated link</MenuItem>
-    </NavDropdown>
-  </Nav>
-</Navbar>;
 
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
@@ -268,6 +247,8 @@ class ContentBlock extends Component {
                     onStopDeselect={this.onStopDeselect.bind(this)}
                     chosenRoute={this.state.chosenRoute}
                     />
+        <CustomNavbar />
+        {/* <CustomGeolocation /> */}
 
               <div style={{marginTop: '2em'}}> </div>
 
