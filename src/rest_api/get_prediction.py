@@ -20,3 +20,7 @@ def getPrediction():
     result = rf_model.predict(df_test) # prediction for time between stops 
     return result
     # multiply this num by the number of points bewteen start and destination - then divide by 60 for the time
+    
+
+    
+    
