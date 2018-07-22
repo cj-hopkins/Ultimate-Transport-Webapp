@@ -115,11 +115,18 @@ export class NowButton extends Component {
     }
   }
   
+  
+//   timeUpdate(time){
+//      this.props.onSelectTime(time)
+//  }
+
+  
+  
   handleClick(date) {
     this.setState({
       plannedTime:date
     });
-    this.props.selectTime(this.state.plannedTime);
+    this.props.onSelectNow(this.state.plannedTime);
     console.log('Time from now button:'+this.state.plannedTime);
   }
  
