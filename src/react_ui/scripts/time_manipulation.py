@@ -16,3 +16,4 @@ is_a_weekday = day_of_week <5
 dataframe2=pd.DataFrame([{'weekday':is_a_weekday}])
 df_time_details = pd.concat([dataframe2, df_better_format], axis=1) 
 print(df_time_details )
+
