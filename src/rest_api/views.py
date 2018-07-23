@@ -39,7 +39,6 @@ def getCurrentWeather(request):
 def getFiveDayWeather(request):
     weather = FiveDayWeather.objects.all()
     data = list(weather.values())
-    print(data)
     return Response(data)
     # return JsonResponse({'weather': data})
 
@@ -75,6 +74,10 @@ def getPredictionForJourney(request):
     print(route, start, finish)
     # stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')
     # data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address').distinct())
+    
+    
+    
+    
     result = getPrediction()
     print(result[0])
     return JsonResponse({'prediction':result[0]})

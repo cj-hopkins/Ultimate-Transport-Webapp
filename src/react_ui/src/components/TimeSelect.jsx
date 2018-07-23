@@ -30,6 +30,8 @@ class TimeButton extends Component {
     this.props.onSelectTime(time);
   }
 
+  
+
   render() {
     return (
       <div>
@@ -51,6 +53,10 @@ class TimeButton extends Component {
               <Col>
                 {" "}
                 <CalendarChooseDate onSelectDate={this.dateUpdate.bind(this)} />
+              </Col>
+              <Col>
+                <NowButton  onSelectTime={this.timeUpdate.bind(this)}
+                            onSelectDate={this.dateUpdate.bind(this)}/>
               </Col>
             </Row>
           </Grid>
@@ -123,7 +129,7 @@ class TimeDropdown extends Component {
   }
 }
 
-export class NowButton extends Component {
+class NowButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -157,7 +163,7 @@ export class NowButton extends Component {
       <div>
         <Button
           value={this.state.plannedTime}
-          bsStyle="primary"
+          bsStyle="default"
           onClick={this.handleClick.bind(this)}
           block
         >
