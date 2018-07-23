@@ -4,6 +4,7 @@ import "./App.css";
 import MapContainer from "./components/MapContainer";
 import ContentBlock from "./components/ContentBlock";
 import CustomGeolocation from "./components/examples/GeoLocation";
+import MainController from "./components/MainController";
 
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
@@ -33,40 +34,41 @@ class App extends Component {
       selectedJourney: data
     });
   }
+
   locationUpdate(position) {
     this.setState({
       currentPosition: position
     });
   }
-  // componentDidUpdate(prevState) {
-  //   if (prevState.selectedJourney === []) {
-  //     const stops = this.state.stopsInRoute
-  //     this.setState({
-  //       selectedJourney: stops
-  //     })
-  //   }
-  // }
+
   render() {
-    // var StatesField = require('./components/StatesField').StatesField;
-    // const myMarker = [{'stop_id': 1089, 'stop_lat': 53.3518, 'stop_lon': -6.2814}]
-    // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
       <Grid fluid={true} className="Grid">
-        <Row><Col xsHidden md={4}>
-              <ContentBlock data={this.state.testState} 
-                            onRouteUpdate={this.onRouteUpdate.bind(this)}
-                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
-            </Col>
-            <Col xsHidden md={8}>
-              <MapContainer selectedStops={ this.state.selectedJourney}/></Col></Row>
-          {/*      <Row>
-           <Col mdHidden lgHidden ><ContentBlock data={this.state.testState} 
-                            onRouteUpdate={this.onRouteUpdate.bind(this)}
-                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
-              <MapContainer selectedStops={ this.state.selectedJourney}/>
-            </Col>
-           
-        </Row> */} 
+        <Row>
+          <Col xsHidden md={4}>
+            <MainController
+              data={this.state.testState}
+              onRouteUpdate={this.onRouteUpdate.bind(this)}
+              onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            />
+          </Col>
+          <Col xsHidden md={8}>
+            <MapContainer
+              selectedStops={this.state.selectedJourney}
+              currentPosition={this.state.currentPosition}
+            />
+          </Col>
+        </Row>
+        {/* <Row>
+          <Col mdHidden lgHidden>
+            <ContentBlock
+              data={this.state.testState}
+              onRouteUpdate={this.onRouteUpdate.bind(this)}
+              onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            />
+            <MapContainer selectedStops={this.state.selectedJourney} />
+          </Col>
+        </Row> */}
       </Grid>
     );
   }

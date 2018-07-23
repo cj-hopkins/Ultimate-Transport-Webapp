@@ -260,14 +260,6 @@ class ContentBlock extends Component {
 
     return (
       <div>
-       <Media>
-		
-		<Media.Left>
-        
-        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
-          </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader><WeatherWidget/>
-        </Media>
-        {/* <NavigationTabs /> */}
 
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
@@ -288,7 +280,6 @@ class ContentBlock extends Component {
                     onStopDeselect={this.onStopDeselect.bind(this)}
                     chosenRoute={this.state.chosenRoute}
                     />
-        <CustomNavbar />
         {/* <CustomGeolocation /> */}
 
               <div style={{marginTop: '2em'}}> </div>
