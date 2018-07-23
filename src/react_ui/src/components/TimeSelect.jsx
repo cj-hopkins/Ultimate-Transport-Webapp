@@ -52,7 +52,9 @@ class TimeButton extends Component {
               </Col>
               <Col>
                 {" "}
-                <CalendarChooseDate onSelectDate={this.dateUpdate.bind(this)} />
+                <CalendarChooseDate 
+                plannedDate= {this.props.plannedDate}
+                onSelectDate={this.dateUpdate.bind(this)} />
               </Col>
               <Col>
                 <NowButton  onSelectTime={this.timeUpdate.bind(this)}
@@ -76,17 +78,17 @@ class CalendarChooseDate extends Component {
   }
   handleChange(date) {
     // console.log(date)
-    this.setState({
-      plannedDate: date
-    });
     this.props.onSelectDate(date);
+    // this.setState({
+    //   plannedDate: this.props.selectedDate
+    // })
     // console.log('Date from Calendar:'+this.state.plannedDate);
   }
 
   render() {
     return (
       <DatePicker
-        selected={this.state.plannedDate} //when day clicked
+        selected={this.props.plannedDate} //when day clicked
         onChange={this.handleChange.bind(this)} // when value changed
         minDate={moment()}
         highlightDates={[moment()]}

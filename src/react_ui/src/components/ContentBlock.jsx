@@ -85,10 +85,18 @@ class ContentBlock extends Component {
     })
   }
   
+  onResetTime(date, secsPastMidnight) {
+    this.onSelectDate(date)
+    this.onSelectTime(secsPastMidnight)
+    this.setState({
+      isDefaultTime: true
+    })
+  }
+
     onSelectTime(time){
      this.setState({
       plannedTime:time,
-        isDefaultTime:false
+      isDefaultTime: false
      
    })
       }
@@ -97,8 +105,7 @@ class ContentBlock extends Component {
      console.log(date)
    this.setState({
        plannedDate:date,
-     isDefaultTime:false
-     
+      isDefaultTime: false
      })
    }
   
@@ -293,7 +300,9 @@ class ContentBlock extends Component {
               <Col xs={8}><TimeButton   plannedTime = {this.state.plannedTime}
                                         plannedDate = {this.state.plannedDate}
                                         onSelectTime= {this.onSelectTime.bind(this)} 
-                                        onSelectDate= {this.onSelectDate.bind(this)} /></Col>
+                                        onSelectDate= {this.onSelectDate.bind(this)} 
+                                          onResetTime={this.onResetTime.bind(this)}
+                                        /></Col>
               <Col xs={2}></Col></Row>
 
              
