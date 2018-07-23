@@ -56,6 +56,14 @@ def getPredictionForJourney(request):
     route = request.data.get('route')
     start = request.data.get('start')
     finish = request.data.get('finish')
+    getNoStops = Composite.objects.filter(name=route)
+    start
+    for val in getNoStops:
+        if val['stop_id'] == int(start):
+
+    noStops = [val for index,val in enumerate(getNoStops) if  ]
+    selectedTime = request.data.get('selectedTime')
+    selectedDate = request.data.get('selectedDate')
     stopNumber = request.data.get('stopNumber')
     print(route, start, finish)
     # stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')

@@ -30,7 +30,6 @@ class ContentBlock extends Component {
       direction: 'I',
       plannedDate:"",
       plannedTime:"",
-       planedTimeNotNow:"",
     }
   }
 
@@ -93,16 +92,17 @@ class ContentBlock extends Component {
       }
   
    onSelectDate(date){
+     console.log(date)
    this.setState({
        plannedDate:date
      })
    }
   
-  onSelectNow(time){
-   this.setState({
-         plannedTimeNotNow:time
-     })
-  }
+  // onSelectNow(time){
+  //  this.setState({
+  //        plannedTimeNotNow:time
+  //    })
+  // }
   
   onStopDeselect(stop) {
     if (stop === 'start') {
@@ -195,15 +195,15 @@ class ContentBlock extends Component {
 
   handleClick = () => {
 
-    this.setState({ chosenRoute: "31"})
+    // this.setState({ chosenRoute: "31"})
     
-    console.log('IN CONTENT BLOCK \n Now button: '+     this.state.plannedTimeNotNow+  
+    console.log('IN CONTENT BLOCK \n Now button: '+     this.state.plannedTime+  
                                  '\n Time Dropdown: '+  this.state.plannedTime +
                                   '\n Calendar button: '+this.state.plannedDate 
                ) 
     
     // const numOfStops = this.calculateNumberOfStops()
-    // this.getPrediction()
+    this.getPrediction()
     // this.setState({
     //   predictionForJourney: prediction
     // })
@@ -223,6 +223,8 @@ class ContentBlock extends Component {
           route: this.state.chosenRoute,
           start: this.state.startStop,
           finish: this.state.finishStop,
+          selectedTime: this.state.plannedTime,
+          selectedDate: this.state.plannedDate.unix()
         })
       })
         .then((response) => response.json())
@@ -275,7 +277,8 @@ class ContentBlock extends Component {
 
 	            <Row><Col xs={2}></Col>
               <Col xs={8}><NowButton  plannedTimeNotNow= {this.state.plannedTimeNotNow}
-                                      onSelectNow= {this.onSelectNow.bind(this)} 
+                                      onSelectTime= {this.onSelectTime.bind(this)} 
+                                      onSelectDate= {this.onSelectDate.bind(this)} 
                             />
                   </Col>
               <Col xs={2}></Col></Row>
