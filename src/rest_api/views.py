@@ -83,6 +83,8 @@ def getPredictionForJourney(request):
 def getNumStopsInJourney(start, finish, route, direction):
     stops = Composite.objects.filter(name=route).filter(route_direction = direction)
     stops = list(stops.values())
+    if (start == "start" and finish == "finish"):
+        return len(stops)
     startIndex, finishIndex = -1, -1
     for index, item in enumerate(stops):
         if item['stop_id'] == int(start):
