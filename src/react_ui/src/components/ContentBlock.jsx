@@ -4,13 +4,13 @@ import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 
 import { Button, ButtonGroup, Media } from "react-bootstrap"
-
+import TimeButton, {NowButton} from './TimeSelect';
 import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
-import NowButton from './NowButton';
-import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
+//import NowButton from './NowButton';
+//import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
 import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 
 
@@ -30,6 +30,7 @@ class ContentBlock extends Component {
       direction: 'I',
       plannedDate:"",
       plannedTime:"",
+       planedTimeNotNow:"",
     }
   }
 
@@ -65,7 +66,6 @@ class ContentBlock extends Component {
     })
     this.props.onRouteUpdate(route)
   }
-
   // chosen route NAME: '31', '11' etc. - TODO make this clearer
   async onChosenRouteUpdate(route) {
     this.setState({
@@ -84,7 +84,26 @@ class ContentBlock extends Component {
       finishStop: 'finish'
     })
   }
-
+  
+    onSelectTime(time){
+     this.setState({
+      plannedTime:time
+     
+   })
+      }
+  
+   onSelectDate(date){
+   this.setState({
+       plannedDate:date
+     })
+   }
+  
+  onSelectNow(time){
+   this.setState({
+         plannedTimeNotNow:time
+     })
+  }
+  
   onStopDeselect(stop) {
     if (stop === 'start') {
       this.setState({startStop: "start"})
@@ -177,6 +196,12 @@ class ContentBlock extends Component {
   handleClick = () => {
 
     this.setState({ chosenRoute: "31"})
+    
+    console.log('IN CONTENT BLOCK \n Now button: '+     this.state.plannedTimeNotNow+  
+                                 '\n Time Dropdown: '+  this.state.plannedTime +
+                                  '\n Calendar button: '+this.state.plannedDate 
+               ) 
+    
     // const numOfStops = this.calculateNumberOfStops()
     // this.getPrediction()
     // this.setState({
@@ -249,13 +274,18 @@ class ContentBlock extends Component {
               <div style={{marginTop: '2em'}}> </div>
 
 	            <Row><Col xs={2}></Col>
-              <Col xs={8}><NowButton /></Col>
+              <Col xs={8}><NowButton  plannedTimeNotNow= {this.state.plannedTimeNotNow}
+                                      onSelectNow= {this.onSelectNow.bind(this)} 
+                            />
+                  </Col>
               <Col xs={2}></Col></Row>
 
               <div style={{marginTop: '2em'}}> </div>
               
               <Row><Col xs={2}></Col>
-              <Col xs={8}><TimeButton /></Col>
+              <Col xs={8}><TimeButton   plannedTime = {this.state.plannedTime}
+                                        onSelectTime= {this.onSelectTime.bind(this)} 
+                                        onSelectDate= {this.onSelectDate.bind(this)} /></Col>
               <Col xs={2}></Col></Row>
 
              

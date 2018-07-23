@@ -11,6 +11,7 @@
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.20",
     "nightwatch": "^0.9.21",
+    "rc-tabs": "^9.3.1",
     "react": "^16.4.0",
     "react-bootstrap": "^0.32.1",
     "react-bootstrap-select": "^0.14.0",

@@ -53,13 +53,14 @@ class App extends Component {
             </Col>
             <Col xsHidden md={8}>
               <MapContainer selectedStops={ this.state.selectedJourney}/></Col></Row>
-              <Row>
-              <Col mdHidden lgHidden ><ContentBlock data={this.state.testState} 
+          {/*      <Row>
+           <Col mdHidden lgHidden ><ContentBlock data={this.state.testState} 
                             onRouteUpdate={this.onRouteUpdate.bind(this)}
                             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
               <MapContainer selectedStops={ this.state.selectedJourney}/>
             </Col>
-        </Row>
+           
+        </Row> */} 
       </Grid>
 
     )
