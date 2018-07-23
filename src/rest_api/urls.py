@@ -14,4 +14,5 @@ urlpatterns = [
     # path('testRequest', views.request, name='request'),
     path('getRouteStopComposite', views.getRouteStopComposite.as_view(),
          name="getRouteStopComposite"),
+   path('getFiveDayWeather', views.getFiveDayWeather, name='getFiveDayWeather'),
 ]
