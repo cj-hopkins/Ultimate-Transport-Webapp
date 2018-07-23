@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 #from braces.views import CsrfExemptMixin
 import random
 import json
+import re
 from rest_api.get_prediction import getPrediction, rf_model
 
 class getAllStops(generics.ListCreateAPIView):
@@ -65,11 +66,14 @@ def getPredictionForJourney(request):
     direction = request.data.get('direction')
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
+    isDefaultTime = request.data.get('isDefaultTime')
+    print(type(isDefaultTime))
     numStops = getNumStopsInJourney(start, finish, route, direction)
     if numStops == -1:
         print("indexing failed")
+    isRaining = getRain(isDefaultTime, selectedDate, selectedTime)
 
-    result = getPrediction(numStops)
+    result = getPrediction(numStops, isRaining, selectedTime)
     print(result[0])
     return JsonResponse({'prediction':result[0]})
 
@@ -100,3 +104,14 @@ def getNumStopsInJourney(start, finish, route, direction):
             break
     indicesFound = startIndex != -1 and finishIndex != -1 
     return finishIndex - startIndex if indicesFound else -1
+
+def getRain(isDefaultTime, selectedDate, selectedTime):
+    regex = r'^.*[R|r]ain.*$'
+    if isDefaultTime:
+        weather = Currentweather.objects.values()[0]
+        isRaining = re.match(regex, weather['description'])
+        print(isRaining)
+    else:
+        pass
+    isRaining = False if isRaining is None else True
+    return isRaining
