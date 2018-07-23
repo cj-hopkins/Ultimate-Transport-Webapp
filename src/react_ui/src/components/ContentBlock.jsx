@@ -4,7 +4,7 @@ import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 
 import { Button, ButtonGroup, Media } from "react-bootstrap"
-import TimeButton, {NowButton} from './TimeSelect';
+import TimeButton from './TimeSelect';
 import {PageHeader} from 'react-bootstrap';
 import dublin_bus_icon from './dublin_bus_icon.png';
 import WeatherWidget from "./Weather";
@@ -12,7 +12,7 @@ import PredictionContainer from './PredictionContainer';
 //import NowButton from './NowButton';
 //import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
 import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
-
+import moment from "moment";
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -28,8 +28,9 @@ class ContentBlock extends Component {
       finishStop: "finish",
       predictionForJourney: null,
       direction: 'I',
-      plannedDate:"",
-      plannedTime:"",
+      plannedDate:moment(),
+      plannedTime:moment(),
+      isDefaultTime:true,
     }
   }
 
@@ -84,9 +85,18 @@ class ContentBlock extends Component {
     })
   }
   
+  onResetTime(date, secsPastMidnight) {
+    this.onSelectDate(date)
+    this.onSelectTime(secsPastMidnight)
+    this.setState({
+      isDefaultTime: true
+    })
+  }
+
     onSelectTime(time){
      this.setState({
-      plannedTime:time
+      plannedTime:time,
+      isDefaultTime: false
      
    })
       }
@@ -94,7 +104,8 @@ class ContentBlock extends Component {
    onSelectDate(date){
      console.log(date)
    this.setState({
-       plannedDate:date
+       plannedDate:date,
+      isDefaultTime: false
      })
    }
   
@@ -277,19 +288,22 @@ class ContentBlock extends Component {
               <div style={{marginTop: '2em'}}> </div>
 
 	            <Row><Col xs={2}></Col>
-              <Col xs={8}><NowButton  plannedTimeNotNow= {this.state.plannedTimeNotNow}
+            {/* <Col xs={8}><NowButton  plannedTimeNotNow= {this.state.plannedTimeNotNow}
                                       onSelectTime= {this.onSelectTime.bind(this)} 
                                       onSelectDate= {this.onSelectDate.bind(this)} 
                             />
-                  </Col>
+                  </Col> */} 
               <Col xs={2}></Col></Row>
 
               <div style={{marginTop: '2em'}}> </div>
               
               <Row><Col xs={2}></Col>
               <Col xs={8}><TimeButton   plannedTime = {this.state.plannedTime}
+                                        plannedDate = {this.state.plannedDate}
                                         onSelectTime= {this.onSelectTime.bind(this)} 
-                                        onSelectDate= {this.onSelectDate.bind(this)} /></Col>
+                                        onSelectDate= {this.onSelectDate.bind(this)} 
+                                          onResetTime={this.onResetTime.bind(this)}
+                                        /></Col>
               <Col xs={2}></Col></Row>
 
              

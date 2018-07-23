@@ -30,6 +30,8 @@ class TimeButton extends Component {
     this.props.onSelectTime(time);
   }
 
+  
+
   render() {
     return (
       <div>
@@ -50,7 +52,13 @@ class TimeButton extends Component {
               </Col>
               <Col>
                 {" "}
-                <CalendarChooseDate onSelectDate={this.dateUpdate.bind(this)} />
+                <CalendarChooseDate 
+                plannedDate= {this.props.plannedDate}
+                onSelectDate={this.dateUpdate.bind(this)} />
+              </Col>
+              <Col>
+                <NowButton  onSelectTime={this.timeUpdate.bind(this)}
+                            onSelectDate={this.dateUpdate.bind(this)}/>
               </Col>
             </Row>
           </Grid>
@@ -70,17 +78,17 @@ class CalendarChooseDate extends Component {
   }
   handleChange(date) {
     // console.log(date)
-    this.setState({
-      plannedDate: date
-    });
     this.props.onSelectDate(date);
+    // this.setState({
+    //   plannedDate: this.props.selectedDate
+    // })
     // console.log('Date from Calendar:'+this.state.plannedDate);
   }
 
   render() {
     return (
       <DatePicker
-        selected={this.state.plannedDate} //when day clicked
+        selected={this.props.plannedDate} //when day clicked
         onChange={this.handleChange.bind(this)} // when value changed
         minDate={moment()}
         highlightDates={[moment()]}
@@ -123,7 +131,7 @@ class TimeDropdown extends Component {
   }
 }
 
-export class NowButton extends Component {
+class NowButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -157,7 +165,7 @@ export class NowButton extends Component {
       <div>
         <Button
           value={this.state.plannedTime}
-          bsStyle="primary"
+          bsStyle="default"
           onClick={this.handleClick.bind(this)}
           block
         >
