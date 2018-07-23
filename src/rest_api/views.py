@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.conf.urls.static import static
 from django.core import serializers
-from .models import Stop, Route, Composite, Currentweather
+from .models import Stop, Route, Composite, Currentweather, FiveDayWeather
 from .serializers import StopSerializer, RouteSerializer, RouteStopSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -34,7 +34,14 @@ def getCurrentWeather(request):
     print(data)
     return Response(data)
     # return JsonResponse({'weather': data})
-
+    
+@api_view(['GET'])
+def getFiveDayWeather(request):
+    weather = FiveDayWeather.objects.all()
+    data = list(weather.values())
+    print(data)
+    return Response(data)
+    # return JsonResponse({'weather': data})
 
 # @csrf_exempt
 @api_view(['POST'])
@@ -57,11 +64,11 @@ def getPredictionForJourney(request):
     start = request.data.get('start')
     finish = request.data.get('finish')
     getNoStops = Composite.objects.filter(name=route)
-    start
-    for val in getNoStops:
-        if val['stop_id'] == int(start):
+#    start
+#    for val in getNoStops:
+#        if val['stop_id'] == int(start):
 
-    noStops = [val for index,val in enumerate(getNoStops) if  ]
+#    noStops = [val for index,val in enumerate(getNoStops) if  ]
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
     stopNumber = request.data.get('stopNumber')
