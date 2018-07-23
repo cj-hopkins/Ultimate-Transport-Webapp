@@ -223,6 +223,7 @@ class ContentBlock extends Component {
           route: this.state.chosenRoute,
           start: this.state.startStop,
           finish: this.state.finishStop,
+          direction: this.state.direction,
           selectedTime: this.state.plannedTime,
           selectedDate: this.state.plannedDate.unix()
         })

@@ -56,19 +56,14 @@ def getPredictionForJourney(request):
     route = request.data.get('route')
     start = request.data.get('start')
     finish = request.data.get('finish')
-    getNoStops = Composite.objects.filter(name=route)
-    start
-    for val in getNoStops:
-        if val['stop_id'] == int(start):
-
-    noStops = [val for index,val in enumerate(getNoStops) if  ]
+    direction = request.data.get('direction')
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
-    stopNumber = request.data.get('stopNumber')
-    print(route, start, finish)
-    # stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')
-    # data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address').distinct())
-    result = getPrediction()
+    numStops = getNumStopsInJourney(start, finish, route, direction)
+    if numStops == -1:
+        print("indexing failed")
+
+    result = getPrediction(numStops)
     print(result[0])
     return JsonResponse({'prediction':result[0]})
 
@@ -84,3 +79,16 @@ def getPredictionForJourney(request):
 
 # def request(request):
 #     return Response("request made")
+
+def getNumStopsInJourney(start, finish, route, direction):
+    stops = Composite.objects.filter(name=route).filter(route_direction = direction)
+    stops = list(stops.values())
+    startIndex, finishIndex = -1, -1
+    for index, item in enumerate(stops):
+        if item['stop_id'] == int(start):
+            startIndex = index
+        elif item['stop_id'] == int(finish):
+            finishIndex = index
+            break
+    indicesFound = startIndex != -1 and finishIndex != -1 
+    return finishIndex - startIndex if indicesFound else -1
