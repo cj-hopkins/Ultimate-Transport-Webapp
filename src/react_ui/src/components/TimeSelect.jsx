@@ -57,7 +57,8 @@ class TimeButton extends Component {
                 onSelectDate={this.dateUpdate.bind(this)} />
               </Col>
               <Col>
-                <NowButton  onSelectTime={this.timeUpdate.bind(this)}
+                <NowButton  onResetTime={this.props.onResetTime.bind(this)}
+                            onSelectTime={this.timeUpdate.bind(this)}
                             onSelectDate={this.dateUpdate.bind(this)}/>
               </Col>
             </Row>
@@ -155,8 +156,7 @@ class NowButton extends Component {
     this.setState({
       plannedTime: diffInSeconds
     });
-    this.props.onSelectTime(diffInSeconds);
-    this.props.onSelectDate(newTime);
+    this.props.onResetTime(newTime, diffInSeconds)
     console.log("Time from now button:" + this.state.plannedTime);
   }
 

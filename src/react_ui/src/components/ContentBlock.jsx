@@ -236,7 +236,8 @@ class ContentBlock extends Component {
           finish: this.state.finishStop,
           direction: this.state.direction,
           selectedTime: this.state.plannedTime,
-          selectedDate: this.state.plannedDate.unix()
+          selectedDate: this.state.plannedDate.unix(),
+          isDefaultTime: this.state.isDefaultTime
         })
       })
         .then((response) => response.json())
@@ -298,7 +299,8 @@ class ContentBlock extends Component {
               <div style={{marginTop: '2em'}}> </div>
               
               <Row><Col xs={2}></Col>
-              <Col xs={8}><TimeButton   plannedTime = {this.state.plannedTime}
+              <Col xs={8}><TimeButton   onResetTime={this.onResetTime.bind(this)}
+                                        plannedTime = {this.state.plannedTime}
                                         plannedDate = {this.state.plannedDate}
                                         onSelectTime= {this.onSelectTime.bind(this)} 
                                         onSelectDate= {this.onSelectDate.bind(this)} 
