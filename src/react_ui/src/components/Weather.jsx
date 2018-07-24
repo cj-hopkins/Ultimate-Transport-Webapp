@@ -3,9 +3,9 @@ import {Badge} from "react-bootstrap";
 
 
 
-const API_KEY = "2abe029b7b8d40e80d1ed447f4522f0d";
-{/* Orla's key in case Conor's one stops woking
-const API_KEY = "70ef396e3ce3949e0934b4428e41f453";*/}
+// const API_KEY = "2abe029b7b8d40e80d1ed447f4522f0d";
+/* Orla's key in case Conor's one stops woking
+const API_KEY = "70ef396e3ce3949e0934b4428e41f453";*/
 
 
 class WeatherWidget extends Component{
@@ -15,7 +15,7 @@ class WeatherWidget extends Component{
     icon: undefined
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // fetch(`http://api.openweathermap.org/data/2.5/weather?q=Dublin,ie&appid=${API_KEY}&units=metric`)
     const endPoint = '/api/getCurrentWeather'
     fetch(endPoint)
@@ -38,8 +38,8 @@ class WeatherWidget extends Component{
       <div>
       <p>Current Weather</p> 
       
-      <h3><Badge pullRight='true' bsStyle="warning">{this.state.temperature} °C</ Badge></h3>
-      <img src={`https://openweathermap.org/img/w/${this.state.icon}.png`}/>  
+      <h3><Badge pullRight={true} bsStyle="warning">{this.state.temperature} °C</ Badge></h3>
+      <img src={`https://openweathermap.org/img/w/${this.state.icon}.png`} alt={this.state.description}/>  
       </div>
       );
   }
