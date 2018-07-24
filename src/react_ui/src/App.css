@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: left;
 }
 
 .App-logo {
@@ -40,3 +40,8 @@
   height: 40px;
   width: 200px;
 }
+
+.Grid {
+    height: 100px;
+}
+

@@ -42,37 +42,28 @@ class Composite(models.Model):
     stop_lat = models.FloatField()
     stop_lon = models.FloatField()
 
+class Currentweather(models.Model):
+    identifier = models.IntegerField(primary_key=True)
+    temperature = models.IntegerField()
+    description = models.CharField(max_length=128)
+    icon = models.CharField(max_length=128)
 
 # ID,NAME,ROUTE_DIRECTION,SEQUENCE,IS_STAGE_POINT,STAGE_NUMBER,JOURNEY_PATTERN_ID,RTPI_DESTINATION,RTPI_ORGIN,RTPI_VIA,SEQUENCE_NUMBER,FARE
 
-class Weather(models.Model):
-    ID = models.IntegerField()
-    Date = models.DateTimeField(primary_key=True)
-    Ind_Rain = models.IntegerField()
-    Rain = models.FloatField()
-    Ind_Air_Temp = models.IntegerField()
-    Air_Temp = models.FloatField()
-    Ind_Wetb_Temp = models.IntegerField()
-    Wet_Bulb_Temp = models.FloatField()
-    Dew_Point = models.FloatField()
-    Vapour_Pressure = models.FloatField()
-    Rel_Humidity = models.IntegerField()
-    Mean_Sea_Level = models.FloatField()
+class FiveDayWeather(models.Model):
+    number = models.IntegerField()
+    timeofday = models.DateTimeField(primary_key=True)
+    temperature = models.IntegerField()
+    description = models.CharField(max_length=128)
+    icon = models.CharField(max_length=10)
+    rain = models.CharField(max_length=32)
 
     def __str__(self):
-        return "id: {}\ndate: {}\nind_rain: {}\nrain: {}\nind_air_temp: \
-        {}\nair_temp: {}\nind_wetb_temp: {}\nwet_bulb_temp: {}\ndew_point: \
-        {}\nvapour_pressure: {}\nrel_humidity: {}\nmean_sea_level: \
-    {}\n".format(self.ID,
-                 self.Date,
-                 self.Ind_Rain,
-                 self.Rain,
-                 self.Ind_Air_Temp,
-                 self.Air_Temp,
-                 self.Ind_Wetb_Temp,
-                 self.Wet_Bulb_Temp,
-                 self.Dew_Point,
-                 self.Vapour_Pressure,
-                 self.Rel_Humidity,
-                 self.Mean_Sea_Level,
+        return "number : {}\ntimeofday: {}\ntemperature: {}\ndescription: {}\nicon: \
+        {}\nrain: {}\n".format(self.number,
+                 self.timeofday,
+                 self.temperature,
+                 self.description,
+                 self.icon,
+                 self.rain,
                  )

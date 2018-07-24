@@ -8,9 +8,11 @@ urlpatterns = [
     path('getStopsForRoute', views.getStopsForRoute,
          name='getStopsForRoute'),
     path('getPredictionForJourney', views.getPredictionForJourney, name='getPredictionForJourney'),
+    path('getCurrentWeather', views.getCurrentWeather, name='getCurrentWeather'),
     # path('weather', views.getAllWeather.as_view(), name='getAllWeather'),
     # path('', views.getAllStops, name='getAllStops'),
     # path('testRequest', views.request, name='request'),
     path('getRouteStopComposite', views.getRouteStopComposite.as_view(),
          name="getRouteStopComposite"),
+   path('getFiveDayWeather', views.getFiveDayWeather, name='getFiveDayWeather'),
 ]
