@@ -1,12 +1,9 @@
-<<<<<<< HEAD
-=======
 import { Grid, Row, Col, Container } from 'react-bootstrap';
->>>>>>> fb95bb15704c3e4cd1892dfd1dd93faa8a5df83c
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 
-import { Button, Row, Col } from "react-bootstrap"
+import { Button} from "react-bootstrap"
 import TimeButton from './TimeSelect';
 // import {PageHeader} from 'react-bootstrap';
 // import dublin_bus_icon from './dublin_bus_icon.png';
