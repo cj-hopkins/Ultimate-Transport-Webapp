@@ -1,20 +1,24 @@
-import React, { Component } from "react"
-import { Grid, Row, Col, Clearfix } from "react-bootstrap"
-import "./App.css"
-import MapContainer from "./components/MapContainer"
-import ContentBlock from "./components/ContentBlock"
+import React, { Component } from "react";
+import { Grid, Row, Col, Clearfix } from "react-bootstrap";
+import "./App.css";
+import MapContainer from "./components/MapContainer";
+import ContentBlock from "./components/ContentBlock";
+import Example from "./components/examples/Example";
+import CustomNavbar from './components/CustomNavbar';
+import ContentHeader from './components/ContentHeader';
 
-require("bootstrap/dist/css/bootstrap.css")
-require("react-select/dist/react-select.css")
+require("bootstrap/dist/css/bootstrap.css");
+require("react-select/dist/react-select.css");
 
 class App extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
 
     this.state = {
       stopsInRoute: [],
       selectedJourney: [],
-    }
+      activatedUI: 0
+    };
   }
 
   // this is only to be used when a new route is chosen (ie. by RouteSelect)
@@ -23,15 +27,42 @@ class App extends Component {
   onRouteUpdate(data) {
     this.setState({
       stopsInRoute: data,
-      selectedJourney: data,
-    })
+      selectedJourney: data
+    });
   }
 
   onSelectedJourneyUpdate(data) {
     this.setState({
       selectedJourney: data
-    })
+    });
   }
+
+  swapUI(key) {
+    //   console.log(key)
+    this.setState({
+      activatedUI: key
+    });
+  }
+  
+  renderSwitch = () => {
+      console.log("render switch")
+    switch (this.state.activatedUI) {
+        case 0:
+          return <ContentBlock key={0} 
+            onRouteUpdate={this.onRouteUpdate.bind(this)}
+            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+          />;
+        case 1:
+          return <Example key={1} />;
+        case 2:
+          return <Example key={2} />;
+        default:
+          return <div key={3} />;
+      }
+    // return <div>{chosenElement}</div>;
+  }
+
+
   // componentDidUpdate(prevState) {
   //   if (prevState.selectedJourney === []) {
   //     const stops = this.state.stopsInRoute
@@ -46,25 +77,32 @@ class App extends Component {
     // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
       <Grid fluid={true} className="Grid">
-        <Row><Col xsHidden md={4}>
-              <ContentBlock data={this.state.testState} 
-                            onRouteUpdate={this.onRouteUpdate.bind(this)}
-                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
-            </Col>
-            <Col xsHidden md={8}>
-              <MapContainer selectedStops={ this.state.selectedJourney}/></Col></Row>
-          {/*      <Row>
+        <Row>
+          <Col xsHidden md={4}>
+            <ContentHeader />
+            <CustomNavbar swapUI={this.swapUI.bind(this)}/>
+            {this.renderSwitch()}
+            {/* <ContentBlock
+              data={this.state.testState}
+              onRouteUpdate={this.onRouteUpdate.bind(this)}
+              onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            /> */}
+          </Col>
+          <Col xsHidden md={8}>
+            <MapContainer selectedStops={this.state.selectedJourney} />
+          </Col>
+        </Row>
+        {/*      <Row>
            <Col mdHidden lgHidden ><ContentBlock data={this.state.testState} 
                             onRouteUpdate={this.onRouteUpdate.bind(this)}
                             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
               <MapContainer selectedStops={ this.state.selectedJourney}/>
             </Col>
            
-        </Row> */} 
+        </Row> */}
       </Grid>
-
-    )
+    );
   }
 }
 
-export default App
+export default App;

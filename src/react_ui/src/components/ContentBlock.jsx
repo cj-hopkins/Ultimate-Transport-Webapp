@@ -5,14 +5,16 @@ import StopSelect from "./StopSelect"
 
 import { Button, ButtonGroup, Media } from "react-bootstrap"
 import TimeButton from './TimeSelect';
-import {PageHeader} from 'react-bootstrap';
-import dublin_bus_icon from './dublin_bus_icon.png';
-import WeatherWidget from "./Weather";
+// import {PageHeader} from 'react-bootstrap';
+// import dublin_bus_icon from './dublin_bus_icon.png';
+// import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
+// import ContentHeader from './ContentHeader';
 //import NowButton from './NowButton';
 //import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
 import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 import moment from "moment";
+import ContentHeader from './ContentHeader';
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -257,13 +259,14 @@ class ContentBlock extends Component {
 
     return (
       <div>
-       <Media>
+      {/* <ContentHeader /> */}
+       {/* <Media>
 		
-		<Media.Left>
+		<Media.Left> */}
         
-        <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
+        {/* <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
           </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader><WeatherWidget/>
-        </Media>
+        </Media> */}
         {/* <NavigationTabs /> */}
 
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
