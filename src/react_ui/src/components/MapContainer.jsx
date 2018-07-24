@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from "google-maps-react";
+import db2 from './db2.png'
+import MapMarker from './MapMarker.png'
+
 
 export class MapContainer extends Component {
   constructor(props) {
@@ -19,9 +22,10 @@ export class MapContainer extends Component {
   }
 
   // componentWillMount() {
-  //   this.setState({
-  //     selectedStops: this.props.selectedStops
-  //   })
+  //   // this.setState({
+  //   //   selectedStops: this.props.selectedStops
+  //   // })
+  //   console.log(this.props.currentPosition)
   // }
 
 async componentWillMount() {
@@ -55,7 +59,6 @@ async componentWillMount() {
     }
   }
 
-
   onMarkerClick(props, marker, e) {
     // console.log(props)
     // console.log(marker)
@@ -68,16 +71,14 @@ async componentWillMount() {
   }
 
   render() {
-    // console.log(this.state.chosenRoute)
-    // console.log(this.state.selectedStops)
-    // console.log("rendering map!")
     const im = "https://www.robotwoods.com/dev/misc/bluecircle.png";
-    const google = this.props.google
+    const google = window.google
     return (
       <div>
         <Map
           google={this.props.google}
           zoom={12}
+          gestureHandling={'cooperative'}
           initialCenter={{
             lat: 53.3498,
             lng: -6.2603
@@ -102,6 +103,7 @@ async componentWillMount() {
 
           {this.props.selectedStops.map(item => (
             <Marker
+              icon={db2}
               key={item.identifier}
               onClick={this.onMarkerClick}
               title={item.stop_id.toString()}

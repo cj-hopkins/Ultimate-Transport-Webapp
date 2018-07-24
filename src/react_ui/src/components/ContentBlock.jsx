@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import { Grid, Row, Col, Container } from 'react-bootstrap';
+>>>>>>> fb95bb15704c3e4cd1892dfd1dd93faa8a5df83c
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
@@ -250,6 +254,7 @@ class ContentBlock extends Component {
                     onStopDeselect={this.onStopDeselect.bind(this)}
                     chosenRoute={this.state.chosenRoute}
                     />
+        {/* <CustomGeolocation /> */}
 
               {/* TODO - use relative sizing here */}
               <div style={{marginTop: '2em'}}> </div>
