@@ -46,21 +46,19 @@ class App extends Component {
     // const searchNames = ['Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Perth', 'Hobart'];
     return (
       <Grid fluid={true} className="Grid">
-        <Row><Col xsHidden md={4}>
+        <Row><Col md={4}>
               <ContentBlock data={this.state.testState} 
                             onRouteUpdate={this.onRouteUpdate.bind(this)}
                             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
             </Col>
             <Col xsHidden md={8}>
               <MapContainer selectedStops={ this.state.selectedJourney}/></Col></Row>
-          {/*      <Row>
-           <Col mdHidden lgHidden ><ContentBlock data={this.state.testState} 
-                            onRouteUpdate={this.onRouteUpdate.bind(this)}
-                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
+                <Row>
+           <Col smHidden mdHidden lgHidden>
               <MapContainer selectedStops={ this.state.selectedJourney}/>
             </Col>
            
-        </Row> */} 
+        </Row>
       </Grid>
 
     )

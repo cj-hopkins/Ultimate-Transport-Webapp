@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from "google-maps-react";
+import db2 from './db2.png'
+import MapMarker from './MapMarker.png'
 
 
 export class MapContainer extends Component {
@@ -40,16 +42,18 @@ export class MapContainer extends Component {
       <div>
         <Map google={this.props.google} 
           zoom={12}
+          gestureHandling={'cooperative'}
           initialCenter={{
             lat: 53.3498,
             lng: -6.2603
           }} >
 
           <Marker onClick={this.onMarkerClick}
-            name={"Current location"} />
+            name={"Current location"} icon={MapMarker}/>
 
           {this.props.selectedStops.map(item => (
             <Marker
+              icon={db2}
               key={item.identifier}
               onClick={this.onMarkerClick}
               title={item.stop_id.toString()}
