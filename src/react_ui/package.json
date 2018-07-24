@@ -23,7 +23,6 @@
     "react-dropdown-input": "^0.1.11",
     "react-geolocated": "^2.4.0",
     "react-geolocation": "^1.0.3",
-    "react-google-maps": "^9.4.5",
     "react-open-weather": "^0.4.0",
     "react-open-weather-icons": "^0.1.1",
     "react-router-dom": "^4.2.2",

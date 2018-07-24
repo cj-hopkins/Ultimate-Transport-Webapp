@@ -6,6 +6,8 @@ import ContentBlock from "./components/ContentBlock";
 import Example from "./components/examples/Example";
 import CustomNavbar from './components/CustomNavbar';
 import ContentHeader from './components/ContentHeader';
+import LocationSearchInput from './components/LocationSearchInput';
+import JourneyPlanner from './components/JourneyPlanner';
 
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
@@ -53,7 +55,7 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
           />;
         case 1:
-          return <Example key={1} />;
+          return <JourneyPlanner key={1} />;
         case 2:
           return <Example key={2} />;
         default:
