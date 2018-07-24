@@ -44,31 +44,19 @@ class App extends Component {
   render() {
     return (
       <Grid fluid={true} className="Grid">
-        <Row>
-          <Col xsHidden md={4}>
-            <MainController
-              data={this.state.testState}
-              onRouteUpdate={this.onRouteUpdate.bind(this)}
-              onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
-            />
-          </Col>
-          <Col xsHidden md={8}>
-            <MapContainer
-              selectedStops={this.state.selectedJourney}
-              currentPosition={this.state.currentPosition}
-            />
-          </Col>
+        <Row><Col md={4}>
+              <ContentBlock data={this.state.testState} 
+                            onRouteUpdate={this.onRouteUpdate.bind(this)}
+                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
+            </Col>
+            <Col xsHidden md={8}>
+              <MapContainer selectedStops={ this.state.selectedJourney}/></Col></Row>
+                <Row>
+           <Col smHidden mdHidden lgHidden>
+              <MapContainer selectedStops={ this.state.selectedJourney}/>
+            </Col>
+           
         </Row>
-        {/* <Row>
-          <Col mdHidden lgHidden>
-            <ContentBlock
-              data={this.state.testState}
-              onRouteUpdate={this.onRouteUpdate.bind(this)}
-              onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
-            />
-            <MapContainer selectedStops={this.state.selectedJourney} />
-          </Col>
-        </Row> */}
       </Grid>
     );
   }
