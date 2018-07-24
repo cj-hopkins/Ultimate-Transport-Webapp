@@ -30,15 +30,13 @@ class TimeButton extends Component {
     this.props.onSelectTime(time);
   }
 
-  
-
   render() {
     return (
       <div>
         <Button
           onClick={this.toggleHidden.bind(this)}
           bsStyle="primary"
-          bsSize="medium"
+          bsSize="large"
           block
         >
           {" "}
@@ -52,14 +50,17 @@ class TimeButton extends Component {
               </Col>
               <Col>
                 {" "}
-                <CalendarChooseDate 
-                plannedDate= {this.props.plannedDate}
-                onSelectDate={this.dateUpdate.bind(this)} />
+                <CalendarChooseDate
+                  plannedDate={this.props.plannedDate}
+                  onSelectDate={this.dateUpdate.bind(this)}
+                />
               </Col>
               <Col>
-                <NowButton  onResetTime={this.props.onResetTime.bind(this)}
-                            onSelectTime={this.timeUpdate.bind(this)}
-                            onSelectDate={this.dateUpdate.bind(this)}/>
+                <NowButton
+                  onResetTime={this.props.onResetTime.bind(this)}
+                  onSelectTime={this.timeUpdate.bind(this)}
+                  onSelectDate={this.dateUpdate.bind(this)}
+                />
               </Col>
             </Row>
           </Grid>
@@ -156,7 +157,7 @@ class NowButton extends Component {
     this.setState({
       plannedTime: diffInSeconds
     });
-    this.props.onResetTime(newTime, diffInSeconds)
+    this.props.onResetTime(newTime, diffInSeconds);
     console.log("Time from now button:" + this.state.plannedTime);
   }
 

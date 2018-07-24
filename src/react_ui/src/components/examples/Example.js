@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button,  Panel } from 'react-bootstrap';
-import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
+// import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 
 class Example extends React.Component {
   constructor(props, context) {

@@ -9,21 +9,3 @@ let myComponent =  document.getElementById('reactify-django-ui')
 if (myComponent !== null){
     ReactDOM.render(<App />, myComponent);
 }
-
-//ReactDOM.render(
-//    <div>
-//    <RouteForm />
-//    <Map />
-//    </div>,
-//  document.getElementById('reactify-django-ui')
-//);
-
-
-// ReactDOM.render(
-//     <div>
-//     <RouteForm />
-//     <Map />
-//     </div>,
-//   document.getElementById('reactify-django-ui')
-// );
-

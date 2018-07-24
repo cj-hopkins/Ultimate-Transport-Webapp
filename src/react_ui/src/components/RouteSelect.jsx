@@ -35,7 +35,6 @@ class RouteSelect extends Component {
   getStopsForRoute = (routeName, direction) => {
     const endpoint = '/api/getStopsForRoute' 
     try {
-      // const result = fetch(endpoint, {
       fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -56,28 +55,6 @@ class RouteSelect extends Component {
       }
   }
 
-  // Leaving this here for now as the new version may have a concurrency issue
-  // async componentWillMount(){
-
-  //   const endpoint = '/api/getAllRoutes';
-  //   try {
-  //     fetch(endpoint)
-  //       .then(response => response.json())
-  //         .then(routeNames => {
-  //           this.setState({
-  //             routes: routeNames
-  //           });
-  //           const routeItems = []
-  //           {routeNames.forEach(item => (
-  //             routeItems.push({value: item.route, label: item.route})
-  //           ))}
-  //           this.setState({routesAsOptions: routeItems})
-  //           })
-  //   } catch(e) {
-  //     console.log(e);
-  //   }
-  // }
-
   async componentWillMount(){
 
     let routeNames
@@ -95,9 +72,9 @@ class RouteSelect extends Component {
 
     // Format routes to use with dropdown
     const routeItems = []
-    {routeNames.forEach(item => (
+    routeNames.forEach(item => (
       routeItems.push({value: item.route, label: item.route})
-    ))}
+    ))
     this.setState({routesAsOptions: routeItems})
   }
 
@@ -109,7 +86,6 @@ class RouteSelect extends Component {
   }
 
   render() {
-    console.log(this.props.route_destination)
     return (
           <div>
             <Select

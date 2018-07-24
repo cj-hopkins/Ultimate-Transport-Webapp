@@ -41,7 +41,7 @@ async componentWillMount() {
       })
         .then(response => response.json())
         .then(resp => {
-          console.log(resp);
+          // console.log(resp);
           this.setState({
             currentPosition: {
               lat: resp.location.lat,

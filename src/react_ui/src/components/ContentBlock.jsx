@@ -1,9 +1,8 @@
-import { Navbar, Nav, NavItem, MenuItem, NavDropdown, Grid, Row, Col, Container } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 
-import { Button, ButtonGroup, Media } from "react-bootstrap"
+import { Button, Row, Col } from "react-bootstrap"
 import TimeButton from './TimeSelect';
 // import {PageHeader} from 'react-bootstrap';
 // import dublin_bus_icon from './dublin_bus_icon.png';
@@ -12,9 +11,9 @@ import PredictionContainer from './PredictionContainer';
 // import ContentHeader from './ContentHeader';
 //import NowButton from './NowButton';
 //import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
-import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
+import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
-import ContentHeader from './ContentHeader';
+// import ContentHeader from './ContentHeader';
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -95,27 +94,19 @@ class ContentBlock extends Component {
     })
   }
 
-    onSelectTime(time){
-     this.setState({
-      plannedTime:time,
-      isDefaultTime: false
-     
-   })
-      }
+  onSelectTime(time){
+    this.setState({
+    plannedTime:time,
+    isDefaultTime: false
+    })
+  }
   
    onSelectDate(date){
-     console.log(date)
-   this.setState({
-       plannedDate:date,
+    this.setState({
+      plannedDate:date,
       isDefaultTime: false
      })
    }
-  
-  // onSelectNow(time){
-  //  this.setState({
-  //        plannedTimeNotNow:time
-  //    })
-  // }
   
   onStopDeselect(stop) {
     if (stop === 'start') {
@@ -130,6 +121,7 @@ class ContentBlock extends Component {
   }
 
   async onStopUpdate(start = null, finish = null) {
+    // Here be dragons - leave this code for now
     if (start === null || finish === null) {
 
       const isStart = (finish === null) ? true : false;
@@ -197,29 +189,9 @@ class ContentBlock extends Component {
     }
     return -1;
   }
-  // componentWillUpdate(prevState, prevProps) {
-  //   if (this.state.chosenRoute === "" || this.state.startStop === "" || this.state.finishStop === "") {
-  //     // this.setState({predictionForJourney: null});
-  //     return;
-  //   }
-  //   if (prevState.startStop === this.state.startStop || prevState.finishStop === this.state.finishStop) return;
-  //   this.getPrediction();
-  // }
 
   handleClick = () => {
-
-    // this.setState({ chosenRoute: "31"})
-    
-    console.log('IN CONTENT BLOCK \n Now button: '+     this.state.plannedTime+  
-                                 '\n Time Dropdown: '+  this.state.plannedTime +
-                                  '\n Calendar button: '+this.state.plannedDate 
-               ) 
-    
-    // const numOfStops = this.calculateNumberOfStops()
     this.getPrediction()
-    // this.setState({
-    //   predictionForJourney: prediction
-    // })
   }
 
   getPrediction = () => {
@@ -259,16 +231,6 @@ class ContentBlock extends Component {
 
     return (
       <div>
-      {/* <ContentHeader /> */}
-       {/* <Media>
-		
-		<Media.Left> */}
-        
-        {/* <img src={dublin_bus_icon} style={{width: '100px', height:'100px'}} alt="dublin_bus_icon" />
-          </Media.Left><PageHeader className='fontForTitle'> Ultimate Transport Dublin</PageHeader><WeatherWidget/>
-        </Media> */}
-        {/* <NavigationTabs /> */}
-
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
                       direction={this.state.direction}
@@ -289,16 +251,8 @@ class ContentBlock extends Component {
                     chosenRoute={this.state.chosenRoute}
                     />
 
+              {/* TODO - use relative sizing here */}
               <div style={{marginTop: '2em'}}> </div>
-
-	            <Row><Col xs={2}></Col>
-            {/* <Col xs={8}><NowButton  plannedTimeNotNow= {this.state.plannedTimeNotNow}
-                                      onSelectTime= {this.onSelectTime.bind(this)} 
-                                      onSelectDate= {this.onSelectDate.bind(this)} 
-                            />
-                  </Col> */} 
-              <Col xs={2}></Col></Row>
-
               <div style={{marginTop: '2em'}}> </div>
               
               <Row><Col xs={2}></Col>
@@ -307,7 +261,6 @@ class ContentBlock extends Component {
                                         plannedDate = {this.state.plannedDate}
                                         onSelectTime= {this.onSelectTime.bind(this)} 
                                         onSelectDate= {this.onSelectDate.bind(this)} 
-                                          onResetTime={this.onResetTime.bind(this)}
                                         /></Col>
               <Col xs={2}></Col></Row>
 

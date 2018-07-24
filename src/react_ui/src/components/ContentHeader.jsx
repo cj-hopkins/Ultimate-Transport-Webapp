@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import { PageHeader } from "react-bootstrap";
 import dublin_bus_icon from "./dublin_bus_icon.png";
