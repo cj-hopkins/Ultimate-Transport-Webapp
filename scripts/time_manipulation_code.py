@@ -380,23 +380,31 @@ def get_temp_and_rain(response,seconds_past_midnight, epoch_time):
         time_for_entry =response[i]['timeofday']            #time in tring format
         formatted_time= pd.to_datetime(time_for_entry, format='%Y-%m-%dT%H:00:00Z') # dt object
         day_of_month = formatted_time.day
-        hour = formatted_time.hour
+        hour = formatted_time.hour             # hour of response(will be in multiple of 3)
         day_of_week =formatted_time.dayofweek
         
-        res = {}                             # initialise empty dictionary
-        res['day_of_month'] = day_of_month   # store day of month and time
-        res['hour'] = hour 
+        keys_for_dictionary = ['temp','rain','description']  # store relevant weather in dictionary
+        
+        res = {key: None for key in keys_for_dictionary}     # fill dictionary with Nones 
         
         if  day_of_month== day_of_month_chosen and hour==  nearest_hour_multiple3:
             res['temp'] =  entry['temperature'] 
-            res['rain'] =  entry['rain']    
-
-            return res
-    return res
-       
+            res['rain'] =  entry['rain']
+            res['description'] =  entry['description'] 
             
+            return res  #if there's weather info return it else return dictionary of Nones
+    return res
+    
 relevant_weather= get_temp_and_rain(response_json,front_end_time, front_end_date )        
 print(relevant_weather)
-print()
 print('temp',relevant_weather['temp'])
 print('rain',relevant_weather['rain'])
+print('rain',relevant_weather['description'])
+
+
+for i in range(8):
+    future_time = (datetime.date.today() + datetime.timedelta(days=i) ).strftime('%s')
+    print('day',i, ': temp is None:',get_temp_and_rain(response_json,60323 ,future_time) ['temp'] is None)
+
+
+
