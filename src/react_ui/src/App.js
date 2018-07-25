@@ -68,7 +68,7 @@ class App extends Component {
     return (
       <Grid fluid={true} className="Grid">
         <Row>
-          <Col xsHidden md={4}>
+          <Col md={4}>
             <ContentHeader />
             <CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()}
@@ -78,9 +78,7 @@ class App extends Component {
           </Col>
         </Row>
              <Row>
-           <Col mdHidden lgHidden ><ContentBlock data={this.state.testState} 
-                            onRouteUpdate={this.onRouteUpdate.bind(this)}
-                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
+           <Col smHidden mdHidden lgHidden >
               <MapContainer selectedStops={ this.state.selectedJourney}/>
             </Col>
            

@@ -7,6 +7,7 @@ class JourneyPlanner extends Component {
     this.state = {};
   }
   render() {
+    const apiRequest = 'https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&mode=transit&transit_mode=bus&key=AIzaSyBRUrdJ4Tz9rLrHrOkwJWpA9QSYNJbWQ0Q'
     return (
       <div>
         <h3> Start </h3>

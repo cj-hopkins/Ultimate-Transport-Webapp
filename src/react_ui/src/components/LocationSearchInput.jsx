@@ -16,19 +16,35 @@ class LocationSearchInput extends React.Component {
   };
  
   handleSelect = address => {
+    this.setState({ address: address });
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng))
+      .then(latLng => console.log('Success', latLng, address))
       .catch(error => console.error('Error', error));
+  };
+
+  handleCloseClick = () => {
+    this.setState({
+      address: '',
+      latitude: null,
+      longitude: null,
+    });
   };
  
   render() {
     const google = window.google
     const searchOptions = {
     location: new google.maps.LatLng(53.3498, -6.2603),
-    radius: 100,
-    types: ['address']
+    radius: '100',
+    componentRestrictions: {country: 'ie'},
+    types: ['geocode']
     }
+
+transitOptions: {
+            modes: ['BUS']
+          }
+
+
 
     return (
       <PlacesAutocomplete
@@ -45,6 +61,14 @@ class LocationSearchInput extends React.Component {
                 className: 'location-search-input',
               })}
             />
+            {this.state.address.length > 0 && (
+                    <button
+                      className="Demo__clear-button"
+                      onClick={this.handleCloseClick}
+                    >
+                      x
+                    </button>
+                  )}
             <div className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}
               {suggestions.map(suggestion => {
