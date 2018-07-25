@@ -8,24 +8,54 @@ import PlacesAutocomplete, {
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { address: '' };
+    this.state = { address1: '', address2: ''};
   }
 
-  handleChange = address => {
-    this.setState({ address });
+  getAddress1() {
+    return(this.state.address1)
+  };
+
+  getAddress2() {
+    return(this.state.address2)
+  };
+
+  handleChange1 = address1 => {
+    this.setState({ address1 })
+    this.props.onChangeAddress1(address1)
   };
  
-  handleSelect = address => {
-    this.setState({ address: address });
-    geocodeByAddress(address)
+  handleSelect1 = address1 => {
+    this.setState({ address1: address1 });
+    geocodeByAddress(address1)
       .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng, address))
+      .then(latLng => console.log('Origin', latLng, address1))
       .catch(error => console.error('Error', error));
   };
 
-  handleCloseClick = () => {
+  handleCloseClick1 = () => {
     this.setState({
-      address: '',
+      address1: '',
+      latitude: null,
+      longitude: null,
+    });
+  };
+
+  handleChange2 = address2 => {
+    this.setState({ address2 })
+    this.props.onChangeAddress2(address2)
+  };
+ 
+  handleSelect2 = address2 => {
+    this.setState({ address2: address2 });
+    geocodeByAddress(address2)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => console.log('Destination', latLng, address2))
+      .catch(error => console.error('Error', error));
+  };
+
+  handleCloseClick2 = () => {
+    this.setState({
+      address2: '',
       latitude: null,
       longitude: null,
     });
@@ -40,17 +70,12 @@ class LocationSearchInput extends React.Component {
     types: ['geocode']
     }
 
-transitOptions: {
-            modes: ['BUS']
-          }
-
-
-
     return (
+    <div><h2>Origin</h2>
       <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
+        value={this.state.address1}
+        onChange={this.handleChange1}
+        onSelect={this.handleSelect1}
         searchOptions={searchOptions}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -61,10 +86,57 @@ transitOptions: {
                 className: 'location-search-input',
               })}
             />
-            {this.state.address.length > 0 && (
+            {this.state.address1.length > 0 && (
                     <button
                       className="Demo__clear-button"
-                      onClick={this.handleCloseClick}
+                      onClick={this.handleCloseClick1}
+                    >
+                      x
+                    </button>
+                  )}
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete><h2>Destination</h2>
+      <PlacesAutocomplete
+        value={this.state.address2}
+        onChange={this.handleChange2}
+        onSelect={this.handleSelect2}
+        searchOptions={searchOptions}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <input
+              {...getInputProps({
+                placeholder: 'Search Places ...',
+                className: 'location-search-input',
+              })}
+            />
+            {this.state.address2.length > 0 && (
+                    <button
+                      className="Demo__clear-button"
+                      onClick={this.handleCloseClick2}
                     >
                       x
                     </button>
@@ -94,6 +166,7 @@ transitOptions: {
           </div>
         )}
       </PlacesAutocomplete>
+      </div>
     );
   }
 }
