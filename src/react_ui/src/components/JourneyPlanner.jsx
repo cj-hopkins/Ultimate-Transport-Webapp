@@ -41,6 +41,7 @@ class JourneyPlanner extends Component {
       origin: start,
       destination: end,
       travelMode: 'TRANSIT',
+      provideRouteAlternatives: true,
       transitOptions: {
         // departureTime: new Date(1337675679473),
         modes: ['BUS'],
