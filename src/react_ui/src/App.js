@@ -66,7 +66,7 @@ class App extends Component {
     return (
       <Grid fluid={true} className="Grid">
         <Row>
-          <Col xsHidden md={4}>
+          <Col md={4}>
             <ContentHeader />
             <CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()}
