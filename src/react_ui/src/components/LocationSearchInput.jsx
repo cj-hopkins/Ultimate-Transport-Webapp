@@ -28,7 +28,10 @@ class LocationSearchInput extends React.Component {
     this.setState({ address1: address1 });
     geocodeByAddress(address1)
       .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Origin', latLng, address1))
+      .then(latLng => {
+        console.log('Origin', latLng, address1);
+        this.props.getOriginGeolocation(latLng);
+      })
       .catch(error => console.error('Error', error));
   };
 
@@ -38,6 +41,7 @@ class LocationSearchInput extends React.Component {
       latitude: null,
       longitude: null,
     });
+    this.props.getOriginGeolocation(null)
   };
 
   handleChange2 = address2 => {
@@ -49,7 +53,10 @@ class LocationSearchInput extends React.Component {
     this.setState({ address2: address2 });
     geocodeByAddress(address2)
       .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Destination', latLng, address2))
+      .then(latLng => {
+        console.log('Destination', latLng, address2);
+        this.props.getDestinationGeolocation(latLng);
+      })
       .catch(error => console.error('Error', error));
   };
 
@@ -59,6 +66,7 @@ class LocationSearchInput extends React.Component {
       latitude: null,
       longitude: null,
     });
+    this.props.getDestinationGeolocation(null)
   };
  
   render() {
