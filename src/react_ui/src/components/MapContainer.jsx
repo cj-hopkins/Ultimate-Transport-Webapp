@@ -95,7 +95,7 @@ async componentWillMount() {
               lng: this.state.currentPosition.lng
             }}
             icon={{
-              url: im,
+              url: MapMarker,
               anchor: new google.maps.Point(32, 32),
               scaledSize: new google.maps.Size(64, 64)
             }}

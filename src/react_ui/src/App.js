@@ -76,9 +76,7 @@ class App extends Component {
           </Col>
         </Row>
              <Row>
-           <Col mdHidden lgHidden ><ContentBlock data={this.state.testState} 
-                            onRouteUpdate={this.onRouteUpdate.bind(this)}
-                            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}   />
+           <Col smHidden mdHidden lgHidden >
               <MapContainer selectedStops={ this.state.selectedJourney}/>
             </Col>
            
