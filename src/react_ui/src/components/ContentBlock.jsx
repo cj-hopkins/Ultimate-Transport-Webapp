@@ -231,7 +231,7 @@ class ContentBlock extends Component {
   render(){
 
     return (
-      <div>
+      <Grid fluid={true}>
 	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
                       chosenRoute={this.state.chosenRoute}
                       direction={this.state.direction}
@@ -278,7 +278,7 @@ class ContentBlock extends Component {
           sourceType="profile"
           screenName="dublinbusnews"
           options={{height:'20%', width: '100%', theme:'dark'}} />
-	</div>
+	</Grid>
     )
   }
 }

@@ -80,8 +80,8 @@ async componentWillMount() {
           zoom={12}
           gestureHandling={'cooperative'}
           initialCenter={{
-            lat: 53.3498,
-            lng: -6.2603
+            lat: 53.3151123,
+            lng: -6.2480198
           }}
         >
           {/* <Marker onClick={this.onMarkerClick}
