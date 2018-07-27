@@ -7,11 +7,12 @@ import { Media } from "react-bootstrap";
 
 const ContentHeader = () => (
   <Media><Media.Left>
-      <img
+      {/*<img
         src={dublin_bus_icon}
         style={{ width: "100px", height: "100px" }}
         alt="dublin_bus_icon"
-      /></Media.Left>
+      />*/}
+      </Media.Left>
       <Media.Right>
     <PageHeader className="fontForTitle"> Ultimate Transport Dublin</PageHeader></Media.Right>
     <WeatherWidget />

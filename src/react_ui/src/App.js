@@ -3,11 +3,14 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import "./App.css";
 import MapContainer from "./components/MapContainer";
 import ContentBlock from "./components/ContentBlock";
+import ContentHeader from "./components/ContentHeader";
 import Example from "./components/examples/Example";
 import CustomNavbar from './components/CustomNavbar';
-import ContentHeader from './components/ContentHeader';
 import Sidebar from 'react-sidebar';
 import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
+import { PageHeader } from "react-bootstrap";
+import dublin_bus_icon from "./components/dublin_bus_icon.png";
+import WeatherWidget from "./components/Weather";
 
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
@@ -122,14 +125,21 @@ class App extends Component {
   }
 
   render() {
-    const sidebar = <div style={{backgroundColor:"white", height:'100%'}}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a><CustomNavbar swapUI={this.swapUI.bind(this)}/>
+    const sidebar = <div style={{backgroundColor:"white", height:'100%'}}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()})</div>;
 
     const contentHeader = (
-      <span>
-        <ContentHeader />
-        <a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a>
-      </span>);
+      <Grid fluid={true}><Row>
+      <Col xs={2}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
+      <Col xs={4}>
+        <PageHeader className="fontForTitle"> Ultimate Transport Dublin</PageHeader></Col><Col xs={2}>
+        <img
+        src={dublin_bus_icon}
+        style={{ width: "100px", height: "100px" }}
+        alt="dublin_bus_icon"
+      /></Col>
+        </Row>
+      </Grid>);
 
     const sidebarProps = {
       sidebar: sidebar,
