@@ -8,9 +8,6 @@ current_file_dir = os.path.dirname(__file__)
 model_path = os.path.join(current_file_dir, "objects/new_46a_file.pkl")
 rf_model = pickle.load(open(model_path, "rb"))
 
-# with open('./objects/new_46a_file.pkl','rb') as f:
-#     rf_model = pickle.load(f)
-
 def getPrediction(numStops, isRaining, selectedTime):
     print("isRaining", isRaining)
     df_test = pd.DataFrame([[isRaining,'20',1,0, 0, 1,0,0]]) #5-7pm

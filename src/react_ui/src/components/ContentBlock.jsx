@@ -2,7 +2,6 @@ import { Grid, Row, Col, Container } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
-
 import { Button} from "react-bootstrap"
 import TimeButton from './TimeSelect';
 // import {PageHeader} from 'react-bootstrap';
@@ -10,8 +9,6 @@ import TimeButton from './TimeSelect';
 // import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
 // import ContentHeader from './ContentHeader';
-//import NowButton from './NowButton';
-//import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
 // import ContentHeader from './ContentHeader';
@@ -87,7 +84,7 @@ class ContentBlock extends Component {
     })
   }
   
-  onResetTime(date, secsPastMidnight) {
+  onResetTime(date, secsPastMidnight) {  //on-click of leave-now
     this.onSelectDate(date)
     this.onSelectTime(secsPastMidnight)
     this.setState({
@@ -95,19 +92,33 @@ class ContentBlock extends Component {
     })
   }
 
-  onSelectTime(time){
+  onSelectTime(time){  //on change of time (time dropdown) 
     this.setState({
-    plannedTime:time,
-    isDefaultTime: false
+      plannedTime:time,
+      isDefaultTime: false
     })
   }
   
-   onSelectDate(date){
+   onSelectDate(date){  //on change of date (calendar) 
     this.setState({
       plannedDate:date,
       isDefaultTime: false
      })
    }
+  
+  onPageLoadSetTime(time){  //on load of page set time = now
+    this.setState({
+      plannedTime:time,
+      isDefaultTime: true
+    })
+  }
+  
+  onPageLoadSetDate(date){  //on load of page set date = now
+    this.setState({
+      plannedDate:date,
+      isDefaultTime: true
+    })
+  } 
   
   onStopDeselect(stop) {
     if (stop === 'start') {
@@ -211,7 +222,7 @@ class ContentBlock extends Component {
           finish: this.state.finishStop,
           direction: this.state.direction,
           selectedTime: this.state.plannedTime,
-          selectedDate: this.state.plannedDate.unix(),
+          selectedDate: (this.state.plannedDate.unix()).toString(),
           isDefaultTime: this.state.isDefaultTime
         })
       })
@@ -232,24 +243,26 @@ class ContentBlock extends Component {
 
     return (
       <Grid fluid={true}>
-	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
-                      chosenRoute={this.state.chosenRoute}
-                      direction={this.state.direction}
-                      route_destination={this.state.route_destination}
-                      route_origin={this.state.route_origin}
-                      onDirectionUpdate={this.onDirectionUpdate.bind(this)}
-                      onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
-                      onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
-                      routeReset={this.routeReset.bind(this)}/>
+	     <RouteSelect 
+            className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
+            chosenRoute={this.state.chosenRoute}
+            direction={this.state.direction}
+            route_destination={this.state.route_destination}
+            route_origin={this.state.route_origin}
+            onDirectionUpdate={this.onDirectionUpdate.bind(this)}
+            onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
+            onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
+            routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-       <StopSelect stops={this.state.stops}
-                    startStop={this.state.startStop}
-                    finishStop={this.state.finishStop}
-                    direction={this.state.direction}
-                    onDirectionUpdate={this.onDirectionUpdate.bind(this)}
-                    onStopUpdate={this.onStopUpdate.bind(this)}
-                    onStopDeselect={this.onStopDeselect.bind(this)}
-                    chosenRoute={this.state.chosenRoute}
+       <StopSelect 
+          stops={this.state.stops}
+          startStop={this.state.startStop}
+          finishStop={this.state.finishStop}
+          direction={this.state.direction}
+          onDirectionUpdate={this.onDirectionUpdate.bind(this)}
+          onStopUpdate={this.onStopUpdate.bind(this)}
+          onStopDeselect={this.onStopDeselect.bind(this)}
+          chosenRoute={this.state.chosenRoute}
                     />
         {/* <CustomGeolocation /> */}
 
@@ -258,11 +271,15 @@ class ContentBlock extends Component {
               <div style={{marginTop: '2em'}}> </div>
               
               <Row><Col xs={2}></Col>
-              <Col xs={8}><TimeButton   onResetTime={this.onResetTime.bind(this)}
-                                        plannedTime = {this.state.plannedTime}
-                                        plannedDate = {this.state.plannedDate}
-                                        onSelectTime= {this.onSelectTime.bind(this)} 
-                                        onSelectDate= {this.onSelectDate.bind(this)} 
+              <Col xs={8}><TimeButton   
+                            onResetTime={this.onResetTime.bind(this)}
+                            plannedTime = {this.state.plannedTime}
+                            plannedDate = {this.state.plannedDate} 
+                            isDefaultTime = {this.state.isDefaultTime} 
+                            onSelectTime= {this.onSelectTime.bind(this)} 
+                            onSelectDate= {this.onSelectDate.bind(this)} 
+                            onPageLoadSetDate = {this.onPageLoadSetDate.bind(this)} 
+                            onPageLoadSetTime= {this.onPageLoadSetTime.bind(this)} 
                                         /></Col>
               <Col xs={2}></Col></Row>
 
