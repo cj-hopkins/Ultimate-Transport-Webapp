@@ -18,6 +18,7 @@ from rest_api.get_prediction import getPrediction, rf_model
 import pandas as pd
 import numpy as np 
 import datetime
+import time
 
 class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
@@ -70,6 +71,10 @@ def getPredictionForJourney(request):
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
     isDefaultTime = request.data.get('isDefaultTime')
+    current_time = time.time()
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    time_in_5days_since_epoch = (datetime.datetime.now() + datetime.timedelta(days=5) - epoch).total_seconds() 
+    
     print(type(isDefaultTime))
     numStops = getNumStopsInJourney(start, finish, route, direction)
     if numStops == -1:
@@ -77,13 +82,19 @@ def getPredictionForJourney(request):
     if isDefaultTime:
         isRaining = getRainNow()
         result = getPrediction(numStops, isRaining, selectedTime)
-        print(result[0])
+        print('5_days_time',  time_in_5days_since_epoch ,'date',selectedDate, '\ntime',selectedTime,'\npreddiction', result[0])
         return JsonResponse({'prediction':result[0]})
     else:
-        isRaining = getRainNotNow(selectedTime,selectedDate )
-        result = getPrediction(numStops, isRaining, selectedTime)
-        print(result[0])
-        return JsonResponse({'prediction':str(result[0])+ 'NOT NOW!'})
+        if int(selectedDate) < time_in_5days_since_epoch: # weather forecast only for next 5 days
+            isRaining = getRainNotNow(selectedTime,selectedDate )
+            result = getPrediction(numStops, isRaining, selectedTime)
+            print('current_time', current_time ,'date',selectedDate, '\ntime',selectedTime,'\npreddiction', result[0])
+            return JsonResponse({'prediction':str(result[0])+ '  (Includes weather) '})
+        else:
+            isRaining = False  #default is NOT RAINING - is this appropriate ?
+            result = getPrediction(numStops, isRaining, selectedTime)
+            return JsonResponse({'prediction':str(result[0])+ '\n\n(Weather not taken into account) '})
+
 
 # class getStopsForRoute(CsrfExemptMixin, APIView):
 #     def post(self, request):

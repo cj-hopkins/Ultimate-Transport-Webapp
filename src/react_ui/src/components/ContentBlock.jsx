@@ -29,7 +29,7 @@ class ContentBlock extends Component {
       direction: 'I',
       plannedDate:moment(),
       plannedTime:moment(),
-      isDefaultTime:true,
+      isDefaultTime:true, // needed for when page loads and leave_now button
     }
   }
 
