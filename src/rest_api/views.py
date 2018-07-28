@@ -71,11 +71,14 @@ def getPredictionForJourney(request):
     numStops = getNumStopsInJourney(start, finish, route, direction)
     if numStops == -1:
         print("indexing failed")
-    isRaining = getRain(isDefaultTime, selectedDate, selectedTime)
-
-    result = getPrediction(numStops, isRaining, selectedTime)
-    print(result[0])
-    return JsonResponse({'prediction':result[0]})
+    if isDefaultTime:
+        isRaining = getRainNow()
+        result = getPrediction(numStops, isRaining, selectedTime)
+        print(result[0])
+        return JsonResponse({'prediction':result[0]})
+    else:
+        print(isDefaultTime)
+        return JsonResponse({'prediction':'NOT NOW!!!!!!!!!'})
 
 # class getStopsForRoute(CsrfExemptMixin, APIView):
 #     def post(self, request):
@@ -105,13 +108,12 @@ def getNumStopsInJourney(start, finish, route, direction):
     indicesFound = startIndex != -1 and finishIndex != -1 
     return finishIndex - startIndex if indicesFound else -1
 
-def getRain(isDefaultTime, selectedDate, selectedTime):
+def getRainNow():
     regex = r'^.*[R|r]ain.*$'
-    if isDefaultTime:
-        weather = Currentweather.objects.values()[0]
-        isRaining = re.match(regex, weather['description'])
-        print(isRaining)
-    else:
-        pass
+    weather = Currentweather.objects.values()[0]
+    isRaining = re.match(regex, weather['description'])
     isRaining = False if isRaining is None else True
     return isRaining
+  
+  
+  

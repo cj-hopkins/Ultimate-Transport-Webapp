@@ -10,7 +10,8 @@ class TimeButton extends Component {
     super(props);
     this.state = {
       isHidden: true,
-      plannedTime: ""
+      plannedTime: "",
+      isDefaultTime:  true
     };
   }
   
@@ -21,12 +22,12 @@ class TimeButton extends Component {
       const diffInSeconds = newTime.diff(newTimeMidnight, "seconds");
 
       this.setState({
-        plannedTime: diffInSeconds
+        plannedTime: diffInSeconds,
+        isDefaultTime: true
       });
-      this.props.onSelectTime(diffInSeconds);
-      this.props.onSelectDate(newTime);
+      this.props.onPageLoadSetTime(diffInSeconds);
+      this.props.onPageLoadSetDate(newTime);
     }
-  
   
   toggleHidden() {
     this.setState({
@@ -40,7 +41,6 @@ class TimeButton extends Component {
     });
   }
   
-
   dateUpdate(date) {
     this.setState({
       plannedTime: date
