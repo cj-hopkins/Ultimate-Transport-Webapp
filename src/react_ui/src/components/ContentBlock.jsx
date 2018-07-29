@@ -91,7 +91,14 @@ class ContentBlock extends Component {
       isDefaultTime: true
     })
   }
-
+  
+  onResetNowContentBlock(){
+    this.setState({
+      isHidden: !this.state.isHidden,
+      isDefaultTime: true
+    })
+  }
+                  
   onSelectTime(time){  //on change of time (time dropdown) 
     this.setState({
       plannedTime:time,
@@ -271,8 +278,8 @@ class ContentBlock extends Component {
               <div style={{marginTop: '2em'}}> </div>
               
               <Row><Col xs={2}></Col>
-              <Col xs={8}><TimeButton   
-                            onResetTime={this.onResetTime.bind(this)}
+              <Col xs={8}><TimeButton  
+                            onResetNowContentBlock= {this.onResetNowContentBlock.bind(this)} 
                             plannedTime = {this.state.plannedTime}
                             plannedDate = {this.state.plannedDate} 
                             isDefaultTime = {this.state.isDefaultTime} 
