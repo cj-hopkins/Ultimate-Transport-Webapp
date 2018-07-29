@@ -12,27 +12,25 @@ export class MapContainer extends Component {
       selectedPlace: {},
       showingInfoWindow: false,
       activeMarker: {},
-      currentPosition: {
+      currentPosition: { //dublin city centre co-ordinates 
         lat: 53.3498,
         lng: -6.2603
+      },
+      nextBus1:{
+        route:0,
+        dueTime:0, 
+        destination:''
       }
     };
 
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
 
-  // componentWillMount() {
-  //   // this.setState({
-  //   //   selectedStops: this.props.selectedStops
-  //   // })
-  //   console.log(this.props.currentPosition)
-  // }
-
 async componentWillMount() {
     const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
     const endpoint = `https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`;
+   
     try {
-      // const result = fetch(endpoint, {
       fetch(endpoint, {
         method: "POST",
         headers: {
@@ -53,14 +51,32 @@ async componentWillMount() {
             }
           });
         });
-      // .then((resp) => console.log(resp.prediction))
     } catch (e) {
       console.log(e);
     }
   }
-
+  
+  fetchRealTime(stopid){
+    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
+    fetch(endpoint)
+      .then (response => response.json())
+      .then(parsedJSON => {
+            console.log(parsedJSON.results)
+            this.setState({
+            nextBus1: {
+              route: parsedJSON.results[0].route , 
+              dueTime:parsedJSON.results[0].duetime ,
+              destination:parsedJSON.results[0].destination ,
+            }
+          });
+          console.log('BUS ROUTE:',this.state.nextBus1.route );  
+    })
+    
+      .catch(error => console.log('parsing failed',error))
+  }
+  
   onMarkerClick(props, marker, e) {
-    // console.log(props)
+//     console.log('PROPS: ',props)
     // console.log(marker)
     // console.log(e)
     this.setState({
@@ -68,10 +84,13 @@ async componentWillMount() {
       activeMarker: marker,
       showingInfoWindow: true
     });
+    const realTime = this.fetchRealTime(this.state.activeMarker.title);
+    
+     console.log(realTime);
+    console.log('STOP NUM', this.state.activeMarker.title);
   }
 
   render() {
-    const im = "https://www.robotwoods.com/dev/misc/bluecircle.png";
     const google = window.google
     return (
       <div>
@@ -84,12 +103,9 @@ async componentWillMount() {
             lng: -6.2480198
           }}
         >
-          {/* <Marker onClick={this.onMarkerClick}
-            name={"Current location"} /> */}
           <Marker
             onClick={this.onMarkerClick}
             name={"Current location"}
-            // position={this.props.currentPosition} />
             position={{
               lat: this.state.currentPosition.lat,
               lng: this.state.currentPosition.lng
@@ -119,6 +135,10 @@ async componentWillMount() {
             <div>
               <h1>Stop {this.state.activeMarker.title}</h1>
               <p>{this.state.activeMarker.name}</p>
+               <p>Real time Information:</p>
+              <p>Route:{this.state.nextBus1.route}&nbsp;&nbsp;&nbsp;&nbsp;
+                {this.state.nextBus1.destination}&nbsp;&nbsp;&nbsp;&nbsp;
+                {this.state.nextBus1.dueTime} minutes</p>
             </div>
           </InfoWindow>
         </Map>

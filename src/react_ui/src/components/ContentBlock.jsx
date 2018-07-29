@@ -1,17 +1,12 @@
-import { Grid, Row, Col, Container } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 import { Button} from "react-bootstrap"
 import TimeButton from './TimeSelect';
-// import {PageHeader} from 'react-bootstrap';
-// import dublin_bus_icon from './dublin_bus_icon.png';
-// import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
-// import ContentHeader from './ContentHeader';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
-// import ContentHeader from './ContentHeader';
 
 class ContentBlock extends Component {
   constructor(props) {

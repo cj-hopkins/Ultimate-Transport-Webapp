@@ -136,7 +136,6 @@ class TimeDropdown extends Component {
   }
 
   handleTimeChange(time) { // seconds passed midnight
-    const newTime = moment.utc(time*1000).format('HH:mm')
     this.setState({
       chosenTime: time
     });

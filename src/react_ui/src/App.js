@@ -10,7 +10,6 @@ import Sidebar from 'react-sidebar';
 import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
 import { PageHeader } from "react-bootstrap";
 import dublin_bus_icon from "./components/dublin_bus_icon.png";
-import WeatherWidget from "./components/Weather";
 
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
