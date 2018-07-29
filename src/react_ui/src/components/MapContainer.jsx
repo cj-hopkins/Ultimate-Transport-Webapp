@@ -69,7 +69,17 @@ async componentWillMount() {
               destination:parsedJSON.results[0].destination ,
             }
           });
-          console.log('BUS ROUTE:',this.state.nextBus1.route );  
+     {var dict = [];
+       for (var i = 0; i < parsedJSON.results.length; i++) { 
+              dict.push({
+                route:   parsedJSON.results[i].route,
+                dueTime: parsedJSON.results[i].duetime,
+                destination:parsedJSON.results[i].destination
+              });
+                
+             
+            }} 
+          console.log('ARRAY',dict );  
     })
     
       .catch(error => console.log('parsing failed',error))
