@@ -8,7 +8,7 @@ current_file_dir = os.path.dirname(__file__)
 model_path = os.path.join(current_file_dir, "objects/new_46a_file.pkl")
 rf_model = pickle.load(open(model_path, "rb"))
 
-def getPrediction(numStops, isRaining, selectedTime):
+def getPrediction(numStops, isRaining, temp,selectedTime):
     print("isRaining", isRaining)
     df_test = pd.DataFrame([[isRaining,'20',1,0, 0, 1,0,0]]) #5-7pm
     #['raining','air_temp','weekday','10am-1pm', '1pm-5pm', '5pm-7pm', '8am-10am','before_8am']

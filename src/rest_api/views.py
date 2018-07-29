@@ -74,25 +74,26 @@ def getPredictionForJourney(request):
     current_time = time.time()
     epoch = datetime.datetime.utcfromtimestamp(0)
     time_in_5days_since_epoch = (datetime.datetime.now() + datetime.timedelta(days=5) - epoch).total_seconds() 
-    
-    print(type(isDefaultTime))
     numStops = getNumStopsInJourney(start, finish, route, direction)
     if numStops == -1:
         print("indexing failed")
     if isDefaultTime:
         isRaining = getRainNow()
-        result = getPrediction(numStops, isRaining, selectedTime)
-        print('5_days_time',  time_in_5days_since_epoch ,'date',selectedDate, '\ntime',selectedTime,'\npreddiction', result[0])
+        temp = getTempNow()
+        print('temp',temp)
+        result = getPrediction(numStops, isRaining,temp, selectedTime)
         return JsonResponse({'prediction':result[0]})
     else:
         if int(selectedDate) < time_in_5days_since_epoch: # weather forecast only for next 5 days
             isRaining = getRainNotNow(selectedTime,selectedDate )
-            result = getPrediction(numStops, isRaining, selectedTime)
-            print('current_time', current_time ,'date',selectedDate, '\ntime',selectedTime,'\npreddiction', result[0])
+            temp = getTempNotNow(selectedTime,selectedDate)
+            print('temp',temp)
+            result = getPrediction(numStops, isRaining,temp, selectedTime)
             return JsonResponse({'prediction':str(result[0])+ '  (Includes weather) '})
         else:
-            isRaining = False  #default is NOT RAINING - is this appropriate ?
-            result = getPrediction(numStops, isRaining, selectedTime)
+            isRaining = False  #default is NOT RAINING as average for eastcoast is raining 150 days per year
+            temp= 16   #average temp in Ireland
+            result = getPrediction(numStops, isRaining, temp ,selectedTime)
             return JsonResponse({'prediction':str(result[0])+ '\n\n(Weather not taken into account) '})
 
 
@@ -138,6 +139,15 @@ def getRainNotNow(chosenTime, chosenDate):
     isRaining = re.match(regex, relevant_weather['description'])
     isRaining = False if isRaining is None else True
     return isRaining
+  
+def getTempNow():
+    weather = Currentweather.objects.values()[0]
+    return weather['temperature']
+  
+def getTempNotNow(chosenTime, chosenDate):
+    future_weather = FiveDayWeather.objects.values()
+    relevant_weather= get_temp_and_rain(future_weather ,chosenTime, chosenDate )
+    return relevant_weather['temp']
   
 def get_temp_and_rain(response,seconds_past_midnight, epoch_time):
     """

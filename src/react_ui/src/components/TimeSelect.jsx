@@ -27,6 +27,7 @@ class TimeButton extends Component {
       });
       this.props.onPageLoadSetTime(diffInSeconds);
       this.props.onPageLoadSetDate(newTime);
+      
     }
   
   toggleHidden() {
@@ -37,8 +38,10 @@ class TimeButton extends Component {
   
   onResetNow(){
     this.setState({
-      isHidden: !this.state.isHidden
+      isHidden: !this.state.isHidden,
+      isDefaultTime: true
     });
+    this.props.onResetNowContentBlock();
   }
   
   dateUpdate(date) {
@@ -85,7 +88,7 @@ class TimeButton extends Component {
               </Col>
               <Col>
                 <NowButton
-                  onResetTime={this.props.onResetTime.bind(this)}
+                  onResetNow= {this.onResetNow.bind(this)}
                   onSelectTime={this.timeUpdate.bind(this)}
                   onSelectDate={this.dateUpdate.bind(this)}
                 />
@@ -161,7 +164,8 @@ class NowButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      plannedTime: moment()
+      plannedTime: moment(),
+      isDefaultTime:false
     };
   }
 
@@ -171,9 +175,15 @@ class NowButton extends Component {
     const diffInSeconds = newTime.diff(newTimeMidnight, "seconds");
 
     this.setState({
-      plannedTime: diffInSeconds
+      plannedTime: diffInSeconds,
+      isDefaultTime:true
     });
-    this.props.onResetTime(newTime, diffInSeconds);
+    
+    this.props.onSelectTime(diffInSeconds);
+    this.props.onSelectDate(newTime);
+    this.props.onResetNow();
+    
+    //this.props.onResetTime(newTime, diffInSeconds);
     console.log("Time from now button:" + this.state.plannedTime);
   }
  
