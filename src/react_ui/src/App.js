@@ -10,6 +10,7 @@ import Sidebar from 'react-sidebar';
 import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
 import { PageHeader } from "react-bootstrap";
 import dublin_bus_icon from "./components/dublin_bus_icon.png";
+import { Button } from 'react-bootstrap';
 
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
@@ -26,12 +27,15 @@ const styles = {
   },
 };
 
+const mql = window.matchMedia(`(min-width: 800px)`);
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      docked: false,
+      mql: mql,
+      docked: true,
       open: false,
       transitions: true,
       touch: true,
@@ -43,10 +47,27 @@ class App extends Component {
       selectedJourney: [],
       activatedUI: 0
     }
+    this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.renderPropCheckbox = this.renderPropCheckbox.bind(this);
     this.renderPropNumber = this.renderPropNumber.bind(this);
     this.onSetOpen = this.onSetOpen.bind(this);
     this.menuButtonClick = this.menuButtonClick.bind(this);
+  }
+
+  mediaQueryChanged() {
+    this.setState({
+      mql: mql,
+      docked: this.state.mql.matches,
+    });
+  }
+
+  componentWillMount() {
+    mql.addListener(this.mediaQueryChanged);
+    this.setState({mql: mql, docked: mql.matches});
+  }
+
+  componentWillUnmount() {
+    this.state.mql.removeListener(this.mediaQueryChanged);
   }
 
   onRouteUpdate(data) {
@@ -131,7 +152,7 @@ class App extends Component {
       <Grid fluid={true}><Row>
       <Col xs={2}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
       <Col xs={4}>
-        <PageHeader className="fontForTitle"> Ultimate Transport Dublin</PageHeader></Col><Col xs={2}>
+        <PageHeader className="fontForTitle">Ultimate Transport Dublin</PageHeader></Col><Col xs={2}>
         <img
         src={dublin_bus_icon}
         style={{ width: "100px", height: "100px" }}

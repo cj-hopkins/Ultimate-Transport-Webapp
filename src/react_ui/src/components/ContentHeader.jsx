@@ -8,7 +8,7 @@ const ContentHeader = () => (
   <Media><Media.Left>
       {/*<img
         src={dublin_bus_icon}
-        style={{ width: "100px", height: "100px" }}
+        style={{ width: "50px", height: "50px" }}
         alt="dublin_bus_icon"
       />*/}
       </Media.Left>
