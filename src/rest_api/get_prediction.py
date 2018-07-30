@@ -20,7 +20,7 @@ def getPrediction(numStops, isRaining, temp,selectedTime):
     totalSeconds = result[0] * numStops
     seconds = int(round((totalSeconds % 60), 0))
     minutes = int(totalSeconds // 60)
-    result = '{}.{}'.format(minutes, seconds)
+    result = '{} minutes, {} seconds'.format(abs(minutes), abs(seconds))
     # print(result)
     return [result]
     # multiply this num by the number of points bewteen start and destination - then divide by 60 for the time
