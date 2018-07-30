@@ -27,7 +27,9 @@ const styles = {
   },
 };
 
+
 const mql = window.matchMedia(`(min-width: 800px)`);
+
 
 class App extends Component {
   constructor(props) {
@@ -161,6 +163,8 @@ class App extends Component {
         </Row>
       </Grid>);
 
+    const header = (!this.state.mql.matches) ? contentHeader : null 
+
     const sidebarProps = {
       sidebar: sidebar,
       docked: this.state.docked,
@@ -177,7 +181,7 @@ class App extends Component {
 
     return (
       <Sidebar {...sidebarProps}>
-        <MaterialTitlePanel title={contentHeader}>
+        <MaterialTitlePanel title={header}>
             <MapContainer selectedStops={this.state.selectedJourney}/>
         </MaterialTitlePanel>
       </Sidebar>
