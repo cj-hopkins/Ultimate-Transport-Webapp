@@ -3,7 +3,6 @@ import {Map, InfoWindow, Marker, GoogleApiWrapper} from "google-maps-react";
 import db2 from './db2.png'
 import MapMarker from './MapMarker.png'
 
-
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
@@ -54,14 +53,13 @@ async componentWillMount() {
       .then (response => response.json())
       .then(parsedJSON => {
 //            console.log(parsedJSON.results)
-            this.setState({
-                nextBuses: parsedJSON.results.map((post, i) => (
+            this.setState({   //slice(0,4) to limit to top 4 results 
+                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
                   <tr key={i} >
                     <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                 <td>
-                   {post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>           {post.duetime} minutes </td>
-                               </tr>
+                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>{post.duetime} minutes </td>
+                  </tr>
                 ))
             });
      })
@@ -75,6 +73,10 @@ async componentWillMount() {
       showingInfoWindow: true, 
       nextBuses: this.fetchRealTime(this.state.activeMarker.title)
     });
+    
+    
+//    console.log('selectedPlace',this.state.selectedPlace.title);
+//    console.log('activeMarker', this.state.activeMarker.title);
   }
 
   render() {
@@ -114,7 +116,6 @@ async componentWillMount() {
               position={{ lat: item.stop_lat, lng: item.stop_lon }}
             />
           ))}
-
           <InfoWindow
             marker={this.state.activeMarker}
             visible={this.state.showingInfoWindow}
@@ -124,7 +125,7 @@ async componentWillMount() {
               <p>{this.state.activeMarker.name}</p>
                <p>Real time Information:</p>
                 <ul >
-                  <table > {/*style= {{cellPadding:"10"}}*/}
+                  <table > 
                   {this.state.nextBuses}
                   </table>
                 </ul>
