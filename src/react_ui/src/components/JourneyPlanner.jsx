@@ -8,7 +8,9 @@ class JourneyPlanner extends Component {
       origin: "",
       destination: "",
       originLatLng: null,
-      destinationLatLng: null
+      destinationLatLng: null,
+      // directionsObject: null,
+      possibleRoutes: []
     };
   }
 
@@ -32,38 +34,88 @@ class JourneyPlanner extends Component {
     });
   }
 
-  onClick = () => {
-    const google = window.google
+  getDirectionsObject(obj) {
+    this.setState({
+      directionsObject: obj
+    });
+  }
+
+  onClick() {
+    const google = window.google;
     const directionsService = new google.maps.DirectionsService();
-    const start = new google.maps.LatLng(this.state.originLatLng.lat, this.state.originLatLng.lng)
-    const end = new google.maps.LatLng(this.state.destinationLatLng.lat, this.state.destinationLatLng.lng)
-    var request = {
+    const start = new google.maps.LatLng(
+      this.state.originLatLng.lat,
+      this.state.originLatLng.lng
+    );
+    const end = new google.maps.LatLng(
+      this.state.destinationLatLng.lat,
+      this.state.destinationLatLng.lng
+    );
+    const request = {
       origin: start,
       destination: end,
-      travelMode: 'TRANSIT',
+      travelMode: "TRANSIT",
       provideRouteAlternatives: true,
       transitOptions: {
         // departureTime: new Date(1337675679473),
-        modes: ['BUS'],
-        routingPreference: 'FEWER_TRANSFERS'
+        modes: ["BUS"],
+        routingPreference: "FEWER_TRANSFERS"
       }
     };
-    directionsService.route(request, function(result, status) {
-      if (status == 'OK') {
-        // directionsDisplay.setDirections(result);
-        console.log(result)
+    // Save the current context, as "this" will refer to the callback function
+    // when we want to use setState
+    const me = this;
+    directionsService.route(request, (result, status) => {
+      if (status == "OK") {
+        const routes = me.parseAllJournies(result, me.parseSingleJourney)
+        console.log("ROUTES", routes)
+        me.setState({
+          directionsObject: result,
+          possibleRoutes: routes
+        });
+        console.log(result);
+        // me.parseJourneys(result);
       }
     });
+  }
 
-  
-      // const origin = `${this.state.originLatLng.lat},${this.state.originLatLng.lng}`
-      // const destination = `${this.state.destinationLatLng.lat},${this.state.destinationLatLng.lng}`
-      // const apiRequest =
-      //   `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}
-      //   &destination=${destination}
-      //   &mode=transit&transit_mode=bus&key=AIzaSyBRUrdJ4Tz9rLrHrOkwJWpA9QSYNJbWQ0Q`;
-      // fetch(apiRequest)
-      // .then(resp => console.log(resp.json()))
+  // parseSingleJourney = journey => {
+  //   return(
+  //   <div>
+  //     {journey.legs[0].steps.map(item =>
+  //       <p>{item.instructions}</p>
+  //     )}
+  //   </div>
+  //   )
+  // }
+
+  parseSingleJourney = journey => {
+    return (
+      <div>
+        <h1>route</h1>
+        {journey.legs[0].steps.map(item => {
+          if (item.travel_mode === 'TRANSIT') {
+            console.log(item.travel_mode)
+            return <p>{item.instructions} {item.transit.line.short_name}</p>
+          } else {
+          return <p>{item.instructions}</p>
+          }
+        })}
+      </div>
+    )}
+
+  parseAllJournies = (object, fn) => {if (object !== undefined) return object.routes.map(item => fn(item))}
+
+  parseJourneys(result) {
+    if (result === undefined) return;
+    console.log(result.routes[0].legs[0].steps[0].instructions);
+    return;
+
+    const routes = this.parseAllJournies(result, this.parseSingleJourney)
+    console.log(routes);
+    // return routes
+    this.setState({ possibleRoutes: routes });
+    console.log(result);
   }
 
   // componentWillUpdate(nextState) {
@@ -73,24 +125,8 @@ class JourneyPlanner extends Component {
   //     (nextState.destinationLatLng !== null &&
   //       nextState.destinationLatLng !== this.state.destinationLatLng)
   //   ) {
-  //     const origin = `${this.state.originLatlng.lat},${this.state.originLatLng.lng}`
-  //     const destination = `${this.state.destinationLatlng.lat},${this.state.destinationLatLng.lng}`
-  //     const apiRequest =
-  //       `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}
-  //       &destination=${destination}
-  //       &mode=transit&transit_mode=bus&key=AIzaSyBRUrdJ4Tz9rLrHrOkwJWpA9QSYNJbWQ0Q`;
-  //     fetch(apiRequest)
-  //     .then(resp => console.log(resp.json()))
-  //   }
-  // }
 
   render() {
-    const apiRequest =
-      "https://maps.googleapis.com/maps/api/directions/json?origin=" +
-      this.state.origin +
-      "&destination=" +
-      this.state.destination +
-      "&mode=transit&transit_mode=bus&key=AIzaSyBRUrdJ4Tz9rLrHrOkwJWpA9QSYNJbWQ0Q";
     return (
       <div>
         <LocationSearchInput
@@ -101,7 +137,13 @@ class JourneyPlanner extends Component {
           getOriginGeolocation={this.getOriginGeolocation.bind(this)}
           getDestinationGeolocation={this.getDestinationGeolocation.bind(this)}
         />
-        <button onClick={this.onClick}>TEST</button>
+        <button onClick={this.onClick.bind(this)}>TEST</button>
+        {/* <p>{this.parseJourney}</p> */}
+        {/* {this.state.possibleRoutes.map(route => {
+          <h1>route</h1>
+          {route}
+        })} */}
+        {this.parseAllJournies(this.state.directionsObject, this.parseSingleJourney)}
       </div>
     );
   }
