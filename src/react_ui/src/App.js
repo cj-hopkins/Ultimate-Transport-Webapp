@@ -147,7 +147,8 @@ class App extends Component {
   }
 
   render() {
-    const sidebar = <div style={{backgroundColor:"white", height:'100%'}}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
+    const sidebar = (!this.state.mql.matches) ? <div style={{backgroundColor:"white", height:'100%'}}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
+            {this.renderSwitch()})</div> : <div style={{backgroundColor:"white", height:'100%'}}><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()})</div>;
 
     const contentHeader = (
