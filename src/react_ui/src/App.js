@@ -11,6 +11,7 @@ import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
 import { PageHeader } from "react-bootstrap";
 import dublin_bus_icon from "./components/dublin_bus_icon.png";
 import { Button } from 'react-bootstrap';
+import WeatherWidget from "./components/Weather";
 
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
@@ -153,14 +154,15 @@ class App extends Component {
 
     const contentHeader = (
       <Grid fluid={true}><Row>
-      <Col xs={2}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
-      <Col xs={4}>
-        <PageHeader className="fontForTitle">Ultimate Transport Dublin</PageHeader></Col><Col xs={2}>
+      <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
+      <Col xs={3}>
         <img
         src={dublin_bus_icon}
-        style={{ width: "100px", height: "100px" }}
+        style={{ width: "80px", height: "80px" }}
         alt="dublin_bus_icon"
       /></Col>
+      <Col xs={3}>
+        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}><WeatherWidget /></Col>
         </Row>
       </Grid>);
 
