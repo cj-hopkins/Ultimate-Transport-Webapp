@@ -7,7 +7,6 @@ import MapMarker from './MapMarker.png'
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       selectedPlace: {},
       showingInfoWindow: false,
@@ -16,20 +15,14 @@ export class MapContainer extends Component {
         lat: 53.3498,
         lng: -6.2603
       },
-      nextBus1:{
-        route:0,
-        dueTime:0, 
-        destination:''
-      }
+      nextBuses:[]
     };
-
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
 
 async componentWillMount() {
     const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
     const endpoint = `https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`;
-   
     try {
       fetch(endpoint, {
         method: "POST",
@@ -43,7 +36,6 @@ async componentWillMount() {
       })
         .then(response => response.json())
         .then(resp => {
-          // console.log(resp);
           this.setState({
             currentPosition: {
               lat: resp.location.lat,
@@ -61,43 +53,28 @@ async componentWillMount() {
     fetch(endpoint)
       .then (response => response.json())
       .then(parsedJSON => {
-            console.log(parsedJSON.results)
+//            console.log(parsedJSON.results)
             this.setState({
-            nextBus1: {
-              route: parsedJSON.results[0].route , 
-              dueTime:parsedJSON.results[0].duetime ,
-              destination:parsedJSON.results[0].destination ,
-            }
-          });
-     {var dict = [];
-       for (var i = 0; i < parsedJSON.results.length; i++) { 
-              dict.push({
-                route:   parsedJSON.results[i].route,
-                dueTime: parsedJSON.results[i].duetime,
-                destination:parsedJSON.results[i].destination
-              });
-                
-             
-            }} 
-          console.log('ARRAY',dict );  
-    })
-    
+                nextBuses: parsedJSON.results.map((post, i) => (
+                  <tr key={i} >
+                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                 <td>
+                   {post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>           {post.duetime} minutes </td>
+                               </tr>
+                ))
+            });
+     })
       .catch(error => console.log('parsing failed',error))
   }
   
   onMarkerClick(props, marker, e) {
-//     console.log('PROPS: ',props)
-    // console.log(marker)
-    // console.log(e)
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
-      showingInfoWindow: true
+      showingInfoWindow: true, 
+      nextBuses: this.fetchRealTime(this.state.activeMarker.title)
     });
-    const realTime = this.fetchRealTime(this.state.activeMarker.title);
-    
-     console.log(realTime);
-    console.log('STOP NUM', this.state.activeMarker.title);
   }
 
   render() {
@@ -146,9 +123,11 @@ async componentWillMount() {
               <h1>Stop {this.state.activeMarker.title}</h1>
               <p>{this.state.activeMarker.name}</p>
                <p>Real time Information:</p>
-              <p>Route:{this.state.nextBus1.route}&nbsp;&nbsp;&nbsp;&nbsp;
-                {this.state.nextBus1.destination}&nbsp;&nbsp;&nbsp;&nbsp;
-                {this.state.nextBus1.dueTime} minutes</p>
+                <ul >
+                  <table > {/*style= {{cellPadding:"10"}}*/}
+                  {this.state.nextBuses}
+                  </table>
+                </ul>
             </div>
           </InfoWindow>
         </Map>
