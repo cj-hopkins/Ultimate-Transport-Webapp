@@ -12,6 +12,8 @@ import { PageHeader } from "react-bootstrap";
 import dublin_bus_icon from "./components/dublin_bus_icon.png";
 import { Button } from 'react-bootstrap';
 import WeatherWidget from "./components/Weather";
+import LocationSearchInput from './components/LocationSearchInput';
+import JourneyPlanner from './components/JourneyPlanner';
 
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
@@ -48,7 +50,8 @@ class App extends Component {
       dragToggleDistance: 30,
       stopsInRoute: [],
       selectedJourney: [],
-      activatedUI: 0
+      activatedUI: 0,
+      polylineCoordinates: []
     }
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.renderPropCheckbox = this.renderPropCheckbox.bind(this);
@@ -92,6 +95,38 @@ class App extends Component {
       activatedUI: key
     });
   }
+
+  // parseCood = object => (String(object[object]()) > 6) ? object : parseFloat(String(object[object]()).substring(0,6))
+  // parseCoords = array => array.map(object => ({
+  //   let newLat = String(object.lat())
+  //   let newLng = String(object.lng())
+  //   newLat = (newLat.length > 6) ? = parseFloat(newLat.substring(0,6)) : parseFloat(newLat);
+  //   newLng = (newLng.length > 6) ? = parseFloat(newLng.substring(0,6)) : parseFloat(newLng);
+  //   return (({
+  //   lat: newLat,
+  //   lng: newLng
+  //   })
+  // )
+  // })
+
+  // Each JS object in the array has 2 functions, lat & lng. Run them to return the actual coords
+  parseCoords = array => array.map(object => ({
+    lat: parseFloat(object.lat().toFixed(3)),
+    lng: parseFloat(object.lng().toFixed(3))
+    })
+  )
+
+
+  getPolyCoordinates(data) {
+    const coords = this.parseCoords(data);
+    // console.log(coords[0].lat.toFixed(3))
+    // const test = this.parseCood(coords[0])
+    // console.log("TEST", test)
+    this.setState({
+      polylineCoordinates: coords
+    });
+    console.log("coords in App", coords)
+  }
   
   renderSwitch = () => {
       // console.log("render switch")
@@ -102,14 +137,17 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
           />;
         case 1:
-          return <Example key={1} />;
+          return <JourneyPlanner key={1} 
+            getPolyCoordinates={this.getPolyCoordinates.bind(this)}
+          />;
         case 2:
           return <Example key={2} />;
         default:
           return <div key={3} />;
       }
+    }
     // return <div>{chosenElement}</div>;
-  }
+  
 
   onSetOpen(open) {
     this.setState({open: open});
@@ -202,7 +240,9 @@ class App extends Component {
     return (
       <Sidebar {...sidebarProps}>
         <MaterialTitlePanel title={header}>
-            <MapContainer selectedStops={this.state.selectedJourney}/>
+            <MapContainer selectedStops={this.state.selectedJourney}
+              polylineCoordinates={this.state.polylineCoordinates}
+            />
         </MaterialTitlePanel>
       </Sidebar>
     );

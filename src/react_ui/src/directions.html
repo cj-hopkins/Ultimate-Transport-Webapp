@@ -76,14 +76,14 @@
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
       }
 
-      directionsHandler.prototype.setupClickListener = function(id, mode) {
-        var radioButton = document.getElementById(id);
-        var me = this;
-        radioButton.addEventListener('click', function() {
-          me.travelMode = mode;
-          me.route();
-        });
-      };
+      // directionsHandler.prototype.setupClickListener = function(id, mode) {
+      //   var radioButton = document.getElementById(id);
+      //   var me = this;
+      //   radioButton.addEventListener('click', function() {
+      //     me.travelMode = mode;
+      //     me.route();
+      //   });
+      // };
 
       directionsHandler.prototype.setupPlaceChangedListener = function(autocomplete, mode) {
         var me = this;
