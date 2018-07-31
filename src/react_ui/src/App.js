@@ -19,7 +19,13 @@ class App extends Component {
     this.state = {
       stopsInRoute: [],
       selectedJourney: [],
-      activatedUI: 0
+      polylineCoordinates: null,
+      activatedUI: 0,
+      polylineCoordinates: [
+        { lat: 53.378, lng: -6.057 },
+        { lat: 53.378, lng: -6.056 },
+        { lat: 53.378, lng: -6.056 }
+      ]
     };
   }
 
@@ -45,6 +51,38 @@ class App extends Component {
       activatedUI: key
     });
   }
+
+  // parseCood = object => (String(object[object]()) > 6) ? object : parseFloat(String(object[object]()).substring(0,6))
+  // parseCoords = array => array.map(object => ({
+  //   let newLat = String(object.lat())
+  //   let newLng = String(object.lng())
+  //   newLat = (newLat.length > 6) ? = parseFloat(newLat.substring(0,6)) : parseFloat(newLat);
+  //   newLng = (newLng.length > 6) ? = parseFloat(newLng.substring(0,6)) : parseFloat(newLng);
+  //   return (({
+  //   lat: newLat,
+  //   lng: newLng
+  //   })
+  // )
+  // })
+
+  // Each JS object in the array has 2 functions, lat & lng. Run them to return the actual coords
+  parseCoords = array => array.map(object => ({
+    lat: parseFloat(object.lat().toFixed(3)),
+    lng: parseFloat(object.lng().toFixed(3))
+    })
+  )
+
+
+  getPolyCoordinates(data) {
+    const coords = this.parseCoords(data);
+    // console.log(coords[0].lat.toFixed(3))
+    // const test = this.parseCood(coords[0])
+    // console.log("TEST", test)
+    this.setState({
+      polylineCoordinates: coords
+    });
+    console.log("coords in App", coords)
+  }
   
   renderSwitch = () => {
       // console.log("render switch")
@@ -55,14 +93,17 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
           />;
         case 1:
-          return <JourneyPlanner key={1} />;
+          return <JourneyPlanner key={1} 
+            getPolyCoordinates={this.getPolyCoordinates.bind(this)}
+          />;
         case 2:
           return <Example key={2} />;
         default:
           return <div key={3} />;
       }
+    }
     // return <div>{chosenElement}</div>;
-  }
+  
 
   render() {
     return (
@@ -74,12 +115,15 @@ class App extends Component {
             {this.renderSwitch()}
           </Col>
           <Col xsHidden md={8}>
-            <MapContainer selectedStops={this.state.selectedJourney} />
+            <MapContainer selectedStops={this.state.selectedJourney}
+              polylineCoordinates={this.state.polylineCoordinates} />
           </Col>
         </Row>
              <Row>
            <Col smHidden mdHidden lgHidden >
-              <MapContainer selectedStops={ this.state.selectedJourney}/>
+              <MapContainer selectedStops={ this.state.selectedJourney}
+                polylineCoordinates={this.state.polylineCoordinates}
+              />
             </Col>
            
         </Row>
