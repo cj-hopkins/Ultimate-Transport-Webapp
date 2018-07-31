@@ -46,6 +46,13 @@ def getFiveDayWeather(request):
     data = list(weather.values())
     return Response(data)
     # return JsonResponse({'weather': data})
+    
+@api_view(['GET'])
+def getAllStopNumbers(request):
+    stops = Composite.objects.order_by('stop_id').values('stop_id').distinct() 
+    data = list(stops.values())
+    return Response(stops)
+
 
 # @csrf_exempt
 @api_view(['POST'])

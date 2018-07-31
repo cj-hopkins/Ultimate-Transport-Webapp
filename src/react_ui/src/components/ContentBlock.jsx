@@ -4,7 +4,6 @@ import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 import { Button} from "react-bootstrap"
 import TimeButton from './TimeSelect';
-import RealTimeInfo from './RealTimeInfo';
 import PredictionContainer from './PredictionContainer';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
@@ -219,7 +218,8 @@ class ContentBlock extends Component {
           isDefaultTime: this.state.isDefaultTime
         })
       })
-        .then((response) => response.json())
+        .then(
+        (response) => response.json())
         .then((resp) => {
           const prediction = resp.prediction
           this.setState({
@@ -294,10 +294,7 @@ class ContentBlock extends Component {
         <Row>
           <Col xs={2}></Col>
         <Col xs={8}>{(!this.state.isRealTimeHidden && this.state.isDefaultTime ) &&            
-            <div><RealTimeInfo  
-                  nextBuses={this.state.nextBuses}
-                  startStop={this.state.startStop}
-                  /> 
+            <div> <p>Real Time Information for Stop {this.state.startStop}</p>
                 <Table striped bordered condensed hover>{this.state.nextBuses}
               </Table>
             </div> 

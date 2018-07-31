@@ -5,6 +5,7 @@ import MapContainer from "./components/MapContainer";
 import ContentBlock from "./components/ContentBlock";
 import ContentHeader from "./components/ContentHeader";
 import Example from "./components/examples/Example";
+import RealTimePage from "./components/RealTimePage";
 import CustomNavbar from './components/CustomNavbar';
 import Sidebar from 'react-sidebar';
 import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
@@ -147,8 +148,10 @@ class App extends Component {
           />;
         case 2:
           return <Example key={2} />;
+      case 3:
+          return <RealTimePage key={3} />;
         default:
-          return <div key={3} />;
+          return <div key={4} />;
       }
     }
     // return <div>{chosenElement}</div>;
