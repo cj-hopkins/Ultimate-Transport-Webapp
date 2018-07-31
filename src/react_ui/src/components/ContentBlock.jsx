@@ -30,7 +30,6 @@ class ContentBlock extends Component {
     }
   }
   routeReset () {
-    console.log("reset")
     this.setState({
         stops: [],
         chosenStops: null,
@@ -68,9 +67,7 @@ class ContentBlock extends Component {
       predictionForJourney: null,
     })
   }
-
-  // Flip the current direction
-  onDirectionUpdate(){
+  onDirectionUpdate(){   // Flip the current direction
     const newDirection = (this.state.direction === 'I') ? 'O' : 'I'
     this.setState({
       direction: newDirection,
@@ -78,13 +75,6 @@ class ContentBlock extends Component {
       finishStop: 'finish'
     })
   }
-//  onResetTime(date, secsPastMidnight) {  //on-click of leave-now
-//    this.onSelectDate(date)
-//    this.onSelectTime(secsPastMidnight)
-//    this.setState({
-//      isDefaultTime: true
-//    })
-//  }
   onResetNowContentBlock(){
     this.setState({
       isHidden: !this.state.isHidden,
@@ -126,8 +116,10 @@ class ContentBlock extends Component {
       this.routeUpdate(newRoute, false)
     }
   }
-  
   onSelectStartGetRealTime(stopid){
+     this.setState({
+      isRealTimeHidden:false
+    })
     const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
     fetch(endpoint)
       .then (response => response.json())
@@ -143,12 +135,7 @@ class ContentBlock extends Component {
             });
      })
       .catch(error => console.log('parsing failed',error))
-    
   }
-  
-  
-  
-  
   async onStopUpdate(start = null, finish = null) {
     // Here be dragons - leave this code for now
     if (start === null || finish === null) {
@@ -198,7 +185,6 @@ class ContentBlock extends Component {
     }
   }
   findStopIndex = (stop) => {
-    // const allStops = this.state.chosenStops === null ? this.state.stops : this.state.chosenStops;
     if (stop === "start") { 
       return 0 
     } else if (stop === "finish") {
@@ -212,15 +198,7 @@ class ContentBlock extends Component {
   }
 
   handleClick = () => { 
-   
-    this.setState({
-      nextBuses: this.fetchRealTime(this.state.startStop), 
-      isRealTimeHidden:false
-    })
     this.getPrediction()
-    const start = (this.state.startStop).toString();
-    console.log('this.state.startStop,', typeof(start ));
-     
   }
   getPrediction = () => {
     const endpoint = '/api/getPredictionForJourney' 
@@ -248,27 +226,9 @@ class ContentBlock extends Component {
             predictionForJourney: prediction
           })
         })
-        // .then((resp) => console.log(resp.prediction))
     } catch(e) {
         console.log(e)
       }
-  }
-  fetchRealTime(stopid){
-    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
-    fetch(endpoint)
-      .then (response => response.json())
-      .then(parsedJSON => {
-            this.setState({   //slice(0,4) to limit to top 4 results 
-                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-                  <tr key={i} >
-                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.duetime} minutes </td>
-                  </tr>
-                ))
-            });
-     })
-      .catch(error => console.log('parsing failed',error))
   }
 
   componentWillMount() {
