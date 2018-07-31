@@ -1,4 +1,4 @@
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, Table } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
@@ -281,7 +281,7 @@ class ContentBlock extends Component {
         <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
         <Col xs={8}>
-          <Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!
+          <Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Estimate journey time
           </Button>
         </Col>
         <Col xs={2}></Col></Row>
@@ -298,8 +298,8 @@ class ContentBlock extends Component {
                   nextBuses={this.state.nextBuses}
                   startStop={this.state.startStop}
                   /> 
-                <div>{this.state.nextBuses}
-              </div>
+                <Table striped bordered condensed hover>{this.state.nextBuses}
+              </Table>
             </div> 
             } 
           </Col>
