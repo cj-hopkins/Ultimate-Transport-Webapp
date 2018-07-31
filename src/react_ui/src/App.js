@@ -9,7 +9,7 @@ import CustomNavbar from './components/CustomNavbar';
 import Sidebar from 'react-sidebar';
 import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
 import { PageHeader } from "react-bootstrap";
-import dublin_bus_icon from "./components/dublin_bus_icon.png";
+// import dublin_bus_icon from "../img/dublin_bus_icon.png";
 import { Button } from 'react-bootstrap';
 import WeatherWidget from "./components/Weather";
 import LocationSearchInput from './components/LocationSearchInput';
@@ -196,12 +196,12 @@ class App extends Component {
       <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
       <Col xs={3}>
         <img
-        src={dublin_bus_icon}
+        src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
         style={{ width: "80px", height: "80px" }}
         alt="dublin_bus_icon"
       /></Col>
       <Col xs={3}>
-        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}><WeatherWidget /></Col>
+        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>TEST</h1></Col><Col xs={3}><WeatherWidget /></Col>
         </Row>
       </Grid><CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()}</div>;
@@ -217,7 +217,7 @@ class App extends Component {
       <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
       <Col xs={3}>
         <img
-        src={dublin_bus_icon}
+        src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
         style={{ width: "80px", height: "80px" }}
         alt="dublin_bus_icon"
       /></Col>
