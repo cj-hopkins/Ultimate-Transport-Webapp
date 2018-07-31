@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-// import { Panel, Button, DropdownButton, MenuItem } from 'react-bootstrap';
-// import { DropdownButton, MenuItem } from 'react-bootstrap';
-// import MapContainer from './MapContainer';
 import Select from 'react-select';
 
 class RouteSelect extends Component {
@@ -15,9 +12,7 @@ class RouteSelect extends Component {
       routes: [],
     }
   }
-
   handleSelect = (event) => {
-
     if (event === this.state.chosenRoute) {
       return;
     }

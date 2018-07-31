@@ -2,7 +2,6 @@ import React, { Component } from "react";
 // import { Button } from 'react-bootstrap';
 import Select from "react-select";
 // TODO: refactor to use a single handleSelect, pass the select name (start or finish)
-//
 
 class StopSelect extends Component {
   handleFinishSelect = finish => {
@@ -18,6 +17,7 @@ class StopSelect extends Component {
       this.props.onStopDeselect("start");
     } else {
       this.props.onStopUpdate(start.value, null);
+      this.props.fetchRealTime(start.value)
     }
   };
 
