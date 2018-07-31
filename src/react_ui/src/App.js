@@ -201,7 +201,7 @@ class App extends Component {
         alt="dublin_bus_icon"
       /></Col>
       <Col xs={3}>
-        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>TEST</h1></Col><Col xs={3}><WeatherWidget /></Col>
+        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport</h1></Col><Col xs={3}><WeatherWidget /></Col>
         </Row>
       </Grid><CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()}</div>;
