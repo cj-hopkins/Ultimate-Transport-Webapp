@@ -17,7 +17,7 @@ class StopSelect extends Component {
       this.props.onStopDeselect("start");
     } else {
       this.props.onStopUpdate(start.value, null);
-      this.props.fetchRealTime(start.value)
+      this.props.onSelectStartGetRealTime(start.value)
     }
   };
 
