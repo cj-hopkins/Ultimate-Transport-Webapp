@@ -20,6 +20,7 @@ class LocationSearchInput extends React.Component {
   };
 
   handleChange1 = address1 => {
+    console.log("ADDRESS change", address1)
     this.setState({ address1 })
     this.props.onChangeAddress1(address1)
   };
@@ -36,11 +37,13 @@ class LocationSearchInput extends React.Component {
   };
 
   handleCloseClick1 = () => {
+    console.log("CLOSING")
     this.setState({
       address1: '',
       latitude: null,
       longitude: null,
     });
+    this.props.onChangeAddress1(null)
     this.props.getOriginGeolocation(null)
   };
 
@@ -66,6 +69,7 @@ class LocationSearchInput extends React.Component {
       latitude: null,
       longitude: null,
     });
+    this.props.onChangeAddress2(null)
     this.props.getDestinationGeolocation(null)
   };
  
