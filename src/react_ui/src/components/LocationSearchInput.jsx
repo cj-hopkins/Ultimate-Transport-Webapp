@@ -79,7 +79,7 @@ class LocationSearchInput extends React.Component {
     }
 
     return (
-    <div><h2>Origin</h2>
+    <div>
       <PlacesAutocomplete
         value={this.state.address1}
         onChange={this.handleChange1}
@@ -90,7 +90,7 @@ class LocationSearchInput extends React.Component {
           <div>
             <input
               {...getInputProps({
-                placeholder: 'Search Places ...',
+                placeholder: 'Choose origin',
                 className: 'location-search-input',
               })}
             />
@@ -126,7 +126,7 @@ class LocationSearchInput extends React.Component {
             </div>
           </div>
         )}
-      </PlacesAutocomplete><h2>Destination</h2>
+      </PlacesAutocomplete>
       <PlacesAutocomplete
         value={this.state.address2}
         onChange={this.handleChange2}
@@ -137,7 +137,7 @@ class LocationSearchInput extends React.Component {
           <div>
             <input
               {...getInputProps({
-                placeholder: 'Search Places ...',
+                placeholder: 'Choose destination',
                 className: 'location-search-input',
               })}
             />
