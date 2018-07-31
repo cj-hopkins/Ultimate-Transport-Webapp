@@ -140,7 +140,7 @@ export class MapContainer extends Component {
           icon={{
             url: MapMarker,
             anchor: new google.maps.Point(32, 32),
-            scaledSize: new google.maps.Size(134, 134)
+            scaledSize: new google.maps.Size(64, 64)
           }}
         />
 
