@@ -25,7 +25,8 @@ class ContentBlock extends Component {
       plannedDate:moment(),
       plannedTime:moment(),
       isDefaultTime:true, // needed for when page loads and leave_now button
-      nextBuses:[]
+      nextBuses:[], 
+      isRealTimeHidden:true
     }
   }
   routeReset () {
@@ -190,7 +191,8 @@ class ContentBlock extends Component {
   handleClick = () => { 
      
     this.setState({
-      nextBuses: this.fetchRealTime(this.state.startStop)
+      nextBuses: this.fetchRealTime(this.state.startStop), 
+      isRealTimeHidden:false
     })
     this.getPrediction()
     const start = (this.state.startStop).toString();
@@ -249,7 +251,7 @@ class ContentBlock extends Component {
   render(){
     return (
       <Grid fluid={true}>
-	     <RouteSelect 
+        <RouteSelect 
             className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
             chosenRoute={this.state.chosenRoute}
             direction={this.state.direction}
@@ -260,7 +262,7 @@ class ContentBlock extends Component {
             onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
             routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-       <StopSelect 
+        <StopSelect 
           stops={this.state.stops}
           startStop={this.state.startStop}
           finishStop={this.state.finishStop}
@@ -270,40 +272,54 @@ class ContentBlock extends Component {
           onStopDeselect={this.onStopDeselect.bind(this)}
           chosenRoute={this.state.chosenRoute}
                     />
-              <div style={{marginTop: '2em'}}> </div>
-              <div style={{marginTop: '2em'}}> </div>
-              <Row><Col xs={2}></Col>
-              <Col xs={8}><TimeButton  
-                            onResetNowContentBlock= {this.onResetNowContentBlock.bind(this)} 
-                            plannedTime = {this.state.plannedTime}
-                            plannedDate = {this.state.plannedDate} 
-                            isDefaultTime = {this.state.isDefaultTime} 
-                            onSelectTime= {this.onSelectTime.bind(this)} 
-                            onSelectDate= {this.onSelectDate.bind(this)} 
-                            onPageLoadSetDate = {this.onPageLoadSetDate.bind(this)} 
-                            onPageLoadSetTime= {this.onPageLoadSetTime.bind(this)} 
-                                        /></Col>
-              <Col xs={2}></Col></Row>  
-              <div style={{marginTop: '2em'}}> </div>
+        <div style={{marginTop: '2em'}}> </div>
+        <div style={{marginTop: '2em'}}> </div>
+        <Row>
+          <Col xs={2}></Col>
+          <Col xs={8}>
+            <TimeButton  
+              onResetNowContentBlock= {this.onResetNowContentBlock.bind(this)} 
+              plannedTime = {this.state.plannedTime}
+              plannedDate = {this.state.plannedDate} 
+              isDefaultTime = {this.state.isDefaultTime} 
+              onSelectTime= {this.onSelectTime.bind(this)} 
+              onSelectDate= {this.onSelectDate.bind(this)} 
+              onPageLoadSetDate = {this.onPageLoadSetDate.bind(this)} 
+              onPageLoadSetTime= {this.onPageLoadSetTime.bind(this)} 
+                        />
+          </Col>
+          <Col xs={2}></Col>
+        </Row>  
+        <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
-        <Col xs={8}><Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!</Button></Col>
+        <Col xs={8}>
+          <Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!
+          </Button>
+        </Col>
         <Col xs={2}></Col></Row>
-        <PredictionContainer prediction={this.state.predictionForJourney} />
-       <div style={{marginTop: '2em'}}> </div>
-
-        <RealTimeInfo  
-          nextBuses={this.state.nextBuses}
-          startStop={this.state.startStop}
-          /> 
-
-        <div>
-          {this.state.nextBuses}
-        </div>
+        <Row><Col xs={2}></Col>
+        <Col xs={8}>
+          <PredictionContainer prediction={this.state.predictionForJourney} />
+        </Col>
+        </Row>	
+        <div style={{marginTop: '2em'}}> </div>
+        <Row>
+          <Col xs={2}></Col>
+        <Col xs={8}>{!this.state.isRealTimeHidden && 
+            <div><RealTimeInfo  
+                  nextBuses={this.state.nextBuses}
+                  startStop={this.state.startStop}
+                  /> 
+                <div>{this.state.nextBuses}</div>
+            </div> 
+            } 
+          </Col>
+        </Row>
         <TwitterTimelineEmbed
           sourceType="profile"
           screenName="dublinbusnews"
           options={{height:'20%', width: '100%', theme:'dark'}} />
-	</Grid>
+      </Grid>
     )
   }
 }
