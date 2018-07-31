@@ -30,7 +30,6 @@ class ContentBlock extends Component {
     }
   }
   routeReset () {
-    console.log("reset")
     this.setState({
         stops: [],
         chosenStops: null,
@@ -68,21 +67,12 @@ class ContentBlock extends Component {
       predictionForJourney: null,
     })
   }
-
-  // Flip the current direction
-  onDirectionUpdate(){
+  onDirectionUpdate(){   // Flip the current direction
     const newDirection = (this.state.direction === 'I') ? 'O' : 'I'
     this.setState({
       direction: newDirection,
       startStop: 'start',
       finishStop: 'finish'
-    })
-  }
-  onResetTime(date, secsPastMidnight) {  //on-click of leave-now
-    this.onSelectDate(date)
-    this.onSelectTime(secsPastMidnight)
-    this.setState({
-      isDefaultTime: true
     })
   }
   onResetNowContentBlock(){
@@ -125,6 +115,26 @@ class ContentBlock extends Component {
       const newRoute = this.state.stops.slice(this.findStopIndex(this.state.startStop, this.state.stops.length))
       this.routeUpdate(newRoute, false)
     }
+  }
+  onSelectStartGetRealTime(stopid){
+     this.setState({
+      isRealTimeHidden:false
+    })
+    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
+    fetch(endpoint)
+      .then (response => response.json())
+      .then(parsedJSON => {
+            this.setState({   //slice(0,4) to limit to top 4 results 
+                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
+                  <tr key={i} >
+                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>{post.duetime} minutes </td>
+                  </tr>
+                ))
+            });
+     })
+      .catch(error => console.log('parsing failed',error))
   }
   async onStopUpdate(start = null, finish = null) {
     // Here be dragons - leave this code for now
@@ -175,7 +185,6 @@ class ContentBlock extends Component {
     }
   }
   findStopIndex = (stop) => {
-    // const allStops = this.state.chosenStops === null ? this.state.stops : this.state.chosenStops;
     if (stop === "start") { 
       return 0 
     } else if (stop === "finish") {
@@ -189,14 +198,7 @@ class ContentBlock extends Component {
   }
 
   handleClick = () => { 
-     
-    this.setState({
-      nextBuses: this.fetchRealTime(this.state.startStop), 
-      isRealTimeHidden:false
-    })
     this.getPrediction()
-    const start = (this.state.startStop).toString();
-    console.log('this.state.startStop,', typeof(start ));
   }
   getPrediction = () => {
     const endpoint = '/api/getPredictionForJourney' 
@@ -224,28 +226,9 @@ class ContentBlock extends Component {
             predictionForJourney: prediction
           })
         })
-        // .then((resp) => console.log(resp.prediction))
     } catch(e) {
         console.log(e)
       }
-  }
-  fetchRealTime(stopid){
-    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
-    fetch(endpoint)
-      .then (response => response.json())
-      .then(parsedJSON => {
-//            console.log(parsedJSON.results)
-            this.setState({   //slice(0,4) to limit to top 4 results 
-                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-                  <tr key={i} >
-                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.duetime} minutes </td>
-                  </tr>
-                ))
-            });
-     })
-      .catch(error => console.log('parsing failed',error))
   }
 
   componentWillMount() {
@@ -275,6 +258,7 @@ class ContentBlock extends Component {
           onStopUpdate={this.onStopUpdate.bind(this)}
           onStopDeselect={this.onStopDeselect.bind(this)}
           chosenRoute={this.state.chosenRoute}
+          onSelectStartGetRealTime={this.onSelectStartGetRealTime.bind(this)}
                     />
         <div style={{marginTop: '2em'}}> </div>
         <div style={{marginTop: '2em'}}> </div>
@@ -309,12 +293,13 @@ class ContentBlock extends Component {
         <div style={{marginTop: '2em'}}> </div>
         <Row>
           <Col xs={2}></Col>
-        <Col xs={8}>{!this.state.isRealTimeHidden && 
+        <Col xs={8}>{(!this.state.isRealTimeHidden && this.state.isDefaultTime ) &&            
             <div><RealTimeInfo  
                   nextBuses={this.state.nextBuses}
                   startStop={this.state.startStop}
                   /> 
-                <div>{this.state.nextBuses}</div>
+                <div>{this.state.nextBuses}
+              </div>
             </div> 
             } 
           </Col>
