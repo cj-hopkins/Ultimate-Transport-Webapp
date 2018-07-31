@@ -204,10 +204,10 @@ class App extends Component {
         <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}><WeatherWidget /></Col>
         </Row>
       </Grid><CustomNavbar swapUI={this.swapUI.bind(this)}/>
-            {this.renderSwitch()})</div>;
+            {this.renderSwitch()}</div>;
 
     const sidebarNoButton = <div style={{backgroundColor:"white", height:'100%'}}><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
-            {this.renderSwitch()})</div>;
+            {this.renderSwitch()}</div>;
 
 
     const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;

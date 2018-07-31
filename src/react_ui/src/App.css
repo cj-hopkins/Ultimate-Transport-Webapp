@@ -42,5 +42,23 @@
   width: 200px;
 }
 
+.location-search-input {
+  font-size: 40px;
+  margin-left:5%;
+  margin-top: 5%;
+  padding: 10px;
+  width: 80%;
+  background: none transparent;
+  box-shadow: none;
+  cursor: default;
+  display: inline-block;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.Demo__clear-button {
+  padding: 10px;
+  }
+
 
 

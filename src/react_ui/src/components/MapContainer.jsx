@@ -123,7 +123,6 @@ export class MapContainer extends Component {
         />
         
         <Marker
-          onClick={this.onMarkerClick}
           name={"Current location"}
           // position={this.props.currentPosition} />
           position={{
@@ -131,7 +130,7 @@ export class MapContainer extends Component {
             lng: this.state.currentPosition.lng
           }}
           icon={{
-            url: im,
+            url: MapMarker,
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(64, 64)
           }}

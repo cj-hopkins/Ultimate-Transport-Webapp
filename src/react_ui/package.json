@@ -27,6 +27,7 @@
     "react-motion": "^0.5.2",
     "react-open-weather": "^0.4.0",
     "react-open-weather-icons": "^0.1.1",
+    "react-places-autocomplete": "^7.2.0",
     "react-router-dom": "^4.2.2",
     "react-select": "^1.2.1",
     "react-sidebar": "^2.3.2",
