@@ -148,9 +148,26 @@ class App extends Component {
   }
 
   render() {
-    const sidebar = (!this.state.mql.matches) ? <div style={{backgroundColor:"white", height:'100%'}}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
-            {this.renderSwitch()})</div> : <div style={{backgroundColor:"white", height:'100%'}}><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
+    const siderbarWithButton = <div style={{backgroundColor:"white", height:'100%'}}>
+      <Grid fluid={true}><Row>
+      <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
+      <Col xs={3}>
+        <img
+        src={dublin_bus_icon}
+        style={{ width: "80px", height: "80px" }}
+        alt="dublin_bus_icon"
+      /></Col>
+      <Col xs={3}>
+        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}><WeatherWidget /></Col>
+        </Row>
+      </Grid><CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()})</div>;
+
+    const sidebarNoButton = <div style={{backgroundColor:"white", height:'100%'}}><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
+            {this.renderSwitch()})</div>;
+
+
+    const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;
 
     const contentHeader = (
       <Grid fluid={true}><Row>
