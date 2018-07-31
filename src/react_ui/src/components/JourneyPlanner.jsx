@@ -7,12 +7,13 @@ class JourneyPlanner extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      origin: "",
-      destination: "",
+      origin: null,
+      destination: null,
       originLatLng: null,
       destinationLatLng: null,
       // directionsObject: null,
-      possibleRoutes: []
+      possibleRoutes: [],
+      selectedRoute: null
     };
   }
 
@@ -42,7 +43,22 @@ class JourneyPlanner extends Component {
     });
   }
 
-  onClick() {
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      // (this.state.originLatLng !== prevState.originLatLng && this.state.originLatLng !== null) && 
+      // (this.state.destinationLatLng !== prevState.destinationLatLng && this.state.destinationLatLng !== null)
+      (this.state.originLatLng !== null && this.state.destinationLatLng !== null) &&
+      (this.state.originLatLng !== prevState.originLatLng || this.state.destinationLatLng !== prevState.destinationLatLng)
+    ) {
+        this.setState({directionsObject: undefined, selectedRoute: null})
+        this.makeDirectionsRequest()
+    } else if (this.state.originLatLng !== prevState.originLatLng || this.state.destinationLatLng !== prevState.destinationLatLng) {
+        this.setState({directionsObject: undefined, selectedRoute: null})
+        this.props.getPolyCoordinates([])
+    }
+  }
+
+  makeDirectionsRequest = () => {
     const google = window.google;
     const directionsService = new google.maps.DirectionsService();
     const start = new google.maps.LatLng(
@@ -69,49 +85,40 @@ class JourneyPlanner extends Component {
     const me = this;
     directionsService.route(request, (result, status) => {
       if (status == "OK") {
-        // const routes = me.parseAllJournies(result, me.parseSingleJourney)
-        // console.log("ROUTES", routes)
         me.setState({
           directionsObject: result,
-          // possibleRoutes: routes
         });
-        console.log(result);
-        // me.parseJourneys(result);
       }
     });
   }
 
   selectRoute = (key) => {
-    console.log(key)
+    // console.log(key)
     this.setState({
       selectedRoute: key
     })
-    const google = window.google;
-    const polyline = new google.maps.Polyline({
-      path: [],
-      strokeColor: '#0000FF',
-      strokeWeight: 3
-    });
     const route = this.state.directionsObject.routes[key].legs[0].steps;
     let coordinates = []
+
     for (let i = 0; i < route.length; i++) {
       let nextSegment = route[i].path;
       for (let j = 0; j < nextSegment.length; j++) {
         coordinates.push(nextSegment[j])
-        // polyline.getPath().push(nextSegment[j])
       }
     }
     // const parser = array => array.reduce((item, acc) => acc.push({lat: item.lat(), lng: item.lng()}), []);
     // const coords = parser(data);
 
     // console.log(coords)
-    console.log("POLY", polyline)
-    console.log("PATH", polyline.latLngs.b[0].b)
     console.log(coordinates)
     this.props.getPolyCoordinates(coordinates)
-    const journeyObject = this.state.directionsObject.routes[key].legs[0].steps
+    this.getMultiRoutePrediction(key)
+  }
+
+  getMultiRoutePrediction = chosenRouteKey => {
+    const endpoint = '/api/getMultiRoutePrediction' 
+    const journeyObject = this.state.directionsObject.routes[chosenRouteKey].legs[0].steps
       .filter(item => item.travel_mode === 'TRANSIT')
-      // .map(item => {name: item.transit.line.short_name})
       .map(item => ({
         route: item.transit.line.short_name,
         stops: item.transit.num_stops,
@@ -119,6 +126,34 @@ class JourneyPlanner extends Component {
         finish: item.transit.arrival_stop
         })
       );
+      console.log(journeyObject)
+
+
+
+    try {
+      fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body : JSON.stringify({
+          'busRoutes': journeyObject,
+          'isDefaultTime': true,
+          'direction': 'I'
+        })
+      })
+        .then((response) => response.json())
+        // .then((resp) => {
+        //   const prediction = resp.prediction
+        //   this.setState({
+        //     predictionForJourney: prediction
+        //   })
+        // })
+        .then((resp) => console.log(resp))
+    } catch(e) {
+        console.log(e)
+      }
     console.log(journeyObject)
   }
 
@@ -161,6 +196,10 @@ class JourneyPlanner extends Component {
   //       nextState.destinationLatLng !== this.state.destinationLatLng)
   //   ) {
 
+  componentWillMount() {
+    this.props.onSelectedJourneyUpdate([])
+  }
+
   render() {
     return (
       <div>
@@ -172,7 +211,7 @@ class JourneyPlanner extends Component {
           getOriginGeolocation={this.getOriginGeolocation.bind(this)}
           getDestinationGeolocation={this.getDestinationGeolocation.bind(this)}
         />
-        <button onClick={this.onClick.bind(this)}>TEST</button>
+        {/* <button onClick={this.onClick.bind(this)}>TEST</button> */}
         {/* <p>{this.parseJourney}</p> */}
         {/* {this.state.possibleRoutes.map(route => {
           <h1>route</h1>

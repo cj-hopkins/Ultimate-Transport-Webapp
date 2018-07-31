@@ -97,6 +97,22 @@ def getPredictionForJourney(request):
             return JsonResponse({'prediction':str(result[0])+ '\n\n(Weather not taken into account) '})
 
 
+@api_view(['POST'])
+def getMultiRoutePrediction(request):
+    print("REQUEST", request.data)
+    totalPrediction = 0
+    # for item in request.data['busRoutes']:
+    #     print("KEY", key)
+    #     if isDefaultTime:
+    #         isRaining = getRainNow()
+    #         temp = getTempNow()
+    #         print('temp',temp)
+    #         result = getPrediction(item['numStops'], isRaining,temp, selectedTime)
+    #         print(result)
+    #         totalPrediction += result
+    #         # return JsonResponse({'prediction':result[0]})
+    return JsonResponse({'test': 'val'})
+
 # class getStopsForRoute(CsrfExemptMixin, APIView):
 #     def post(self, request):
 #         route = request.data.get('route')
@@ -192,5 +208,3 @@ def get_temp_and_rain(response,seconds_past_midnight, epoch_time):
             return res  #if there's weather info return it else return dictionary of Nones
     return res
     
-  
-  

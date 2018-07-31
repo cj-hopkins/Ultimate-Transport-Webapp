@@ -98,16 +98,10 @@ export class MapContainer extends Component {
   // }
 
   render() {
-    const google = window.google;
     if (!this.props.loaded) return <div>Loading...</div>;
-    console.log("RENDERING MAP");
+
+    const google = window.google;
     const im = "https://www.robotwoods.com/dev/misc/bluecircle.png";
-    const coords = this.state.polylineCoordinates;
-    const testCoords = [
-      { lat: 53.378, lng: -6.057 },
-      { lat: 53.378, lng: -6.056 },
-      { lat: 53.378, lng: -6.056 }
-    ];
     return (
       <Map
         google={this.props.google}
@@ -127,9 +121,7 @@ export class MapContainer extends Component {
           strokeOpacity={0.8}
           strokeWeight={2}
         />
-        {/* <this.renderPolyline /> */}
-        {/* <Marker onClick={this.onMarkerClick}
-            name={"Current location"} /> */}
+        
         <Marker
           name={"Current location"}
           // position={this.props.currentPosition} />
