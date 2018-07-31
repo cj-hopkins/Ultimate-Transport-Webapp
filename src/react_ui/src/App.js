@@ -111,14 +111,15 @@ class App extends Component {
 
   // Each JS object in the array has 2 functions, lat & lng. Run them to return the actual coords
   parseCoords = array => array.map(object => ({
-    lat: parseFloat(object.lat().toFixed(3)),
-    lng: parseFloat(object.lng().toFixed(3))
+    lat: parseFloat(object.lat()),
+    lng: parseFloat(object.lng())
     })
   )
 
 
   getPolyCoordinates(data) {
     const coords = this.parseCoords(data);
+    // console.log(coords)
     // console.log(coords[0].lat.toFixed(3))
     // const test = this.parseCood(coords[0])
     // console.log("TEST", test)
@@ -132,13 +133,17 @@ class App extends Component {
       // console.log("render switch")
     switch (this.state.activatedUI) {
         case 0:
+        // this.setState({polylineCoordinates: []});
           return <ContentBlock key={0} 
             onRouteUpdate={this.onRouteUpdate.bind(this)}
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            getPolyCoordinates={this.getPolyCoordinates.bind(this)}
           />;
         case 1:
+        // this.setState({selectedJourney: []});
           return <JourneyPlanner key={1} 
             getPolyCoordinates={this.getPolyCoordinates.bind(this)}
+            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
           />;
         case 2:
           return <Example key={2} />;

@@ -270,6 +270,10 @@ class ContentBlock extends Component {
      })
       .catch(error => console.log('parsing failed',error))
   }
+
+  componentWillMount() {
+    this.props.getPolyCoordinates([])
+  }
   
   render(){
     return (

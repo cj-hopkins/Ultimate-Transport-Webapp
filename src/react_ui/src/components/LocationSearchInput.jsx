@@ -20,6 +20,7 @@ class LocationSearchInput extends React.Component {
   };
 
   handleChange1 = address1 => {
+    console.log("ADDRESS change", address1)
     this.setState({ address1 })
     this.props.onChangeAddress1(address1)
   };
@@ -36,11 +37,13 @@ class LocationSearchInput extends React.Component {
   };
 
   handleCloseClick1 = () => {
+    console.log("CLOSING")
     this.setState({
       address1: '',
       latitude: null,
       longitude: null,
     });
+    this.props.onChangeAddress1(null)
     this.props.getOriginGeolocation(null)
   };
 
@@ -66,6 +69,7 @@ class LocationSearchInput extends React.Component {
       latitude: null,
       longitude: null,
     });
+    this.props.onChangeAddress2(null)
     this.props.getDestinationGeolocation(null)
   };
  
@@ -79,7 +83,7 @@ class LocationSearchInput extends React.Component {
     }
 
     return (
-    <div><h2>Origin</h2>
+    <div>
       <PlacesAutocomplete
         value={this.state.address1}
         onChange={this.handleChange1}
@@ -90,7 +94,7 @@ class LocationSearchInput extends React.Component {
           <div>
             <input
               {...getInputProps({
-                placeholder: 'Search Places ...',
+                placeholder: 'Choose origin',
                 className: 'location-search-input',
               })}
             />
@@ -126,7 +130,7 @@ class LocationSearchInput extends React.Component {
             </div>
           </div>
         )}
-      </PlacesAutocomplete><h2>Destination</h2>
+      </PlacesAutocomplete>
       <PlacesAutocomplete
         value={this.state.address2}
         onChange={this.handleChange2}
@@ -137,7 +141,7 @@ class LocationSearchInput extends React.Component {
           <div>
             <input
               {...getInputProps({
-                placeholder: 'Search Places ...',
+                placeholder: 'Choose destination',
                 className: 'location-search-input',
               })}
             />

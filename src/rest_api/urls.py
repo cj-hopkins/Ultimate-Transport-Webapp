@@ -15,4 +15,5 @@ urlpatterns = [
     path('getRouteStopComposite', views.getRouteStopComposite.as_view(),
          name="getRouteStopComposite"),
    path('getFiveDayWeather', views.getFiveDayWeather, name='getFiveDayWeather'),
+   path('getMultiRoutePrediction', views.getMultiRoutePrediction, name='getMultiRoutePrediction'),
 ]
