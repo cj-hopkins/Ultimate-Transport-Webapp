@@ -75,7 +75,23 @@ def getTimeTable(request):
     table = Timetable.objects.filter(lineid=lineid).filter(direction = direction).filter(stop_id = stop).filter(weekday = weekday).filter(saturday = sat).filter(sunday = sun)
     serializer = TimeTableSerializer(table, many=True)
     #print(len(data))
-    return Response(serializer.data)
+    times = []
+    for i in range(len(serializer.data)):
+        times.append(serializer.data[i]['arrival_time']) #serializer.data[i]['stop_headsign']})
+    return Response(times)
+
+# @api_view(['POST'])
+# def getTimeTable(request):
+#     lineid = request.data.get('route')
+#     direction = request.data.get('direction')
+#     stop = request.data.get('stop_id')
+#     weekday = request.data.get('weekday')
+#     sat = request.data.get('saturday')
+#     sun = request.data.get('sunday')
+#     table = Timetable.objects.filter(lineid=lineid).filter(direction = direction).filter(stop_id = stop).filter(weekday = weekday).filter(saturday = sat).filter(sunday = sun)
+#     serializer = TimeTableSerializer(table, many=True)
+#     #print(len(data))
+#     return Response(serializer.data)
 
 
 @api_view(['POST'])
