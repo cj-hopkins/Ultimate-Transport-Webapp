@@ -298,14 +298,13 @@ class TimeTable extends Component {
         <Row><Col xs={2}></Col>
           <Col xs={8}>
         <Button onClick={this.getTable} bsStyle='warning' bsSize='large' block>Get timetable
-          </Button></Col><Col xs={2}></Col>
-          <Col xs={8}>{!(this.state.times===null) &&
-          <ol>
-                { this.state.times.map(function(time){
-                    return <li>{time}</li>;
-                  })}
-            </ol>}
-          </Col></Row>
+          </Button></Col></Row><div style={{marginTop: '2em'}}> </div><Row><Col xs={4}></Col>
+          <Col xs={4}>{!(this.state.times===null) && <div className='timetable'>
+          <Table striped bordered condensed hover responsive size={'sm'}><tbody>
+          { this.state.times.map(function(time, index){
+                    return <tr><th style={{textAlign:'center'}}>{time}</th></tr>;
+                  })}</tbody></Table></div>}
+          </Col><Col xs={4}></Col></Row>
         </Grid>
     );
   }
