@@ -33,7 +33,15 @@ class TimeTable extends Component {
   handleSelect = (chosenDay) => {
       this.setState({ chosenDay });
       console.log(`Option selected:`, chosenDay);
-      if (chosenDay.value==='weekday'){
+      if (chosenDay===null) {
+        this.setState({
+          weekday: 0,
+          saturday: 0,
+          sunday: 0,
+          times:null
+        })
+      }
+      else if (chosenDay.value==='weekday'){
         this.setState({
           weekday: 1,
           saturday: 0,
@@ -65,6 +73,7 @@ class TimeTable extends Component {
         startStop: "start",
         finishStop: "finish",
         direction: 'I',
+        times:null
     })
     this.props.onRouteUpdate([])
   }
@@ -101,25 +110,7 @@ class TimeTable extends Component {
       startStop: 'start',
       finishStop: 'finish'
     })
-  }
-  onResetNowContentBlock(){
-    this.setState({
-      isHidden: !this.state.isHidden,
-      isDefaultTime: true
-    })
-  }               
-  onSelectTime(time){  //on change of time (time dropdown) 
-    this.setState({
-      plannedTime:time,
-      isDefaultTime: false
-    })
-  }
-   onSelectDate(date){  //on change of date (calendar) 
-    this.setState({
-      plannedDate:date,
-      isDefaultTime: false
-     })
-   }
+  }              
   onPageLoadSetTime(time){  //on load of page set time = now
     this.setState({
       plannedTime:time,
@@ -134,12 +125,11 @@ class TimeTable extends Component {
   } 
   onStopDeselect(stop) {
     if (stop === 'start') {
-      this.setState({startStop: "start"})
+      this.setState({
+        startStop: "start",
+        times:null
+        })
       const newRoute = this.state.stops.slice(0, this.findStopIndex(this.state.finishStop))
-      this.routeUpdate(newRoute, false)
-    } else {
-      this.setState({finishStop: "finish"})
-      const newRoute = this.state.stops.slice(this.findStopIndex(this.state.startStop, this.state.stops.length))
       this.routeUpdate(newRoute, false)
     }
   }
@@ -192,13 +182,14 @@ class TimeTable extends Component {
         newStops = this.state.stops.slice(startIndex, index);
         this.setState({finishStop: stop})
       }
-      this.setState({chosenStops: newStops});
+      this.setState({
+          chosenStops: newStops,
+          times:null});
       this.props.onSelectedJourneyUpdate(newStops);
       // if neither values are null then we are doing a direction switch
     } else {
         this.setState({
           startStop: start,
-          finishStop: finish,
         });
         const startIndex = this.findStopIndex(start);
         console.log("start" + startIndex)
@@ -206,7 +197,10 @@ class TimeTable extends Component {
         console.log("finish" + finishIndex)
         let newStops = this.state.stops.slice(startIndex, finishIndex);
         console.log(newStops);
-        this.setState({chosenStops: newStops});
+        this.setState({
+          chosenStops: newStops,
+          times:null
+        });
         this.props.onSelectedJourneyUpdate(newStops);
     }
   }
@@ -302,8 +296,8 @@ class TimeTable extends Component {
           <Col xs={4}>{!(this.state.times===null) && <div className='timetable'>
           <Table striped bordered condensed hover responsive size={'sm'}><tbody>
           { this.state.times.map(function(time, index){
-                    return <tr><th style={{textAlign:'center'}}>{time}</th></tr>;
-                  })}</tbody></Table></div>}
+              return <tr><th style={{textAlign:'center'}}>{time}</th></tr>;
+              })}</tbody></Table></div>}
           </Col><Col xs={4}></Col></Row>
         </Grid>
     );

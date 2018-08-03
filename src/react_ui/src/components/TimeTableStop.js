@@ -57,7 +57,7 @@ class TimeTableStop extends Component {
           value={this.props.startStop}
           // onChange={this.handleChange}
           onChange={this.handleStartSelect}
-          placeholder={"Start stop"}
+          placeholder={"Select stop"}
         />
       </div>
     );
