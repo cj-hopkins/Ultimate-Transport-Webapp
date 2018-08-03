@@ -14,6 +14,7 @@ import { Button } from 'react-bootstrap';
 import WeatherWidget from "./components/Weather";
 import LocationSearchInput from './components/LocationSearchInput';
 import JourneyPlanner from './components/JourneyPlanner';
+import TimeTable from "./components/TimeTable";
 
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
@@ -146,7 +147,10 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
           />;
         case 2:
-          return <Example key={2} />;
+          return <TimeTable key={2} 
+            onRouteUpdate={this.onRouteUpdate.bind(this)}
+            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            />;
         default:
           return <div key={3} />;
       }

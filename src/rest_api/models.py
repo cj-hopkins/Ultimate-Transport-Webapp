@@ -49,6 +49,17 @@ class Currentweather(models.Model):
     icon = models.CharField(max_length=128)
 
 # ID,NAME,ROUTE_DIRECTION,SEQUENCE,IS_STAGE_POINT,STAGE_NUMBER,JOURNEY_PATTERN_ID,RTPI_DESTINATION,RTPI_ORGIN,RTPI_VIA,SEQUENCE_NUMBER,FARE
+class Timetable(models.Model):
+    row_index = models.IntegerField(primary_key=True)
+    arrival_time = models.CharField(max_length=128)
+    stop_id = models.CharField(max_length=128)
+    stop_sequence = models.IntegerField()
+    stop_headsign = models.CharField(max_length=128)
+    weekday = models.DecimalField(max_digits=10, decimal_places=0)    
+    saturday = models.DecimalField(max_digits=10, decimal_places=0)
+    sunday = models.DecimalField(max_digits=10, decimal_places=0)
+    direction = models.DecimalField(max_digits=10, decimal_places=0)
+    lineid = models.CharField(max_length=128)
 
 class FiveDayWeather(models.Model):
     number = models.IntegerField()
