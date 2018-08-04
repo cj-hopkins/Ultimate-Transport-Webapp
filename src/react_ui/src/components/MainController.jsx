@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { Button, ButtonGroup, Media } from "react-bootstrap";
 import { PageHeader } from "react-bootstrap";
-import dublin_bus_icon from "./dublin_bus_icon.png";
+// import dublin_bus_icon from "./dublin_bus_icon.png";
 import WeatherWidget from "./Weather";
 
 import CustomNavbar from "./CustomNavBar";
@@ -57,7 +57,7 @@ class MainController extends Component {
         <Media>
           <Media.Left>
             <img
-              src={dublin_bus_icon}
+              src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
               style={{ width: "100px", height: "100px" }}
               alt="dublin_bus_icon"
             />

@@ -16,6 +16,7 @@ import WeatherWidget from "./components/Weather";
 import LocationSearchInput from './components/LocationSearchInput';
 import JourneyPlanner from './components/JourneyPlanner';
 import { Table } from 'react-bootstrap';
+import TimeTable from "./components/TimeTable";
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
 
@@ -103,7 +104,7 @@ class App extends Component {
     fetch(endpoint)
       .then (response => response.json())
       .then(parsedJSON => {
-            this.setState({   //slice(0,4) to limit to top 4 results 
+            this.setState({   
                 nextBuses: parsedJSON.results.map((post, i) => (
                   <tr key={i} >
                     <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -165,7 +166,10 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
           />;
         case 2:
-          return <Example key={2} />;
+        return <TimeTable key={2} 
+            onRouteUpdate={this.onRouteUpdate.bind(this)}
+            onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            />;
         case 3:
           return <div><RealTimePage key={3} 
                     onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
@@ -184,6 +188,7 @@ class App extends Component {
         case 4.1:
           return 
             <a href={"http://www.dublinbus.ie"}>Dub</a>;
+        
         default:
           return <div key={4} />;
       }
@@ -234,7 +239,7 @@ class App extends Component {
         alt="dublin_bus_icon"
       /></Col>
       <Col xs={3}>
-        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>TEST</h1></Col><Col xs={3}><WeatherWidget /></Col>
+        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport</h1></Col><Col xs={3}><WeatherWidget /></Col>
         </Row>
       </Grid><CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()}</div>;

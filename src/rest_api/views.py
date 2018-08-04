@@ -3,12 +3,13 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.conf.urls.static import static
 from django.core import serializers
-from .models import Stop, Route, Composite, Currentweather, FiveDayWeather
-from .serializers import StopSerializer, RouteSerializer, RouteStopSerializer
+from .models import Stop, Route, Composite, Currentweather, FiveDayWeather, Timetable 
+from .serializers import StopSerializer, RouteSerializer, RouteStopSerializer, TimeTableSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.views import APIView
+from rest_framework.renderers import JSONRenderer
 from django.views.decorators.csrf import csrf_exempt
 #from braces.views import CsrfExemptMixin
 import random
@@ -31,6 +32,7 @@ class getAllRoutes(generics.ListCreateAPIView):
 class getRouteStopComposite(generics.ListCreateAPIView):
     queryset = Composite.objects.all()
     serializer_class = RouteStopSerializer
+
 
 @api_view(['GET'])
 def getCurrentWeather(request):
@@ -68,6 +70,38 @@ def getStopsForRoute(request):
     print(len(data))
     return Response(data)
     # return JsonResponse({"iDirection": iDirection, "oDirection": oDirection})
+
+# @api_view(['GET'])
+# def getTimeTable(request):
+#     lineid = 140 #request.data.get('route')
+#     direction = 0#request.data.get('direction')
+#     stop = 7149 #request.data.get('stop_id')
+#     weekday = 1 #request.data.get('weekday')
+#     sat = 0 #request.data.get('saturday')
+#     sun = 0 #request.data.get('sunday')
+#     table = Timetable.objects.filter(lineid=lineid).filter(direction = direction).filter(stop_id = stop).filter(weekday = weekday).filter(saturday = sat).filter(sunday = sun)
+#     serializer = TimeTableSerializer(table, many=True)
+#     #print(len(data))
+#     times = []
+#     for i in range(len(serializer.data)):
+#         times.append(serializer.data[i]['arrival_time']) #serializer.data[i]['stop_headsign']})
+#     return Response(times)
+
+@api_view(['POST'])
+def getTimeTable(request):
+    lineid = request.data.get('lineid')
+    direction = request.data.get('direction')
+    stop = request.data.get('stop_id')
+    weekday = request.data.get('weekday')
+    sat = request.data.get('saturday')
+    sun = request.data.get('sunday')
+    table = Timetable.objects.filter(lineid=lineid).filter(direction = direction).filter(stop_id = stop).filter(weekday = weekday).filter(saturday = sat).filter(sunday = sun)
+    serializer = TimeTableSerializer(table, many=True)
+    times = []
+    for i in range(len(serializer.data)):
+        times.append(serializer.data[i]['arrival_time'])
+    return Response(times)
+
 
 @api_view(['POST'])
 def getPredictionForJourney(request):
