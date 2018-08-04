@@ -16,6 +16,7 @@ class TimeTable extends Component {
       route_origin: null,
       chosenRoute: "Select Route",
       startStop: "start",
+      finishStop:'finish',
       direction: 'I',
       sqlDirection: 1,
       plannedDate:moment(),
@@ -158,8 +159,8 @@ class TimeTable extends Component {
     if (start === null || finish === null) {
       const isStart = (finish === null) ? true : false;
       const stop = isStart ? start : finish;
-      const finishIndex = (this.state.finishStop === "finish") ? this.state.stops.length : this.findStopIndex(this.state.finishStop)
-      const startIndex = (this.state.startStop === "start") ? 0 : this.findStopIndex(this.state.startStop)
+      const finishIndex = this.findStopIndex(this.state.startStop)+1 
+      const startIndex = this.findStopIndex(this.state.startStop)
 
       // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
       // if (stop === "Start" || stop === "Finish") {
@@ -177,10 +178,16 @@ class TimeTable extends Component {
       let newStops;
       if (isStart) {
         newStops = this.state.stops.slice(index, finishIndex)
-        this.setState({startStop: stop})
+        this.setState({
+          startStop: stop,
+          finishStop: start+1
+          })
       } else {
         newStops = this.state.stops.slice(startIndex, index);
-        this.setState({finishStop: stop})
+        this.setState({
+          startStop: stop,
+          finishStop: start+1
+        })
       }
       this.setState({
           chosenStops: newStops,
@@ -190,10 +197,11 @@ class TimeTable extends Component {
     } else {
         this.setState({
           startStop: start,
+          finishStop: start+1
         });
         const startIndex = this.findStopIndex(start);
         console.log("start" + startIndex)
-        const finishIndex = this.findStopIndex(finish);
+        const finishIndex = this.findStopIndex(start)+1;
         console.log("finish" + finishIndex)
         let newStops = this.state.stops.slice(startIndex, finishIndex);
         console.log(newStops);
@@ -264,7 +272,7 @@ class TimeTable extends Component {
             className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
             chosenRoute={this.state.chosenRoute}
             direction={this.state.direction}
-            route_destination={this.state.route_destination}
+            route_destination={this.state.route_origin}
             route_origin={this.state.route_origin}
             onDirectionUpdate={this.onDirectionUpdate.bind(this)}
             onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
