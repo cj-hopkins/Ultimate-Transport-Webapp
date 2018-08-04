@@ -306,14 +306,6 @@ class ContentBlock extends Component {
             } 
           </Col>
         </Row>
-        <TwitterTimelineEmbed
-          sourceType="profile"
-          screenName="dublinbusnews"
-          options={{
-            height:'20%', 
-            width: '100%', 
-            theme:'dark'}} 
-          />
       </Grid>
     )
   }

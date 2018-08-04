@@ -17,6 +17,7 @@ import LocationSearchInput from './components/LocationSearchInput';
 import JourneyPlanner from './components/JourneyPlanner';
 import { Table } from 'react-bootstrap';
 import TimeTable from "./components/TimeTable";
+import { TwitterFeed } from "./components/TwitterFeed";
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
 
@@ -116,10 +117,6 @@ class App extends Component {
      })
       .catch(error => console.log('parsing failed',error))
   }
-  
-  
-  
-  
   // parseCood = object => (String(object[object]()) > 6) ? object : parseFloat(String(object[object]()).substring(0,6))
   // parseCoords = array => array.map(object => ({
   //   let newLat = String(object.lat())
@@ -140,10 +137,6 @@ class App extends Component {
   )
   getPolyCoordinates(data) {
     const coords = this.parseCoords(data);
-    // console.log(coords)
-    // console.log(coords[0].lat.toFixed(3))
-    // const test = this.parseCood(coords[0])
-    // console.log("TEST", test)
     this.setState({
       polylineCoordinates: coords
     });
@@ -188,7 +181,21 @@ class App extends Component {
         case 4.1:
           return 
             <a href={"http://www.dublinbus.ie"}>Dub</a>;
-        
+        case 4.3:
+          return <div> 
+            <TwitterFeed />
+            
+      {/*     <TwitterTimelineEmbed
+                          sourceType="profile"
+                          screenName="dublinbusnews"
+                          options={{
+                            height:'60%', 
+                            width: '100%', 
+                            theme:'dark'}} 
+                          />
+            */}               
+                          
+        </div>
         default:
           return <div key={4} />;
       }
