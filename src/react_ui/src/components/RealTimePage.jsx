@@ -1,51 +1,66 @@
 import React, { Component } from 'react';
-import Select from "react-select";
+//import Select from "react-select";
+import VirtualizedSelect from 'react-virtualized-select'
 
 class RealTimePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-       isRealTimeHidden:true
+        stops:[]
     }
   }
-   fetchRealTime(stopid){
-     this.setState({
-      isRealTimeHidden:false
+ async componentWillMount(){
+    let  stopIds
+    const endpoint = '/api/getAllStopNumbers';
+    try {
+      const result = await fetch(endpoint)
+      stopIds = await result.json();
+      this.setState({
+        stops: stopIds
+      });
+    } catch(e) {
+      console.log(e);
+    }
+    const stopItems = []  // Format stops to use with dropdown
+    stopIds.forEach(item => (
+      stopItems.push({
+        value: item.stop_id, 
+        label: item.stop_id
+      })
+    ))
+    this.setState({
+      stopsAsOptions: stopItems
     })
-    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
-    fetch(endpoint)
-      .then (response => response.json())
-      .then(parsedJSON => {
-            this.setState({   //slice(0,4) to limit to top 4 results 
-                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-                  <tr key={i} >
-                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.duetime} minutes </td>
-                  </tr>
-                ))
-            });
-     })
-      .catch(error => console.log('parsing failed',error))
   }
+   handleSelect = (stopNum) => {
+    this.props.onRealTimeStopUpdate(stopNum)
+     this.props.onStopSelectGetRealTime(stopNum)
+  } 
+  
   
   render(){
-
     return (
-      
       <div>Search by stop number:
-      
-       <Select
+{/*       <Select
           id="startSelect"
           name="form-field-name"
-          placeholder={"Start stop"}
-        />
-      
-      
-      
+          placeholder={"Select a stop"}
+          options={this.state.stopsAsOptions}
+          value={this.props.selectedRealTimeStop}
+          onChange={this.handleSelect}  
+        />    
+        */}
+        <VirtualizedSelect ref="citySelect"
+					options={this.state.stopsAsOptions}
+					simpleValue
+					clearable
+					name="select-city"
+					value={this.props.selectedRealTimeStop}
+					onChange={this.handleSelect}
+					searchable
+				/>
       </div>
     );
   }
 };
-
 export default  RealTimePage ;

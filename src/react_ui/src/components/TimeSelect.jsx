@@ -14,28 +14,23 @@ class TimeButton extends Component {
       isDefaultTime:  true
     };
   }
-  
    //ensures time in format 'seconds past midnight' on load of page
     componentDidMount() {   
       const newTime = moment();
       const newTimeMidnight = newTime.clone().startOf("day");
       const diffInSeconds = newTime.diff(newTimeMidnight, "seconds");
-
       this.setState({
         plannedTime: diffInSeconds,
         isDefaultTime: true
       });
       this.props.onPageLoadSetTime(diffInSeconds);
       this.props.onPageLoadSetDate(newTime);
-      
     }
-  
   toggleHidden() {
     this.setState({
       isHidden: false
     });
   }
-  
   onResetNow(){
     this.setState({
       isHidden: !this.state.isHidden,
@@ -43,21 +38,18 @@ class TimeButton extends Component {
     });
     this.props.onResetNowContentBlock();
   }
-  
   dateUpdate(date) {
     this.setState({
       plannedTime: date
     });
     this.props.onSelectDate(date);
   }
-
   timeUpdate(time) {
     this.setState({
       plannedTime: time
     });
     this.props.onSelectTime(time);
   }
-
   render() {
     return (
       <div>
@@ -100,11 +92,9 @@ class TimeButton extends Component {
     );
   }
 }
-
 class CalendarChooseDate extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       plannedDate: moment()
     };
@@ -112,7 +102,6 @@ class CalendarChooseDate extends Component {
   handleChange(date) {
     this.props.onSelectDate(date);
   }
-
   render() {
     return (
       <DatePicker
@@ -125,23 +114,19 @@ class CalendarChooseDate extends Component {
     );
   }
 }
-
 class TimeDropdown extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       plannedTimeNotNow: moment()
     };
   }
-
   handleTimeChange(time) { // seconds passed midnight
     this.setState({
       chosenTime: time
     });
     this.props.onSelectTime(time);
   }
-
   render() {
     return (
       <div>
@@ -158,7 +143,6 @@ class TimeDropdown extends Component {
     );
   }
 }
-
 class NowButton extends Component {
   constructor(props) {
     super(props);
@@ -167,26 +151,20 @@ class NowButton extends Component {
       isDefaultTime:false
     };
   }
-
   handleClick(date) {
     const newTime = moment();
     const newTimeMidnight = newTime.clone().startOf("day");
     const diffInSeconds = newTime.diff(newTimeMidnight, "seconds");
-
     this.setState({
       plannedTime: diffInSeconds,
       isDefaultTime:true
     });
-    
     this.props.onSelectTime(diffInSeconds);
     this.props.onSelectDate(newTime);
     this.props.onResetNow();
     
     //this.props.onResetTime(newTime, diffInSeconds);
-    console.log("Time from now button:" + this.state.plannedTime);
   }
- 
-
   render() {
     return (
       <div>
@@ -203,5 +181,4 @@ class NowButton extends Component {
     );
   }
 }
-
 export default TimeButton;

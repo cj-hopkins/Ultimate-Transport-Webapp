@@ -15,7 +15,7 @@ import { Button } from 'react-bootstrap';
 import WeatherWidget from "./components/Weather";
 import LocationSearchInput from './components/LocationSearchInput';
 import JourneyPlanner from './components/JourneyPlanner';
-
+import { Table } from 'react-bootstrap';
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
 
@@ -30,15 +30,10 @@ const styles = {
     padding: '16px',
   },
 };
-
-
 const mql = window.matchMedia(`(min-width: 800px)`);
-
-
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       mql: mql,
       docked: true,
@@ -51,8 +46,11 @@ class App extends Component {
       dragToggleDistance: 30,
       stopsInRoute: [],
       selectedJourney: [],
+      selectedRealTimeStop:0,
       activatedUI: 0,
-      polylineCoordinates: []
+      polylineCoordinates: [], 
+      nextBuses:[], 
+      isRealTimeHidden:true
     }
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.renderPropCheckbox = this.renderPropCheckbox.bind(this);
@@ -60,43 +58,67 @@ class App extends Component {
     this.onSetOpen = this.onSetOpen.bind(this);
     this.menuButtonClick = this.menuButtonClick.bind(this);
   }
-
   mediaQueryChanged() {
     this.setState({
       mql: mql,
       docked: this.state.mql.matches,
     });
   }
-
   componentWillMount() {
     mql.addListener(this.mediaQueryChanged);
-    this.setState({mql: mql, docked: mql.matches});
+    this.setState({
+      mql: mql,
+      docked: mql.matches});
   }
-
   componentWillUnmount() {
     this.state.mql.removeListener(this.mediaQueryChanged);
   }
-
   onRouteUpdate(data) {
     this.setState({
       stopsInRoute: data,
       selectedJourney: data
     });
   }
-
   onSelectedJourneyUpdate(data) {
     this.setState({
       selectedJourney: data
     });
   }
-
   swapUI(key) {
-    //   console.log(key)
     this.setState({
       activatedUI: key
     });
   }
-
+  onRealTimeStopUpdate(stop) {
+    this.setState({
+      selectedRealTimeStop: stop
+    });
+  }
+  
+  onStopSelectGetRealTime(stop){
+     this.setState({
+      isRealTimeHidden:false
+    })
+    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stop}&format=json`;
+    fetch(endpoint)
+      .then (response => response.json())
+      .then(parsedJSON => {
+            this.setState({   //slice(0,4) to limit to top 4 results 
+                nextBuses: parsedJSON.results.map((post, i) => (
+                  <tr key={i} >
+                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>{post.duetime} minutes </td>
+                  </tr>
+                ))
+            });
+     })
+      .catch(error => console.log('parsing failed',error))
+  }
+  
+  
+  
+  
   // parseCood = object => (String(object[object]()) > 6) ? object : parseFloat(String(object[object]()).substring(0,6))
   // parseCoords = array => array.map(object => ({
   //   let newLat = String(object.lat())
@@ -109,15 +131,12 @@ class App extends Component {
   //   })
   // )
   // })
-
   // Each JS object in the array has 2 functions, lat & lng. Run them to return the actual coords
   parseCoords = array => array.map(object => ({
     lat: parseFloat(object.lat()),
     lng: parseFloat(object.lng())
     })
   )
-
-
   getPolyCoordinates(data) {
     const coords = this.parseCoords(data);
     // console.log(coords)
@@ -129,9 +148,8 @@ class App extends Component {
     });
     console.log("coords in App", coords)
   }
-  
   renderSwitch = () => {
-      // console.log("render switch")
+    console.log(this.state.activatedUI)
     switch (this.state.activatedUI) {
         case 0:
         // this.setState({polylineCoordinates: []});
@@ -148,89 +166,117 @@ class App extends Component {
           />;
         case 2:
           return <Example key={2} />;
-      case 3:
-          return <RealTimePage key={3} />;
+        case 3:
+          return <div><RealTimePage key={3} 
+                    onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
+                    selectedRealTimeStop= {this.state.selectedRealTimeStop}
+                    onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
+                        />;
+            {!this.state.isRealTimeHidden &&
+            <div>
+            <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
+            <Table>
+            {this.state.nextBuses}
+            </Table>
+            </div>
+              }
+            </div> 
+        case 4.1:
+          return 
+            <a href={"http://www.dublinbus.ie"}>Dub</a>;
         default:
           return <div key={4} />;
       }
     }
     // return <div>{chosenElement}</div>;
-  
-
   onSetOpen(open) {
-    this.setState({open: open});
+    this.setState({
+      open: open
+    });
   }
-
   menuButtonClick(ev) {
     ev.preventDefault();
     this.onSetOpen(!this.state.open);
   }
-
   renderPropCheckbox(prop) {
     const toggleMethod = (ev) => {
       const newState = {};
       newState[prop] = ev.target.checked;
       this.setState(newState);
     };
-
     return (
       <p key={prop}>
         <input type="checkbox" onChange={toggleMethod} checked={this.state[prop]} id={prop} />
         <label htmlFor={prop}> {prop}</label>
-      </p>);
+      </p>
+    );
   }
-
   renderPropNumber(prop) {
     const setMethod = (ev) => {
       const newState = {};
       newState[prop] = parseInt(ev.target.value, 10);
       this.setState(newState);
     };
-
     return (
       <p key={prop}>
          {prop} <input type="number" onChange={setMethod} value={this.state[prop]} />
-      </p>);
+      </p>
+    );
   }
-
   render() {
-    const siderbarWithButton = <div style={{backgroundColor:"white", height:'100%'}}>
-      <Grid fluid={true}><Row>
-      <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
-      <Col xs={3}>
-        <img
-        src={dublin_bus_icon}
-        style={{ width: "80px", height: "80px" }}
-        alt="dublin_bus_icon"
-      /></Col>
-      <Col xs={3}>
-        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}><WeatherWidget /></Col>
-        </Row>
-      </Grid><CustomNavbar swapUI={this.swapUI.bind(this)}/>
-            {this.renderSwitch()}</div>;
+    const siderbarWithButton = 
+          <div style={{backgroundColor:"white", height:'100%'}}>
+            <Grid fluid={true}>
+              <Row>
+                <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a>
+                </Col>
+                <Col xs={3}>
+                  <img
+                  src={dublin_bus_icon}
+                  style={{ width: "80px", height: "80px" }}
+                  alt="dublin_bus_icon"
+                  />
+                </Col>
+                <Col xs={3}>
+                  <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1>
+                </Col>
+                <Col xs={3}>
+                  <WeatherWidget />
+                </Col>
+              </Row>
+            </Grid>
+            <CustomNavbar swapUI={this.swapUI.bind(this)}/>
+            {this.renderSwitch()}
+          </div>;
 
     const sidebarNoButton = <div style={{backgroundColor:"white", height:'100%'}}><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
             {this.renderSwitch()}</div>;
 
-
     const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;
 
     const contentHeader = (
-      <Grid fluid={true}><Row>
-      <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
-      <Col xs={3}>
-        <img
-        src={dublin_bus_icon}
-        style={{ width: "80px", height: "80px" }}
-        alt="dublin_bus_icon"
-      /></Col>
-      <Col xs={3}>
-        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}><WeatherWidget /></Col>
+      <Grid fluid={true}>
+        <Row>
+          <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a>
+          </Col>
+          <Col xs={3}>
+            <img
+            src={dublin_bus_icon}
+            style={{ width: "80px", height: "80px" }}
+            alt="dublin_bus_icon"
+              />
+          </Col>
+          <Col xs={3}>
+            <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1>
+          </Col>
+          <Col xs={3}>
+            <WeatherWidget />
+          </Col>
         </Row>
-      </Grid>);
-
+      </Grid>
+    );
     const header = (!this.state.mql.matches) ? contentHeader : null 
-
+    
     const sidebarProps = {
       sidebar: sidebar,
       docked: this.state.docked,
@@ -244,7 +290,6 @@ class App extends Component {
       transitions: this.state.transitions,
       onSetOpen: this.onSetOpen,
     };
-
     return (
       <Sidebar {...sidebarProps}>
         <MaterialTitlePanel title={header}>
@@ -256,6 +301,4 @@ class App extends Component {
     );
   }
 }
-
-
 export default App;
