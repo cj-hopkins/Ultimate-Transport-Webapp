@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
 
 class CustomNavbar extends Component {
-
   render() {
     return (
       <Nav style={{ display: "flex", flexDirection: "row" }}>
@@ -15,16 +14,18 @@ class CustomNavbar extends Component {
         <NavItem eventKey={2} onSelect={this.props.swapUI}>
           Timetables
         </NavItem>
-        <NavDropdown eventKey={3} title="More" id="basic-nav-dropdown">
-          <MenuItem eventKey={3.1}>News</MenuItem>
-          <MenuItem eventKey={3.2}>Timetables</MenuItem>
-          <MenuItem eventKey={3.3}>Something else here</MenuItem>
+        <NavItem eventKey={3} onSelect={this.props.swapUI}>
+          Real Time Info
+        </NavItem>
+        <NavDropdown eventKey={4} title="More" id="basic-nav-dropdown">
+          <MenuItem eventKey={4.1} href='http://www.dublinbus.ie' target='blank'>Dublin Bus</MenuItem>
+          <MenuItem eventKey={4.2} href='https://www.facebook.com/DublinBusNews/' target='blank'>Facebook</MenuItem>
+          <MenuItem eventKey={4.3}>Something else here</MenuItem>
           <MenuItem divider />
-          <MenuItem eventKey={3.4}>Separated link</MenuItem>
+          <MenuItem eventKey={4.4}>Separated link</MenuItem>
         </NavDropdown>
       </Nav>
     );
   }
 }
-
 export default CustomNavbar;

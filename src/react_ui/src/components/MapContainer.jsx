@@ -84,7 +84,7 @@ export class MapContainer extends Component {
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true,
-      nextBuses: this.fetchRealTime(this.state.activeMarker.title)
+      nextBuses: this.fetchRealTime(marker.title)
     });
 
     //    console.log('selectedPlace',this.state.selectedPlace.title);

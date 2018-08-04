@@ -4,7 +4,6 @@ import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
 import { Button} from "react-bootstrap"
 import TimeButton from './TimeSelect';
-import RealTimeInfo from './RealTimeInfo';
 import PredictionContainer from './PredictionContainer';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
@@ -219,7 +218,8 @@ class ContentBlock extends Component {
           isDefaultTime: this.state.isDefaultTime
         })
       })
-        .then((response) => response.json())
+        .then(
+        (response) => response.json())
         .then((resp) => {
           const prediction = resp.prediction
           this.setState({
@@ -239,11 +239,12 @@ class ContentBlock extends Component {
     return (
       <Grid fluid={true}>
         <RouteSelect 
-            className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
+            className="mb-3" 
             chosenRoute={this.state.chosenRoute}
             direction={this.state.direction}
             route_destination={this.state.route_destination}
             route_origin={this.state.route_origin}
+            onRouteUpdate={this.routeUpdate.bind(this)}
             onDirectionUpdate={this.onDirectionUpdate.bind(this)}
             onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
             onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
@@ -281,7 +282,11 @@ class ContentBlock extends Component {
         <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
         <Col xs={8}>
-          <Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Estimate journey time
+          <Button 
+            onClick={this.handleClick} 
+            bsStyle='warning' 
+            bsSize='large' 
+            block>Estimate journey time
           </Button>
         </Col>
         <Col xs={2}></Col></Row>
@@ -294,10 +299,7 @@ class ContentBlock extends Component {
         <Row>
           <Col xs={2}></Col>
         <Col xs={8}>{(!this.state.isRealTimeHidden && this.state.isDefaultTime ) &&            
-            <div><RealTimeInfo  
-                  nextBuses={this.state.nextBuses}
-                  startStop={this.state.startStop}
-                  /> 
+            <div> <p>Real Time Information for Stop {this.state.startStop}</p>
                 <Table striped bordered condensed hover>{this.state.nextBuses}
               </Table>
             </div> 
@@ -307,7 +309,11 @@ class ContentBlock extends Component {
         <TwitterTimelineEmbed
           sourceType="profile"
           screenName="dublinbusnews"
-          options={{height:'20%', width: '100%', theme:'dark'}} />
+          options={{
+            height:'20%', 
+            width: '100%', 
+            theme:'dark'}} 
+          />
       </Grid>
     )
   }
