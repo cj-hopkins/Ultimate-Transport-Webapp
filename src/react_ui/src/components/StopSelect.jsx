@@ -49,9 +49,8 @@ class StopSelect extends Component {
         // (" ", item.location_text, " ", item.address)};
         stopsAsOptions.push({
           value: item.stop_id,
-          label: item.stop_id
-            .toString()
-            .concat(" ", item.location_text, " ", item.address)
+          label: item.stop_id.toString()
+            .concat(` ${item.address}, ${item.location_text}`)
         })
       );
     

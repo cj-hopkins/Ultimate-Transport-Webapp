@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import Select from "react-select";
 import VirtualizedSelect from 'react-virtualized-select'
 
 class RealTimePage extends Component {
@@ -25,32 +24,22 @@ class RealTimePage extends Component {
     stopIds.forEach(item => (
       stopItems.push({
         value: item.stop_id, 
-        label: item.stop_id
-      })
-    ))
+        label: item.stop_id.toString()
+            .concat(` ${item.address}, ${item.location_text}`)
+        })
+      ))
     this.setState({
       stopsAsOptions: stopItems
     })
   }
    handleSelect = (stopNum) => {
     this.props.onRealTimeStopUpdate(stopNum)
-     this.props.onStopSelectGetRealTime(stopNum)
+    this.props.onStopSelectGetRealTime(stopNum)
   } 
-  
-  
   render(){
     return (
       <div>Search by stop number:
-{/*       <Select
-          id="startSelect"
-          name="form-field-name"
-          placeholder={"Select a stop"}
-          options={this.state.stopsAsOptions}
-          value={this.props.selectedRealTimeStop}
-          onChange={this.handleSelect}  
-        />    
-        */}
-        <VirtualizedSelect ref="citySelect"
+      <VirtualizedSelect ref="citySelect"
 					options={this.state.stopsAsOptions}
 					simpleValue
 					clearable

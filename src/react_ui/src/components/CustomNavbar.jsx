@@ -6,10 +6,10 @@ class CustomNavbar extends Component {
     return (
       <Nav style={{ display: "flex", flexDirection: "row" }}>
         <NavItem eventKey={0} onSelect={this.props.swapUI}>
-          Bus Routes
+          By Route
         </NavItem>
         <NavItem eventKey={1} onSelect={this.props.swapUI}>
-          Journey Planner
+          By Address
         </NavItem>
         <NavItem eventKey={2} onSelect={this.props.swapUI}>
           Timetables
