@@ -38,7 +38,7 @@ class RealTimePage extends Component {
   } 
   render(){
     return (
-      <div>Search by stop number:
+      <div><p style={{fontSize:'16px'}}>Search by stop number or address:</p>
       <VirtualizedSelect ref="citySelect"
 					options={this.state.stopsAsOptions}
 					simpleValue

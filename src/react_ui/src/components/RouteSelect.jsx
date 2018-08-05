@@ -10,6 +10,8 @@ class RouteSelect extends Component {
     // needs that isn't controlled by ContentBlock is the array of route names
     this.state = {
       routes: [],
+//      start:this.props.route_origin,
+//      end:this.props.route_destination
     }
   }
   handleSelect = (event) => {
@@ -25,7 +27,14 @@ class RouteSelect extends Component {
     // console.log("getting new route")
     this.props.onChosenRouteUpdate(event.value)
     //default to 'I' direction when new route is chosen
-    this.getStopsForRoute(event.value, 'I')
+    this.getStopsForRoute(event.value, 'I');
+    
+//    this.setState ({
+//      start:this.props.route_origin,
+//      end:this.props.route_destination
+//      
+//    });
+    
   }
   getStopsForRoute = (routeName, direction) => {
     const endpoint = '/api/getStopsForRoute' 
@@ -88,8 +97,8 @@ class RouteSelect extends Component {
           />
           {/* Only show the change direction buttons when a route has already been selected */}
           <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
-          <Button onClick={this.props.onDirectionUpdate} bsStyle="primary">Towards: {this.props.route_destination}</Button>
-          <Button onClick={this.props.onDirectionUpdate}> Towards {this.props.route_origin}</Button>
+          <Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large">Towards: {this.props.route_origin}</Button>
+          <Button onClick={this.props.onDirectionUpdate}   bsSize="large"> Towards {this.props.route_destination}</Button>
           </div>
           </div>
             )}
