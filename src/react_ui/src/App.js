@@ -10,7 +10,6 @@ import CustomNavbar from './components/CustomNavbar';
 import Sidebar from 'react-sidebar';
 import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
 import { PageHeader } from "react-bootstrap";
-// import dublin_bus_icon from "../img/dublin_bus_icon.png";
 import { Button } from 'react-bootstrap';
 import WeatherWidget from "./components/Weather";
 import LocationSearchInput from './components/LocationSearchInput';
@@ -18,6 +17,7 @@ import JourneyPlanner from './components/JourneyPlanner';
 import { Table } from 'react-bootstrap';
 import TimeTable from "./components/TimeTable";
 import { TwitterFeed } from "./components/TwitterFeed";
+import {Badge} from "react-bootstrap";
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
 
@@ -164,43 +164,28 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
             />;
         case 3:
-          return <div><RealTimePage key={3} 
-                    onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
-                    selectedRealTimeStop= {this.state.selectedRealTimeStop}
-                    onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
-                        />;
-            {!this.state.isRealTimeHidden &&
+          return 
             <div>
-            <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
-            <Table>
-            {this.state.nextBuses}
-            </Table>
-            </div>
-              }
+              <RealTimePage key={3} 
+                      onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
+                      selectedRealTimeStop= {this.state.selectedRealTimeStop}
+                      onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
+                          />;
+              {!this.state.isRealTimeHidden &&
+              <div>
+                <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
+                <Table>  {this.state.nextBuses}  </Table>
+              </div>
+                }
             </div> 
         case 4.1:
-          return 
-            <a href={"http://www.dublinbus.ie"}>Dub</a>;
+          return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
         case 4.3:
-          return <div> 
-            <TwitterFeed />
-            
-      {/*     <TwitterTimelineEmbed
-                          sourceType="profile"
-                          screenName="dublinbusnews"
-                          options={{
-                            height:'60%', 
-                            width: '100%', 
-                            theme:'dark'}} 
-                          />
-            */}               
-                          
-        </div>
+          return <div>  <TwitterFeed />  </div>
         default:
           return <div key={4} />;
       }
     }
-    // return <div>{chosenElement}</div>;
   onSetOpen(open) {
     this.setState({
       open: open
@@ -236,43 +221,79 @@ class App extends Component {
     );
   }
   render() {
-    const siderbarWithButton = <div style={{backgroundColor:"white", height:'100%'}}>
-      <Grid fluid={true}><Row>
-      <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
-      <Col xs={3}>
-        <img
-        src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
-        style={{ width: "80px", height: "80px" }}
-        alt="dublin_bus_icon"
-      /></Col>
-      <Col xs={3}>
-        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport</h1></Col><Col xs={3}><WeatherWidget /></Col>
-        </Row>
-      </Grid><CustomNavbar swapUI={this.swapUI.bind(this)}/>
-            {this.renderSwitch()}</div>;
-
-    const sidebarNoButton = <div style={{backgroundColor:"white", height:'100%'}}><ContentHeader/><CustomNavbar swapUI={this.swapUI.bind(this)}/>
-            {this.renderSwitch()}</div>;
+    const siderbarWithButton = 
+          <div style={{backgroundColor:"white", height:'100%'}}>
+            <Grid fluid={true}>
+              <Row>
+                <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a></Col>
+                <Col xs={3}>
+                  <img
+                  src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
+                  style={{ width: "80px", height: "80px" }}
+                  alt="dublin_bus_icon"
+                /></Col>
+                <Col xs={3}>
+                  <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport</h1></Col><Col xs={3}><WeatherWidget />
+                </Col>
+              </Row>
+              <Row>    <Col xs={2}></Col>
+        <Col xs={8}>
+                <h3>
+                  <Badge bsStyle="primary" style ={{fontSize:'16px'}} >Plan Your Journey</ Badge>
+                </h3>
+                </Col>
+                 <Col xs={2}></Col>
+              </Row>
+            </Grid>
+            <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
+    </div>;
+    
+    const sidebarNoButton = 
+          <div style={{backgroundColor:"white", height:'100%'}}>
+            <ContentHeader/>
+            <Grid>
+              <Row>
+                <Col xs={4}></Col>
+                  <Col xs={4}>
+                    <h3>
+                      <Badge bsStyle="primary"  style ={{fontSize:'16px'}}  >Plan Your Journey</ Badge>
+                    </h3>
+                </Col>
+                <Col xs={4}></Col>
+              </Row>
+            </Grid>
+         
+            <CustomNavbar swapUI={this.swapUI.bind(this)}/>{this.renderSwitch()}
+          </div>;
 
     const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;
-
     const contentHeader = (
-      <Grid fluid={true}><Row>
-      <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>=</a></Col>
-      <Col xs={3}>
-        <img
-        src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
-        style={{ width: "80px", height: "80px" }}
-        alt="dublin_bus_icon"
-      /></Col>
-      <Col xs={3}>
-        <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}><WeatherWidget /></Col>
-
+      <Grid fluid={true}>
+        <Row>
+          <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a></Col>
+          <Col xs={3}>
+            <img
+            src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
+            style={{ width: "80px", height: "80px" }}
+            alt="dublin_bus_icon"
+            />
+          </Col>
+          <Col xs={3}>
+            <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1>
+          </Col>
+          <Col xs={3}><WeatherWidget /></Col>
+        </Row>
+        <Row><Col xs={2}></Col>
+          <Col xs={8}>
+            <h3>
+              <Badge bsStyle="warning"  style ={{fontSize:'16px'}}  >Plan Your Journey</ Badge>
+            </h3>
+          </Col>
+           <Col xs={2}></Col>
         </Row>
       </Grid>
     );
     const header = (!this.state.mql.matches) ? contentHeader : null 
-    
     const sidebarProps = {
       sidebar: sidebar,
       docked: this.state.docked,

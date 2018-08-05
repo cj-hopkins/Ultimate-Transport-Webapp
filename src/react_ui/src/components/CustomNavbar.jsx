@@ -4,7 +4,7 @@ import { Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
 class CustomNavbar extends Component {
   render() {
     return (
-      <Nav style={{ display: "flex", flexDirection: "row" }}>
+      <Nav style={{ display: "flex", flexDirection: "row" , fontSize:'16px'}}>
         <NavItem eventKey={0} onSelect={this.props.swapUI}>
           By Route
         </NavItem>
