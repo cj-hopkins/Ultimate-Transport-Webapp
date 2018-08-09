@@ -1,19 +1,25 @@
 import React, { Component } from "react";
 
-class PredictionContainer extends Component {
+class JourneyContainer extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
 
     }
   }
+
+
   render(){
-    if (this.props.prediction === null) {  //only show if we have a prediction
+    //only show if we have a prediction
+    if (this.props.prediction === null) {
       return(<div></div>)
     }
+
     return (
       <p>{this.props.prediction}</p>
     )
   }
 }
-export default PredictionContainer
+
+export default JourneyContainer

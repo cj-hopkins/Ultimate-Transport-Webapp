@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Stop, Route, Composite
+from .models import Stop, Route, Composite, Timetable
 
 
 class StopSerializer(serializers.ModelSerializer):
@@ -39,3 +39,19 @@ class RouteStopSerializer(serializers.ModelSerializer):
             'stop_lon',
         )
         model = Composite
+
+class TimeTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            'row_index',
+            'arrival_time',
+            'stop_id',
+            'stop_sequence',
+            'stop_headsign',
+            'weekday',
+            'saturday',
+            'sunday',
+            'direction',
+            'lineid',
+        )
+        model= Timetable

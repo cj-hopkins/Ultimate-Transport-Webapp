@@ -3,21 +3,12 @@ import React, { Component } from "react";
 import Select from "react-select";
 // TODO: refactor to use a single handleSelect, pass the select name (start or finish)
 
-class StopSelect extends Component {
-  handleFinishSelect = finish => {
-    if (finish === null) {
-      this.props.onStopDeselect("finish");
-    } else {
-      this.props.onStopUpdate(null, finish.value);
-    }
-  };
-
+class TimeTableStop extends Component {
   handleStartSelect = start => {
     if (start === null) {
       this.props.onStopDeselect("start");
     } else {
       this.props.onStopUpdate(start.value, null);
-      this.props.onSelectStartGetRealTime(start.value)
     }
   };
 
@@ -49,8 +40,9 @@ class StopSelect extends Component {
         // (" ", item.location_text, " ", item.address)};
         stopsAsOptions.push({
           value: item.stop_id,
-          label: item.stop_id.toString()
-            .concat(` ${item.address}, ${item.location_text}`)
+          label: item.stop_id
+            .toString()
+            .concat(" ", item.location_text, " ", item.address)
         })
       );
     
@@ -65,25 +57,11 @@ class StopSelect extends Component {
           value={this.props.startStop}
           // onChange={this.handleChange}
           onChange={this.handleStartSelect}
-          placeholder={"Start stop"}
-        />
-
-        {/* <Button onClick={this.handleToggle}> Swap start/finish</Button> */}
-
-        <div style={{ marginTop: "1em" }}> </div>
-        <Select
-          id="finishSelect"
-          name="form-field-name"
-          options={[...stopsAsOptions].reverse()}
-          value={this.props.finishStop}
-          // onChange={this.handleChange}
-          // onChange={stop => this.setState({ selectedOptionFinish: stop.value })}
-          onChange={this.handleFinishSelect}
-          placeholder={"Finish stop"}
+          placeholder={"Select stop"}
         />
       </div>
     );
   }
 }
 
-export default StopSelect;
+export default TimeTableStop;
