@@ -153,64 +153,64 @@ class TimeTable extends Component {
      })
       .catch(error => console.log('parsing failed',error))
   }
-  async onStopUpdate(start = null, finish = null) {
-    // Here be dragons - leave this code for now
-    if (start === null || finish === null) {
-      const isStart = (finish === null) ? true : false;
-      const stop = isStart ? start : finish;
-      const finishIndex = this.findStopIndex(this.state.startStop)+1 
-      const startIndex = this.findStopIndex(this.state.startStop)
+  // async onStopUpdate(start = null, finish = null) {
+  //   // Here be dragons - leave this code for now
+  //   if (start === null || finish === null) {
+  //     const isStart = (finish === null) ? true : false;
+  //     const stop = isStart ? start : finish;
+  //     const finishIndex = this.findStopIndex(this.state.startStop)+1 
+  //     const startIndex = this.findStopIndex(this.state.startStop)
 
-      // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
-      // if (stop === "Start" || stop === "Finish") {
-      //   this.setState({
-      //     startStop: "Start",
-      //     finishStop: "Finish"
-      //   })
-      // }
-      // this.setState({
-      //   stopState: stop,
-      //   predictionForJourney: null,
-      // })
-      const index = this.findStopIndex(stop);
-      console.log(index)
-      let newStops;
-      if (isStart) {
-        newStops = this.state.stops.slice(index, finishIndex)
-        this.setState({
-          startStop: stop,
-          finishStop: start+1
-          })
-      } else {
-        newStops = this.state.stops.slice(startIndex, index);
-        this.setState({
-          startStop: stop,
-          finishStop: start+1
-        })
-      }
-      this.setState({
-          chosenStops: newStops,
-          times:null});
-      this.props.onSelectedJourneyUpdate(newStops);
-      // if neither values are null then we are doing a direction switch
-    } else {
-        this.setState({
-          startStop: start,
-          finishStop: start+1
-        });
-        const startIndex = this.findStopIndex(start);
-        console.log("start" + startIndex)
-        const finishIndex = this.findStopIndex(start)+1;
-        console.log("finish" + finishIndex)
-        let newStops = this.state.stops.slice(startIndex, finishIndex);
-        console.log(newStops);
-        this.setState({
-          chosenStops: newStops,
-          times:null
-        });
-        this.props.onSelectedJourneyUpdate(newStops);
-    }
-  }
+  //     // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
+  //     // if (stop === "Start" || stop === "Finish") {
+  //     //   this.setState({
+  //     //     startStop: "Start",
+  //     //     finishStop: "Finish"
+  //     //   })
+  //     // }
+  //     // this.setState({
+  //     //   stopState: stop,
+  //     //   predictionForJourney: null,
+  //     // })
+  //     const index = this.findStopIndex(stop);
+  //     console.log(index)
+  //     let newStops;
+  //     if (isStart) {
+  //       newStops = this.state.stops.slice(index, finishIndex)
+  //       this.setState({
+  //         startStop: stop,
+  //         finishStop: start+1
+  //         })
+  //     } else {
+  //       newStops = this.state.stops.slice(startIndex, index);
+  //       this.setState({
+  //         startStop: stop,
+  //         finishStop: start+1
+  //       })
+  //     }
+  //     this.setState({
+  //         chosenStops: newStops,
+  //         times:null});
+  //     this.props.onSelectedJourneyUpdate(newStops);
+  //     // if neither values are null then we are doing a direction switch
+  //   } else {
+  //       this.setState({
+  //         startStop: start,
+  //         finishStop: start+1
+  //       });
+  //       const startIndex = this.findStopIndex(start);
+  //       console.log("start" + startIndex)
+  //       const finishIndex = this.findStopIndex(start)+1;
+  //       console.log("finish" + finishIndex)
+  //       let newStops = this.state.stops.slice(startIndex, finishIndex);
+  //       console.log(newStops);
+  //       this.setState({
+  //         chosenStops: newStops,
+  //         times:null
+  //       });
+  //       this.props.onSelectedJourneyUpdate(newStops);
+  //   }
+  // }
   findStopIndex = (stop) => {
     if (stop === "start") { 
       return 0 
@@ -222,6 +222,14 @@ class TimeTable extends Component {
       if (allStops[i].stop_id === stop) return i;
     }
     return -1;
+  }
+
+  async onStopUpdate(item) {
+    console.log("STOP UPDAATE", item)
+    this.setState({startStop: item})
+    const marker = this.state.stops[this.findStopIndex(item)]
+    console.log(marker)
+    this.props.onSelectedJourneyUpdate([marker])
   }
 
   getTable = () => {
