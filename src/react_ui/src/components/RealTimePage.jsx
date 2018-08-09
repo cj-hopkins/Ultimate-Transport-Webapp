@@ -9,6 +9,7 @@ class RealTimePage extends Component {
     }
   }
  async componentWillMount(){
+   
     let  stopIds
     const endpoint = '/api/getAllStopNumbers';
     try {
@@ -31,6 +32,9 @@ class RealTimePage extends Component {
     this.setState({
       stopsAsOptions: stopItems
     })
+   
+   console.log('here')
+   
   }
    handleSelect = (stopNum) => {
     this.props.onRealTimeStopUpdate(stopNum)
@@ -38,7 +42,9 @@ class RealTimePage extends Component {
   } 
   render(){
     return (
-      <div><p style={{fontSize:'16px'}}>Search by stop number or address:</p>
+      <div>
+        
+      {/* <p style={{fontSize:'16px'}}>Search by stop number or address:</p>  */} 
       <VirtualizedSelect ref="citySelect"
 					options={this.state.stopsAsOptions}
 					simpleValue

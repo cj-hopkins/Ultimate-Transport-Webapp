@@ -164,20 +164,34 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
             />;
         case 3:
-          return 
-            <div>
+          return  <div><RealTimePage key={3} 
+                      onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
+                      selectedRealTimeStop= {this.state.selectedRealTimeStop}
+                      onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
+                          />
+            
+            <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
+        <Table>  {this.state.nextBuses}  </Table></div>;
+     {/*      
+            
+            <p>Works----------------------------------------</p>
+            
+            
+        
               <RealTimePage key={3} 
                       onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
                       selectedRealTimeStop= {this.state.selectedRealTimeStop}
                       onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
                           />;
+
               {!this.state.isRealTimeHidden &&
               <div>
                 <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
+
                 <Table>  {this.state.nextBuses}  </Table>
               </div>
-                }
-            </div> 
+               }
+          </div>  */}
         case 4.1:
           return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
         case 4.3:
