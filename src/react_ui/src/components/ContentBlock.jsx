@@ -201,7 +201,8 @@ class ContentBlock extends Component {
     this.getPrediction()
   }
   getPrediction = () => {
-    const endpoint = '/api/getPredictionForJourney' 
+    // const endpoint = '/api/getPredictionForJourney' 
+    const endpoint = '/api/getModelPrediction' 
     try {
       fetch(endpoint, {
         method: 'POST',

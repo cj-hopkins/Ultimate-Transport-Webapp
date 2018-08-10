@@ -20,6 +20,7 @@ import pandas as pd
 import numpy as np 
 import datetime
 import time
+from rest_api.nnPrediction import makePrediction, parseRequest
 
 class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
@@ -136,6 +137,18 @@ def getPredictionForJourney(request):
             result = getPrediction(numStops, isRaining, temp ,selectedTime)
             return JsonResponse({'prediction':str(result[0])+ '\n\n(Weather not taken into account) '})
 
+@api_view(['POST'])
+def getModelPrediction(request):
+    route = request.data.get('route')
+    start = request.data.get('start')
+    finish = request.data.get('finish')
+    direction = request.data.get('direction')
+    selectedTime = request.data.get('selectedTime')
+    selectedDate = request.data.get('selectedDate')
+    isDefaultTime = request.data.get('isDefaultTime')
+    pklFileName = parseRequest(route, direction)
+    makePrediction(pklFileName)
+    return JsonResponse({'test': 'val'})
 
 @api_view(['POST'])
 def getMultiRoutePrediction(request):
