@@ -1,26 +1,18 @@
 import React from 'react';
-import Select from 'react-select';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+import PlacesAutocomplete, { geocodeByAddress,  getLatLng } from 'react-places-autocomplete';
  
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = { address1: '', address2: ''};
   }
-
   getAddress1() {
     return(this.state.address1)
   };
-
   getAddress2() {
     return(this.state.address2)
   };
-
   handleChange1 = address1 => {
-    console.log("ADDRESS change", address1)
     this.setState({ address1 })
     this.props.onChangeAddress1(address1)
   };
@@ -35,9 +27,7 @@ class LocationSearchInput extends React.Component {
       })
       .catch(error => console.error('Error', error));
   };
-
   handleCloseClick1 = () => {
-    console.log("CLOSING")
     this.setState({
       address1: '',
       latitude: null,
@@ -46,12 +36,10 @@ class LocationSearchInput extends React.Component {
     this.props.onChangeAddress1(null)
     this.props.getOriginGeolocation(null)
   };
-
   handleChange2 = address2 => {
     this.setState({ address2 })
     this.props.onChangeAddress2(address2)
   };
- 
   handleSelect2 = address2 => {
     this.setState({ address2: address2 });
     geocodeByAddress(address2)
@@ -62,7 +50,6 @@ class LocationSearchInput extends React.Component {
       })
       .catch(error => console.error('Error', error));
   };
-
   handleCloseClick2 = () => {
     this.setState({
       address2: '',
@@ -72,7 +59,6 @@ class LocationSearchInput extends React.Component {
     this.props.onChangeAddress2(null)
     this.props.getDestinationGeolocation(null)
   };
- 
   render() {
     const google = window.google
     const searchOptions = {
@@ -81,15 +67,13 @@ class LocationSearchInput extends React.Component {
     componentRestrictions: {country: 'ie'},
     types: ['geocode']
     }
-
     return (
     <div>
       <PlacesAutocomplete
         value={this.state.address1}
         onChange={this.handleChange1}
         onSelect={this.handleSelect1}
-        searchOptions={searchOptions}
-      >
+        searchOptions={searchOptions}  >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
             <input
@@ -101,8 +85,7 @@ class LocationSearchInput extends React.Component {
             {this.state.address1.length > 0 && (
                     <button
                       className="Demo__clear-button"
-                      onClick={this.handleCloseClick1}
-                    >
+                      onClick={this.handleCloseClick1}  >
                       x
                     </button>
                   )}
@@ -121,8 +104,7 @@ class LocationSearchInput extends React.Component {
                     {...getSuggestionItemProps(suggestion, {
                       className,
                       style,
-                    })}
-                  >
+                    })}>
                     <span>{suggestion.description}</span>
                   </div>
                 );
@@ -135,8 +117,7 @@ class LocationSearchInput extends React.Component {
         value={this.state.address2}
         onChange={this.handleChange2}
         onSelect={this.handleSelect2}
-        searchOptions={searchOptions}
-      >
+        searchOptions={searchOptions}>
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
             <input
@@ -148,8 +129,7 @@ class LocationSearchInput extends React.Component {
             {this.state.address2.length > 0 && (
                     <button
                       className="Demo__clear-button"
-                      onClick={this.handleCloseClick2}
-                    >
+                      onClick={this.handleCloseClick2}>
                       x
                     </button>
                   )}
@@ -182,5 +162,4 @@ class LocationSearchInput extends React.Component {
     );
   }
 }
-
 export default LocationSearchInput;

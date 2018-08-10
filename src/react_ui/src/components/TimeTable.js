@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import RouteSelect from './RouteSelect';
 import TimeTableStop from "./TimeTableStop";
 import { Button, Grid, Row, Col, Table } from "react-bootstrap";
-import moment from "moment";
 import Select from 'react-select';
 
 class TimeTable extends Component {
@@ -18,11 +17,6 @@ class TimeTable extends Component {
       finishStop:'finish',
       direction: 'I',
       sqlDirection: 1,
-      plannedDate:moment(),
-      plannedTime:moment(),
-      isDefaultTime:true, // needed for when page loads and leave_now button
-      nextBuses:[], 
-      isRealTimeHidden:true,
       weekday: 0,
       saturday: 0,
       sunday: 0,
@@ -77,13 +71,9 @@ class TimeTable extends Component {
     })
     this.props.onRouteUpdate([])
   }
-  //Save the list of stops to contentBlock's state before
-  //Calling App.js setState function - pass stops to map
   routeUpdate (route) {
     console.log("route update")
     console.log(route)
-    // TODO get rtpi dest and origin factoring in the time - currently
-    // they are often incorrect
     const route_orig = route[0].rtpi_origin
     const route_dest = route[route.length - 1].rtpi_destination
     this.setState({
@@ -93,7 +83,6 @@ class TimeTable extends Component {
     })
     this.props.onRouteUpdate(route)
   }
-  // chosen route NAME: '31', '11' etc. - TODO make this clearer
   async onChosenRouteUpdate(route) {
     this.setState({
       chosenRoute: route,
@@ -111,18 +100,6 @@ class TimeTable extends Component {
       finishStop: 'finish'
     })
   }              
-  onPageLoadSetTime(time){  //on load of page set time = now
-    this.setState({
-      plannedTime:time,
-      isDefaultTime: true
-    })
-  }
-  onPageLoadSetDate(date){  //on load of page set date = now
-    this.setState({
-      plannedDate:date,
-      isDefaultTime: true
-    })
-  } 
   onStopDeselect(stop) {
     if (stop === 'start') {
       this.setState({
@@ -133,26 +110,7 @@ class TimeTable extends Component {
       this.routeUpdate(newRoute, false)
     }
   }
-  onSelectStartGetRealTime(stopid){
-     this.setState({
-      isRealTimeHidden:false
-    })
-    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
-    fetch(endpoint)
-      .then (response => response.json())
-      .then(parsedJSON => {
-            this.setState({   //slice(0,4) to limit to top 4 results 
-                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-                  <tr key={i} >
-                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.duetime} minutes </td>
-                  </tr>
-                ))
-            });
-     })
-      .catch(error => console.log('parsing failed',error))
-  }
+
   async onStopUpdate(start = null, finish = null) {
     // Here be dragons - leave this code for now
     if (start === null || finish === null) {
@@ -160,18 +118,6 @@ class TimeTable extends Component {
       const stop = isStart ? start : finish;
       const finishIndex = this.findStopIndex(this.state.startStop)+1 
       const startIndex = this.findStopIndex(this.state.startStop)
-
-      // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
-      // if (stop === "Start" || stop === "Finish") {
-      //   this.setState({
-      //     startStop: "Start",
-      //     finishStop: "Finish"
-      //   })
-      // }
-      // this.setState({
-      //   stopState: stop,
-      //   predictionForJourney: null,
-      // })
       const index = this.findStopIndex(stop);
       console.log(index)
       let newStops;
@@ -254,11 +200,6 @@ class TimeTable extends Component {
         console.log(e)
       }
   }
-
-  // handleClick(){
-  //   this.getTable()
-  // }
-
   render(){
     const options = [
       { value: 'weekday', label: 'Monday-Friday' },
@@ -285,17 +226,16 @@ class TimeTable extends Component {
           onDirectionUpdate={this.onDirectionUpdate.bind(this)}
           onStopUpdate={this.onStopUpdate.bind(this)}
           onStopDeselect={this.onStopDeselect.bind(this)}
-          chosenRoute={this.state.chosenRoute}
-                    />
+          chosenRoute={this.state.chosenRoute}/>
         <div style={{marginTop: '2em'}}> </div>
         <Select
-              id="daySelect"
-              name="form-field-name"
-              options= {options}
-              value={this.state.chosenDay}
-              onChange={this.handleSelect}
-              placeholder={"Select day of travel"}
-        /><div style={{marginTop: '2em'}}> </div>
+          id="daySelect"
+          name="form-field-name"
+          options= {options}
+          value={this.state.chosenDay}
+          onChange={this.handleSelect}
+          placeholder={"Select day of travel"}/>
+        <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
           <Col xs={8}>
         <Button onClick={this.getTable} bsStyle='warning' bsSize='large' block>Get timetable
@@ -310,5 +250,4 @@ class TimeTable extends Component {
     );
   }
 };
-
 export default TimeTable;
