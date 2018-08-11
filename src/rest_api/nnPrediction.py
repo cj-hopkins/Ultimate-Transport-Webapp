@@ -16,6 +16,7 @@ class NNModel:
         self.startStop = startStop
         self.finishStop = finishStop
         self.stops = stops
+        self.dayArray = ['Friday', 'Monday', 'Saturday', 'Sunday','Thursday', 'Tuesday', 'Wednesday']
 
     def parseRequest(self, route, direction):
         parseDir = lambda x: '1' if x == 'I' else '2'
@@ -40,6 +41,7 @@ class NNModel:
         df = pd.DataFrame(columns=columnsList)
         # print("DF SHAPE", df.shape)
         count = 0
+        # populate the df
         for index in range(len(stopsInJourney)):
             row = [0 for i in range(len(self.stops) * 2)]
             row[startIndex + index] = 1
@@ -47,6 +49,24 @@ class NNModel:
             df.loc[count] = row
             count += 1
         return df
+
+    def createTimeDf(self, hour, day):
+        # 7 days + 23 hour ranges
+        print(hour)
+        columnsList = [i for i in range(30)]
+        df = pd.DataFrame(columns=columnsList)
+        timeRow = [0 for i in range(23)]
+        dayRow = [0 for i in range(7)]
+        dayIndex = self.dayArray.index(day)
+        timeRow[hour - 1] = 1
+        dayRow.extend(i for i in timeRow)
+        # print("time row", timeRow)
+        print("day row", dayRow)
+        print("both", timeRow)
+        self.timeRow = dayRow
+        print("SELF", self.timeRow)
+        return dayRow
+
 
     def makePrediction(self, model_path):
         # print("isRaining", isRaining)
@@ -68,5 +88,3 @@ class NNModel:
         # return [result]
         # multiply this num by the number of points bewteen start and destination - then divide by 60 for the time
         
-        def createTimeDf(self, hour, day):
-            pass

@@ -158,6 +158,8 @@ def getModelPrediction(request):
     print(selectedTime//3600)
     hour = selectedTime // 3600
     print(type(selectedDate))
+    tmp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(selectedDate)))
+    print(tmp)
     day = datetime.fromtimestamp(int(selectedDate)/1000).strftime("%A")
     timeDf = nn_model.createTimeDf(hour, day)
     print(day)
