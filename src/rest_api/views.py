@@ -20,7 +20,8 @@ import pandas as pd
 import numpy as np 
 import datetime
 import time
-from rest_api.nnPrediction import makePrediction, parseRequest
+from datetime import datetime
+from rest_api.nnPrediction import NNModel
 
 class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
@@ -140,14 +141,33 @@ def getPredictionForJourney(request):
 @api_view(['POST'])
 def getModelPrediction(request):
     route = request.data.get('route')
+    print(route)
     start = request.data.get('start')
     finish = request.data.get('finish')
     direction = request.data.get('direction')
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
     isDefaultTime = request.data.get('isDefaultTime')
-    pklFileName = parseRequest(route, direction)
-    makePrediction(pklFileName)
+    # pklFileName = parseRequest(route, direction)
+    stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('stop_id').values()
+    # print(type(stops))
+    # stops = Composite.objects.filter()
+    nn_model = NNModel(route, direction, start, finish, stops)
+    pkl = nn_model.parseRequest(nn_model.route, nn_model.direction)
+    stopDf = nn_model.createStopDf()
+    print(selectedTime//3600)
+    hour = selectedTime // 3600
+    print(type(selectedDate))
+    day = datetime.fromtimestamp(int(selectedDate)/1000).strftime("%A")
+    timeDf = nn_model.createTimeDf(hour, day)
+    print(day)
+
+    # print(pkl)
+    # Implement this 
+    # timeArray = parseTime(selectedTime)
+    # dayArray = parseDay(selectedDate)
+    # startStopArray = createStopArray(route, direction getNumStopsInJourney(start, finish, route, direction))
+    # makePrediction(pklFileName)
     return JsonResponse({'test': 'val'})
 
 @api_view(['POST'])
