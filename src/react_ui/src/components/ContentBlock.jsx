@@ -8,6 +8,7 @@ import PredictionContainer from './PredictionContainer';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
 import ErrorBoundary from './ErrorBoundary';
+import ReactTooltip from 'react-tooltip'
 
 class ContentBlock extends Component {
   constructor(props) {
@@ -290,12 +291,12 @@ class ContentBlock extends Component {
         <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
         <Col xs={8}>
-          <Button 
+          <Button data-tip='Click here to see predicted journey time'
             onClick={this.handleClick} 
             bsStyle='warning' 
             bsSize='large' 
             block>Estimate journey time
-          </Button>
+          </Button><ReactTooltip />
         </Col>
         <Col xs={2}></Col></Row>
         <Row><Col xs={2}></Col>

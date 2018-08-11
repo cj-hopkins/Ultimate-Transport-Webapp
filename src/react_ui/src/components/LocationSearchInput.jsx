@@ -4,7 +4,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
- 
+import ReactTooltip from 'react-tooltip'
+
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
@@ -92,12 +93,12 @@ class LocationSearchInput extends React.Component {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <input
+            <input data-tip='Where are you going from?'  style={{border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px', color: '#606060'}}
               {...getInputProps({
                 placeholder: 'Choose origin',
                 className: 'location-search-input',
               })}
-            />
+            /><ReactTooltip />
             {this.state.address1.length > 0 && (
                     <button
                       className="Demo__clear-button"
@@ -114,7 +115,7 @@ class LocationSearchInput extends React.Component {
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  ? { backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
                   : { backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
@@ -139,12 +140,12 @@ class LocationSearchInput extends React.Component {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <input
+            <input data-tip='Where are you going to?' style={{border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize:'16px', color: '#606060'}}
               {...getInputProps({
                 placeholder: 'Choose destination',
                 className: 'location-search-input',
               })}
-            />
+            /><ReactTooltip />
             {this.state.address2.length > 0 && (
                     <button
                       className="Demo__clear-button"
@@ -161,7 +162,7 @@ class LocationSearchInput extends React.Component {
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  ? { backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
                   : { backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div

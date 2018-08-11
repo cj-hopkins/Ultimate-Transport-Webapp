@@ -97,8 +97,8 @@ class RouteSelect extends Component {
           />
           {/* Only show the change direction buttons when a route has already been selected */}
           <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
-          <Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large">Towards: {this.props.route_origin}</Button>
-          <Button onClick={this.props.onDirectionUpdate}   bsSize="large"> Towards {this.props.route_destination}</Button>
+          <Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large">Towards {this.props.route_origin}</Button>
+          <Button onClick={this.props.onDirectionUpdate} bsStyle="warning"  bsSize="large"> Towards {this.props.route_destination}</Button>
           </div>
           </div>
             )}

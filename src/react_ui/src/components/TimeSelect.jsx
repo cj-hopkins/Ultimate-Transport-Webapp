@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import TimePicker from "react-bootstrap-time-picker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
+import ReactTooltip from 'react-tooltip'
 
 class TimeButton extends Component {
   constructor(props) {
@@ -53,7 +54,7 @@ class TimeButton extends Component {
   render() {
     return (
       <div>
-        <Button
+        <Button style={{marginBottom: '5px'}} data-tip='Change the time of your journey'
           onClick={this.toggleHidden.bind(this)}
           bsStyle="primary"
           bsSize="large"
@@ -61,7 +62,7 @@ class TimeButton extends Component {
         >
           {" "}
           Change Time
-        </Button>
+        </Button><ReactTooltip />
         {!this.state.isHidden && (
           <Grid>
             <Row>
@@ -168,9 +169,9 @@ class NowButton extends Component {
   render() {
     return (
       <div>
-        <Button
+        <Button className="float-right"
           value={this.state.plannedTime}
-          bsStyle="default"
+          bsStyle="primary"
           onClick={this.handleClick.bind(this)}
           block
         >

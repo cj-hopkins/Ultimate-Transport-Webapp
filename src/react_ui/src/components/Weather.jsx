@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Badge} from "react-bootstrap";
+import ReactTooltip from 'react-tooltip'
 
 class WeatherWidget extends Component{
   state = {
@@ -25,8 +26,8 @@ class WeatherWidget extends Component{
     return(
       <div>  
         <p></p> {/* empty paragraph for space at top*/}
-      <h3><Badge pullRight={true} bsStyle="warning">{this.state.temperature} °C</ Badge></h3>
-      <img src={`https://openweathermap.org/img/w/${this.state.icon}.png`} alt={this.state.description}/>  
+      <img data-tip="Current weather" src={`https://openweathermap.org/img/w/${this.state.icon}.png`} alt={this.state.description}/><ReactTooltip />  
+      <h3><Badge pullRight={true} bsStyle="warning">{this.state.temperature}°C</ Badge></h3>
       </div>
       );
   }

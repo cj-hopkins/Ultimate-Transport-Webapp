@@ -8,6 +8,7 @@ import {
 } from "google-maps-react";
 import db2 from "./db2.png";
 import MapMarker from "./MapMarker.png";
+import ReactTooltip from 'react-tooltip'
 
 export class MapContainer extends Component {
   constructor(props) {
@@ -103,7 +104,7 @@ export class MapContainer extends Component {
     const google = window.google;
     const im = "https://www.robotwoods.com/dev/misc/bluecircle.png";
     return (
-      <Map
+      <Map data-tip='Dublin'
         google={this.props.google}
         className="map"
         zoom={12}
@@ -112,17 +113,18 @@ export class MapContainer extends Component {
           lat: 53.3498,
           lng: -6.2603
         }}
-      >
+      ><ReactTooltip />
+
         <Polyline
-          fillColor="#0000FF"
+          fillColor="#2979ff"
           fillOpacity={0.35}
           path={this.props.polylineCoordinates}
-          strokeColor="#0000FF"
-          strokeOpacity={0.8}
-          strokeWeight={2}
+          strokeColor="#2979ff"
+          // strokeOpacity={0.8}
+          strokeWeight={3}
         />
         
-        <Marker
+        <Marker data-tip='You are here'
           name={"Current location"}
           // position={this.props.currentPosition} />
           position={{
@@ -134,7 +136,7 @@ export class MapContainer extends Component {
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(64, 64)
           }}
-        />
+        /><ReactTooltip />
 
         {this.props.selectedStops.map(item => (
           <Marker

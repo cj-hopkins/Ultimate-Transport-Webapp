@@ -18,6 +18,8 @@ import { Table } from 'react-bootstrap';
 import TimeTable from "./components/TimeTable";
 import { TwitterFeed } from "./components/TwitterFeed";
 import {Badge} from "react-bootstrap";
+import ReactTooltip from 'react-tooltip'
+import FooterPage from './components/Footer'
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
 
@@ -252,12 +254,11 @@ class App extends Component {
               </Row>
               <Row>    <Col xs={2}></Col>
         <Col xs={8}>
-                <h3>
-                  <Badge bsStyle="primary" style ={{fontSize:'16px'}} >Plan Your Journey</ Badge>
-                </h3>
+                <h3 style ={{color: '#2979ff', fontSize:'16px', fontFamily: 'Titillium Web, sans-serif'}} >Plan Your Journey With Dublin Bus</h3>
                 </Col>
                  <Col xs={2}></Col>
               </Row>
+              
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
     </div>;
@@ -269,15 +270,15 @@ class App extends Component {
               <Row>
                 <Col xs={4}></Col>
                   <Col xs={4}>
-                    <h3>
-                      <Badge bsStyle="primary"  style ={{fontSize:'16px'}}  >Plan Your Journey</ Badge>
-                    </h3>
+                    <h3 style={{width: '100%', color: '#2979ff', fontSize:'16px', fontFamily: 'Titillium Web, sans-serif'}} >Plan Your Journey With Dublin Bus</h3>
+                    
                 </Col>
                 <Col xs={4}></Col>
               </Row>
             </Grid>
          
             <CustomNavbar swapUI={this.swapUI.bind(this)}/>{this.renderSwitch()}
+            <FooterPage/>
           </div>;
 
     const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;
@@ -299,9 +300,7 @@ class App extends Component {
         </Row>
         <Row><Col xs={2}></Col>
           <Col xs={8}>
-            <h3>
-              <Badge bsStyle="warning"  style ={{fontSize:'16px'}}  >Plan Your Journey</ Badge>
-            </h3>
+            <h3 style ={{color: '#ffeb3b', fontSize:'16px'}}  >Plan Your Journey With Dublin Bus</h3>
           </Col>
            <Col xs={2}></Col>
         </Row>
