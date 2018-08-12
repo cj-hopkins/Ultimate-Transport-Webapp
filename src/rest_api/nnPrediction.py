@@ -2,6 +2,7 @@ import os
 import pickle
 import pandas as pd
 import numpy as np
+import math
 import sklearn
 from rest_api.models import Composite 
 
@@ -32,22 +33,38 @@ class NNModel:
         df = pd.DataFrame(columns=columnsList)
         stopsInJourney = []
         for index, item in enumerate(self.stops):
-            if item['stop_id'] == self.startStop:
+            # print(item['sequence_number'])
+            if item['stop_id'] == self.startStop['stop_id']:
                 startIndex = index
                 stopsInJourney.append(item)
-            elif self.startStop < item['stop_id'] <= self.finishStop:
+            elif self.startStop['sequence_number'] < item['sequence_number'] <= self.finishStop['sequence_number']:
                 stopsInJourney.append(item)
         # print(stopsInJourney)
         # print(startIndex, finishIndex)
         df = pd.DataFrame(columns=columnsList)
+        self.stopsInJourney = stopsInJourney
+        # for i in stopsInJourney:
+        print("START", startIndex)
+        #     print(i['location_text'], i['stop_id'], i['sequence_number'])
         # print("DF SHAPE", df.shape)
         count = 0
         # populate the df
+        # print("Len sto(startIndex + len(self.stops)) + index + 1ps", len(self.stops))
+        print(len(stopsInJourney))
+        for i in self.stopsInJourney:
+            print(i)
+        print("STOPS", len(self.stops))
         for index in range(len(stopsInJourney)):
-            row = [0 for i in range(len(self.stops) * 2)]
-            row[startIndex + index] = 1
-            row[(startIndex + index + 1) * 2] = 1
-            df.loc[count] = row
+            # * 2 because we need columns for start and finish
+            startRow = [0 for i in range(len(self.stops))]
+            finishRow = [0 for i in range(len(self.stops))]
+            # print(len(finishRow))
+            startRow[startIndex + index] = 1
+            finishRow[startIndex + index + 1] = 1
+            startRow.extend(finishRow)
+            # print(startRow, finishRow)
+            # print(startRow)
+            df.loc[count] = startRow
             count += 1
         return df
 
@@ -59,19 +76,37 @@ class NNModel:
         timeRow = [0 for i in range(23)]
         dayRow = [0 for i in range(7)]
         dayIndex = self.dayArray.index(day)
+        dayRow[dayIndex] = 1
         timeRow[hour - 1] = 1
         dayRow.extend(i for i in timeRow)
         # print("time row", timeRow)
-        print("day row", dayRow)
-        print("both", timeRow)
+        # print("day row", dayRow)
+        # print("both", timeRow)
         self.timeRow = dayRow
-        print("SELF", self.timeRow)
+        print("TIMES", self.timeRow)
         return dayRow
       
     def createRainDf(self, rain):
         print(rain)
         
 
+    def calculateDistances(self):
+        distances = []
+        radius_earth = 6371
+        print("stops length", len(self.stopsInJourney))
+        for i in range(len(self.stopsInJourney) - 1):
+            item = self.stopsInJourney[i]
+            nextItem = self.stopsInJourney[i + 1]
+            theta1 = np.deg2rad(item['stop_lon'])
+            theta2 = np.deg2rad(nextItem['stop_lon'])
+            phi1 = np.deg2rad(90 - item['stop_lat'])
+            phi2 = np.deg2rad(90 - nextItem['stop_lat'])
+            distance = math.acos(math.sin(phi1) * math.sin(phi2) * math.cos(
+                theta1 - theta2) + math.cos(phi1) * math.cos(phi2)) * radius_earth
+            # print(distance)
+            distances.append(distance * 1000)
+        return distances
+            
 
     def makePrediction(self, model_path):
         # print("isRaining", isRaining)

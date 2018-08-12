@@ -150,20 +150,46 @@ def getModelPrediction(request):
     
     # pklFileName = parseRequest(route, direction)
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('stop_id').values()
+    # startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start !== 'start' else stops[0]
+    startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0]
+    finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0]
+    # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish !== 'finish' else stops[:-1]
+    print("START", startStop)
+    print("SEQ", startStop['sequence_number'])
     # print(type(stops))
     # stops = Composite.objects.filter()
-    nn_model = NNModel(route, direction, start, finish, stops, rain)
+    nn_model = NNModel(route, direction, startStop, finishStop, stops, rain)
     pkl = nn_model.parseRequest(nn_model.route, nn_model.direction)
     stopDf = nn_model.createStopDf()
+    print(stopDf)
+    print(selectedTime//3600)
     hour = selectedTime // 3600
-    tmp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(selectedDate)))
-    print(tmp)
+    print(type(selectedDate))
+    # tmp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(selectedDate)))
+    # print(tmp)
     day = datetime.datetime.fromtimestamp(int(selectedDate)/1000).strftime("%A")
+    print(day)
     timeDf = nn_model.createTimeDf(hour, day)
-    
-    #print('TIME DATAFRAME',timeDf )
-    print('---STOP DATAFRAME num rows:',len(stopDf ) )
-    print('---STOP DATAFRAME num cols:',len(stopDf.columns ) )
+    print(day)
+
+    rainDf = getRainCategoryNow()
+    print(rainDf)
+
+    distances = nn_model.calculateDistances()
+    print(distances)
+
+    length = len(timeDf) + len(distances) + stopDf.shape[1] + 6
+    print(length)
+
+    df = pd.DataFrame(columns=[i for i in range(length)])
+
+    # future_weather = FiveDayWeather.objects.values()
+    # relevant_weather= get_temp_and_rain(future_weather, selectedTime, selectedDate )
+    # print(relevant_weather)
+
+    # if isDefaultTime:
+    #     weather = Currentweather.values.all()
+
     # print(pkl)
     # Implement this 
     # timeArray = parseTime(selectedTime)
@@ -171,6 +197,11 @@ def getModelPrediction(request):
     # startStopArray = createStopArray(route, direction getNumStopsInJourney(start, finish, route, direction))
     # makePrediction(pklFileName)
     return JsonResponse({'test': 'val'})
+
+def getRainCategoryNow():
+    weather_most_recent_entry = FiveDayWeather.objects.values().first()
+    rain_now = pd.cut(pd.DataFrame([float(weather_most_recent_entry['rain'] )])[0], bins= [0,0.5,15,200], include_lowest=True, labels = ['Precipitation_None', 'Precipitation_Slight', 'Precipitation_Moderate'])
+    return rain_now.iloc[0]
 
 @api_view(['POST'])
 def getMultiRoutePrediction(request):
