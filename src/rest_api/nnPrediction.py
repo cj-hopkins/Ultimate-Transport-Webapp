@@ -29,43 +29,30 @@ class NNModel:
 
     # def createStopArray(self, route, direction, startStop, finishStop, numStopsInJourney, numStopsInRoute, df = None ):
     def createStopDf(self):
+        
+        stopsInJourney = [i for i in self.stops if 
+            self.startStop['sequence_number'] <= i['sequence_number'] <= self.finishStop['sequence_number']]
+        stopsInJourney = sorted(stopsInJourney, key = lambda x: x['sequence_number'])
+        self.stopsInJourney = stopsInJourney
+
         columnsList = [i for i in range(len(self.stops) * 2)]
         df = pd.DataFrame(columns=columnsList)
-        stopsInJourney = []
-        for index, item in enumerate(self.stops):
-            # print(item['sequence_number'])
-            if item['stop_id'] == self.startStop['stop_id']:
-                startIndex = index
-                stopsInJourney.append(item)
-            elif self.startStop['sequence_number'] < item['sequence_number'] <= self.finishStop['sequence_number']:
-                stopsInJourney.append(item)
-        # print(stopsInJourney)
-        # print(startIndex, finishIndex)
-        df = pd.DataFrame(columns=columnsList)
-        self.stopsInJourney = stopsInJourney
-        # for i in stopsInJourney:
-        print("START", startIndex)
-        #     print(i['location_text'], i['stop_id'], i['sequence_number'])
-        # print("DF SHAPE", df.shape)
-        count = 0
-        # populate the df
-        # print("Len sto(startIndex + len(self.stops)) + index + 1ps", len(self.stops))
-        print(len(stopsInJourney))
-        for i in self.stopsInJourney:
-            print(i)
-        print("STOPS", len(self.stops))
-        for index in range(len(stopsInJourney)):
-            # * 2 because we need columns for start and finish
-            startRow = [0 for i in range(len(self.stops))]
-            finishRow = [0 for i in range(len(self.stops))]
-            # print(len(finishRow))
-            startRow[startIndex + index] = 1
-            finishRow[startIndex + index + 1] = 1
-            startRow.extend(finishRow)
-            # print(startRow, finishRow)
-            # print(startRow)
-            df.loc[count] = startRow
-            count += 1
+
+        for i in range(len(self.stopsInJourney) - 1):
+            item = self.stopsInJourney[i]
+            nextItem = self.stopsInJourney[i + 1]
+        
+            startSeqIndex = next((index for (index, stop) in enumerate(self.stops) if stop["sequence_number"] == item['sequence_number']), None)
+            finishSeqIndex = next((index for (index, stop) in enumerate(self.stops) if stop["sequence_number"] == nextItem['sequence_number']), None)
+            print(startSeqIndex, finishSeqIndex)
+
+            row = [0 for i in range(len(self.stops) * 2)]
+            row[startSeqIndex] = 1
+            row[finishSeqIndex] = 1
+            # print(row)
+
+            df.loc[i] = row
+        print(df)
         return df
 
     def createTimeDf(self, hour, day):
