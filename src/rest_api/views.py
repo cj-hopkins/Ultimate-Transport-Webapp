@@ -20,8 +20,9 @@ import pandas as pd
 import numpy as np 
 import datetime
 import time
-#from datetime import datetime
 from rest_api.nnPrediction import NNModel
+from rest_api.weather_for_model import *
+from rest_api.time_for_model import *
 
 class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
@@ -133,20 +134,9 @@ def getModelPrediction(request):
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
     isDefaultTime = request.data.get('isDefaultTime')
-    current_time = time.time()
-    epoch = datetime.datetime.utcfromtimestamp(0)
-    time_in_5days_since_epoch = (datetime.datetime.now() + datetime.timedelta(days=5) - epoch).total_seconds() 
-
-    if (not isDefaultTime) and (int(selectedDate) < time_in_5days_since_epoch): # within next 5 days but not now
-        rain =  getRainCategoryFuture(selectedTime,selectedDate)
-        temp = getTempNotNow(selectedTime,selectedDate)
-    else:
-        rain =  getRainCategoryNow()  #use current weather if now or more than 5 days into future
-        temp = getTempNow()
-    print('RAIN', rain, 'temp', temp)
-    
-    
-    
+    weather_dictionary = getWeatherForPrediction(isDefaultTime , selectedTime, selectedDate)
+    rain = weather_dictionary['rain']
+    temp = weather_dictionary['temp']
     
     # pklFileName = parseRequest(route, direction)
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('stop_id').values()
@@ -156,56 +146,31 @@ def getModelPrediction(request):
     # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish !== 'finish' else stops[:-1]
     print("START", startStop)
     print("SEQ", startStop['sequence_number'])
-    # print(type(stops))
     # stops = Composite.objects.filter()
+    
+    
     nn_model = NNModel(route, direction, startStop, finishStop, stops, rain)
     pkl = nn_model.parseRequest(nn_model.route, nn_model.direction)
     stopDf = nn_model.createStopDf()
-    print(stopDf)
-    print(selectedTime//3600)
-    hour = selectedTime // 3600
-    print(type(selectedDate))
-    # tmp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(selectedDate)))
-    # print(tmp)
-    day = datetime.datetime.fromtimestamp(int(selectedDate)/1000).strftime("%A")
-    print(day)
-    timeDf = nn_model.createTimeDf(hour, day)
-    print('timeDf: ', timeDf)
 
     distances = nn_model.calculateDistances()
     print('distances ', distances)
 
-    length = len(timeDf) + len(distances) + stopDf.shape[1] + 6
-    print('Num of cols', length)
+    #length = len(timeDf) + len(distances) + stopDf.shape[1] + 6
+    #print('Num of cols', length)
+    #df = pd.DataFrame(columns=[i for i in range(length)])
+    
 
-    df = pd.DataFrame(columns=[i for i in range(length)])
-    
-    
-    rain_array = nn_model.createRainArray(rain)
-    
-    rain_arr_corrected = np.tile(np.array(rain_array), (stopDf.shape[0], 1 ))
-    
-    df_rain_arr_corrected = pd.DataFrame(rain_arr_corrected , index=range(rain_arr_corrected.shape[0] ),
-                          columns=nn_model.rainOptions)
-    
-    temp_series = pd.Series(np.tile([temp], stopDf.shape[0] )).to_frame()
-    temp_series.columns = ['Temperature']
-    comined_df = pd.concat([temp_series,df_rain_arr_corrected, stopDf ], axis=1)
+    time_df =get_time_and_date_df(selectedTime,selectedDate, nn_model,stopDf)
+    weather_df = create_weather_df(rain, temp, stopDf, nn_model)
+    comined_df = pd.concat([weather_df, time_df,stopDf ], axis=1)
     print ('combined df\n',comined_df )
-    
 
-    # print(pkl)
     # Implement this 
-    # timeArray = parseTime(selectedTime)
-    # dayArray = parseDay(selectedDate)
     # startStopArray = createStopArray(route, direction getNumStopsInJourney(start, finish, route, direction))
-    # makePrediction(pklFileName)
+    # makePrediction(pklFileName)cs 
     return JsonResponse({'test': 'val'})
 
-def getRainCategoryNow():
-    weather_most_recent_entry = FiveDayWeather.objects.values().first()
-    rain_now = pd.cut(pd.DataFrame([float(weather_most_recent_entry['rain'] )])[0], bins= [0,0.5,15,200], include_lowest=True, labels = ['Precipitation_None', 'Precipitation_Slight', 'Precipitation_Moderate'])
-    return rain_now.iloc[0]
 
 @api_view(['POST'])
 def getMultiRoutePrediction(request):
@@ -223,7 +188,6 @@ def getMultiRoutePrediction(request):
     #         # return JsonResponse({'prediction':result[0]})
     return JsonResponse({'test': 'val'})
 
-  
   
 # class getStopsForRoute(CsrfExemptMixin, APIView):
 #     def post(self, request):
@@ -253,67 +217,4 @@ def getNumStopsInJourney(start, finish, route, direction):
     indicesFound = startIndex != -1 and finishIndex != -1 
     return finishIndex - startIndex if indicesFound else -1
   
-def getRainCategoryNow():
-    weather_most_recent_entry = FiveDayWeather.objects.values().first()
-    rain_now = pd.cut(pd.DataFrame([float(weather_most_recent_entry['rain'] )])[0], bins= [0,0.01,0.5,20], include_lowest=True, labels = ['Precipitation_None', 'Precipitation_Slight', 'Precipitation_Moderate'])
-    return rain_now.iloc[0]  
-  
 
-def getRainCategoryFuture(chosenTime, chosenDate):
-    future_weather = FiveDayWeather.objects.values()
-    relevant_weather= get_temp_and_rain(future_weather ,chosenTime, chosenDate )
-    rain_now = pd.cut(pd.DataFrame([float(relevant_weather['rain'] )])[0], bins= [0,0.01,0.5,20], include_lowest=True, labels = ['Precipitation_None', 'Precipitation_Slight', 'Precipitation_Moderate'])
-    return rain_now.iloc[0]  
-  
-def getTempNow():
-    weather = Currentweather.objects.values()[0]
-    return weather['temperature']
-  
-def getTempNotNow(chosenTime, chosenDate):
-    future_weather = FiveDayWeather.objects.values()
-    relevant_weather= get_temp_and_rain(future_weather ,chosenTime, chosenDate )
-    return relevant_weather['temp']
-  
-def get_temp_and_rain(response,seconds_past_midnight, epoch_time):
-    """
-    response: json from the getFiveDayWeather view in Django
-    seconds_past_midnight:Time chosen (current time or from Django)
-    epoch_time:Date chosen (from calendar)
-    """
-    def round_hour_nearest_3_hour(x):
-        """
-        Rounds to nearest 3 hour (also handles the edge case of 23:00)
-        """
-        if x==23:
-            ans= 0
-        else:
-            ans= int(3 * round(x/3))
-        return ans
-    
-    seconds_past_midnight_1970 =  pd.to_datetime(seconds_past_midnight,unit='s')  # seconds past midnight to dt 
-    nearest_hour = seconds_past_midnight_1970.hour                         # get hour
-    nearest_hour_multiple3 = round_hour_nearest_3_hour(nearest_hour)       # get nearest 3 hour interval
-    
-    epoch_dt_format = pd.to_datetime(epoch_time, unit='s')  # epoch time to dt object 
-    day_of_month_chosen = epoch_dt_format.day               # get day
-
-    for i in range(len(response)):    
-        entry = response[i]
-        time_for_entry =response[i]['timeofday']            #time in tring format
-        formatted_time= pd.to_datetime(time_for_entry, format='%Y-%m-%dT%H:00:00Z') # dt object
-        day_of_month = formatted_time.day
-        hour = formatted_time.hour             # hour of response(will be in multiple of 3)
-        day_of_week =formatted_time.dayofweek
-        
-        keys_for_dictionary = ['temp','rain','description']  # store relevant weather in dictionary
-        
-        res = {key: None for key in keys_for_dictionary}     # fill dictionary with Nones 
-        
-        if  day_of_month== day_of_month_chosen and hour==  nearest_hour_multiple3:
-            res['temp'] =  entry['temperature'] 
-            res['rain'] =  entry['rain']
-            res['description'] =  entry['description'] 
-            
-            return res  #if there's weather info return it else return dictionary of Nones
-    return res
-    

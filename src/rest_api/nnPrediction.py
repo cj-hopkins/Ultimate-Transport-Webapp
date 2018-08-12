@@ -19,6 +19,7 @@ class NNModel:
         self.stops = stops
         self.dayArray = ['Friday', 'Monday', 'Saturday', 'Sunday','Thursday', 'Tuesday', 'Wednesday']
         self.rainOptions = ['Precipitation_Moderate','Precipitation_None', 'Precipitation_Slight']
+        self.timeIntervals = ['day_Friday', 'day_Monday', 'day_Saturday','day_Sunday', 'day_Thursday','day_Tuesday', 'day_Wednesday','time_interval_midnight-1am', 'time_interval_1-2am','time_interval_2-3am', 'time_interval_3-4am', 'time_interval_4-5am','time_interval_5-6am', 'time_interval_6-7am','time_interval_7-8am','time_interval_8-9am', 'time_interval_9-10am', 'time_interval_10-11am','time_interval_11-12midday', 'time_interval_12-1pm','time_interval_1-2pm', 'time_interval_2-3pm', 'time_interval_3-4pm','time_interval_4-5pm', 'time_interval_5-6pm','time_interval_6-7pm','time_interval_7-8pm', 'time_interval_8-9pm', 'time_interval_9-10pm','time_interval_10-11pm']
         
     def parseRequest(self, route, direction):
         parseDir = lambda x: '1' if x == 'I' else '2'
@@ -49,10 +50,7 @@ class NNModel:
             row = [0 for i in range(len(self.stops) * 2)]
             row[startSeqIndex] = 1
             row[finishSeqIndex] = 1
-            # print(row)
-
             df.loc[i] = row
-        print(df)
         return df
 
     def createTimeDf(self, hour, day):
@@ -66,11 +64,7 @@ class NNModel:
         dayRow[dayIndex] = 1
         timeRow[hour - 1] = 1
         dayRow.extend(i for i in timeRow)
-        # print("time row", timeRow)
-        # print("day row", dayRow)
-        # print("both", timeRow)
         self.timeRow = dayRow
-        print("TIMES", self.timeRow)
         return dayRow
       
     def createRainArray (self, rain):
