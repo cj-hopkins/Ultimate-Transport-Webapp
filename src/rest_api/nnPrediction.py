@@ -18,7 +18,7 @@ class NNModel:
         self.finishStop = finishStop
         self.stops = stops
         self.dayArray = ['Friday', 'Monday', 'Saturday', 'Sunday','Thursday', 'Tuesday', 'Wednesday']
-        self.rain  = rain
+        self.rainOptions = ['Precipitation_Moderate','Precipitation_None', 'Precipitation_Slight']
         
     def parseRequest(self, route, direction):
         parseDir = lambda x: '1' if x == 'I' else '2'
@@ -73,9 +73,10 @@ class NNModel:
         print("TIMES", self.timeRow)
         return dayRow
       
-    def createRainDf(self, rain):
-        print(rain)
-        
+    def createRainArray (self, rain):
+        rain_arr = [0 for i in range(len(self.rainOptions))]
+        rain_arr[self.rainOptions.index(rain)]=1
+        return rain_arr
 
     def calculateDistances(self):
         distances = []

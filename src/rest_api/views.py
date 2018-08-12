@@ -170,25 +170,29 @@ def getModelPrediction(request):
     day = datetime.datetime.fromtimestamp(int(selectedDate)/1000).strftime("%A")
     print(day)
     timeDf = nn_model.createTimeDf(hour, day)
-    print(day)
-
-    rainDf = getRainCategoryNow()
-    print(rainDf)
+    print('timeDf: ', timeDf)
 
     distances = nn_model.calculateDistances()
-    print(distances)
+    print('distances ', distances)
 
     length = len(timeDf) + len(distances) + stopDf.shape[1] + 6
-    print(length)
+    print('Num of cols', length)
 
     df = pd.DataFrame(columns=[i for i in range(length)])
-
-    # future_weather = FiveDayWeather.objects.values()
-    # relevant_weather= get_temp_and_rain(future_weather, selectedTime, selectedDate )
-    # print(relevant_weather)
-
-    # if isDefaultTime:
-    #     weather = Currentweather.values.all()
+    
+    
+    rain_array = nn_model.createRainArray(rain)
+    
+    rain_arr_corrected = np.tile(np.array(rain_array), (stopDf.shape[0], 1 ))
+    
+    df_rain_arr_corrected = pd.DataFrame(rain_arr_corrected , index=range(rain_arr_corrected.shape[0] ),
+                          columns=nn_model.rainOptions)
+    
+    temp_series = pd.Series(np.tile([temp], stopDf.shape[0] )).to_frame()
+    temp_series.columns = ['Temperature']
+    comined_df = pd.concat([temp_series,df_rain_arr_corrected, stopDf ], axis=1)
+    print ('combined df\n',comined_df )
+    
 
     # print(pkl)
     # Implement this 
