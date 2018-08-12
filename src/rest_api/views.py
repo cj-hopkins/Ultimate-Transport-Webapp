@@ -20,7 +20,7 @@ import pandas as pd
 import numpy as np 
 import datetime
 import time
-from datetime import datetime
+#from datetime import datetime
 from rest_api.nnPrediction import NNModel
 
 class getAllStops(generics.ListCreateAPIView):
@@ -72,21 +72,6 @@ def getStopsForRoute(request):
     return Response(data)
     # return JsonResponse({"iDirection": iDirection, "oDirection": oDirection})
 
-# @api_view(['GET'])
-# def getTimeTable(request):
-#     lineid = 140 #request.data.get('route')
-#     direction = 0#request.data.get('direction')
-#     stop = 7149 #request.data.get('stop_id')
-#     weekday = 1 #request.data.get('weekday')
-#     sat = 0 #request.data.get('saturday')
-#     sun = 0 #request.data.get('sunday')
-#     table = Timetable.objects.filter(lineid=lineid).filter(direction = direction).filter(stop_id = stop).filter(weekday = weekday).filter(saturday = sat).filter(sunday = sun)
-#     serializer = TimeTableSerializer(table, many=True)
-#     #print(len(data))
-#     times = []
-#     for i in range(len(serializer.data)):
-#         times.append(serializer.data[i]['arrival_time']) #serializer.data[i]['stop_headsign']})
-#     return Response(times)
 
 @api_view(['POST'])
 def getTimeTable(request):
@@ -148,22 +133,37 @@ def getModelPrediction(request):
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
     isDefaultTime = request.data.get('isDefaultTime')
+    current_time = time.time()
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    time_in_5days_since_epoch = (datetime.datetime.now() + datetime.timedelta(days=5) - epoch).total_seconds() 
+
+    if (not isDefaultTime) and (int(selectedDate) < time_in_5days_since_epoch): # within next 5 days but not now
+        rain =  getRainCategoryFuture(selectedTime,selectedDate)
+        temp = getTempNotNow(selectedTime,selectedDate)
+    else:
+        rain =  getRainCategoryNow()  #use current weather if now or more than 5 days into future
+        temp = getTempNow()
+    print('RAIN', rain, 'temp', temp)
+    
+    
+    
+    
     # pklFileName = parseRequest(route, direction)
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('stop_id').values()
     # print(type(stops))
     # stops = Composite.objects.filter()
-    nn_model = NNModel(route, direction, start, finish, stops)
+    nn_model = NNModel(route, direction, start, finish, stops, rain)
     pkl = nn_model.parseRequest(nn_model.route, nn_model.direction)
     stopDf = nn_model.createStopDf()
-    print(selectedTime//3600)
     hour = selectedTime // 3600
-    print(type(selectedDate))
     tmp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(selectedDate)))
     print(tmp)
-    day = datetime.fromtimestamp(int(selectedDate)/1000).strftime("%A")
+    day = datetime.datetime.fromtimestamp(int(selectedDate)/1000).strftime("%A")
     timeDf = nn_model.createTimeDf(hour, day)
-    print(day)
-
+    
+    #print('TIME DATAFRAME',timeDf )
+    print('---STOP DATAFRAME num rows:',len(stopDf ) )
+    print('---STOP DATAFRAME num cols:',len(stopDf.columns ) )
     # print(pkl)
     # Implement this 
     # timeArray = parseTime(selectedTime)
@@ -188,6 +188,8 @@ def getMultiRoutePrediction(request):
     #         # return JsonResponse({'prediction':result[0]})
     return JsonResponse({'test': 'val'})
 
+  
+  
 # class getStopsForRoute(CsrfExemptMixin, APIView):
 #     def post(self, request):
 #         route = request.data.get('route')
@@ -215,21 +217,18 @@ def getNumStopsInJourney(start, finish, route, direction):
             break
     indicesFound = startIndex != -1 and finishIndex != -1 
     return finishIndex - startIndex if indicesFound else -1
-
-def getRainNow():
-    regex = r'^.*[R|r]ain.*$'
-    weather = Currentweather.objects.values()[0]
-    isRaining = re.match(regex, weather['description'])
-    isRaining = False if isRaining is None else True
-    return isRaining
   
-def getRainNotNow(chosenTime, chosenDate):
-    regex = r'^.*[R|r]ain.*$'
+def getRainCategoryNow():
+    weather_most_recent_entry = FiveDayWeather.objects.values().first()
+    rain_now = pd.cut(pd.DataFrame([float(weather_most_recent_entry['rain'] )])[0], bins= [0,0.01,0.5,20], include_lowest=True, labels = ['Precipitation_None', 'Precipitation_Slight', 'Precipitation_Moderate'])
+    return rain_now.iloc[0]  
+  
+
+def getRainCategoryFuture(chosenTime, chosenDate):
     future_weather = FiveDayWeather.objects.values()
     relevant_weather= get_temp_and_rain(future_weather ,chosenTime, chosenDate )
-    isRaining = re.match(regex, relevant_weather['description'])
-    isRaining = False if isRaining is None else True
-    return isRaining
+    rain_now = pd.cut(pd.DataFrame([float(relevant_weather['rain'] )])[0], bins= [0,0.01,0.5,20], include_lowest=True, labels = ['Precipitation_None', 'Precipitation_Slight', 'Precipitation_Moderate'])
+    return rain_now.iloc[0]  
   
 def getTempNow():
     weather = Currentweather.objects.values()[0]

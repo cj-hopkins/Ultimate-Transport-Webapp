@@ -10,14 +10,15 @@ class NNModel:
     current_file_path = __file__
     current_file_dir = os.path.dirname(__file__)
 
-    def __init__(self, route, direction, startStop, finishStop, stops):
+    def __init__(self, route, direction, startStop, finishStop, stops, rain):
         self.route = route
         self.direction = direction
         self.startStop = startStop
         self.finishStop = finishStop
         self.stops = stops
         self.dayArray = ['Friday', 'Monday', 'Saturday', 'Sunday','Thursday', 'Tuesday', 'Wednesday']
-
+        self.rain  = rain
+        
     def parseRequest(self, route, direction):
         parseDir = lambda x: '1' if x == 'I' else '2'
         key = "bus{}_d{}.pkl".format(route, parseDir(direction))
@@ -66,6 +67,10 @@ class NNModel:
         self.timeRow = dayRow
         print("SELF", self.timeRow)
         return dayRow
+      
+    def createRainDf(self, rain):
+        print(rain)
+        
 
 
     def makePrediction(self, model_path):
