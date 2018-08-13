@@ -60,12 +60,21 @@ def getAllStopNumbers(request):
 def getStopsForRoute(request):
     route = request.data.get('route')
     direction = request.data.get('direction')
-    stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number')
+    stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('sequence_number').values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address', 'route_direction', 'rtpi_destination', 'rtpi_origin', 'sequence_number')
+    # stops = set(stops)
+    for i in stops:
+        print(i['stop_id'], i['sequence_number'], i['location_text'])
+    # uniqueStops = list(set(map(lambda x: x['stop_id'], stops)))
+    # print(uniqueStops)
+    # stops = [item for index, item in enumerate(stops) if item['stop_id'] not in uniqueStops[index+1:]]
+    stops = sorted(list({item["stop_id"]: item for item in stops}.values()), key = lambda x: x['sequence_number'])
+    # newStops = []
     # stops = Composite.objects.filter(name=route).order_by('sequence_number')
-    data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address', 'route_direction', 'rtpi_destination', 'rtpi_origin').distinct())
+    # data = list(stops.values('stop_id', 'stop_lat', 'stop_lon', 'location_text', 'address', 'route_direction', 'rtpi_destination', 'rtpi_origin').distinct())
     # iDirection = [i for i in data if i['route_direction'] == 'I']
     # oDirection = [i for i in data if i['route_direction'] == 'O']
     # print(data)
+    data = list(stops)
     print(len(data))
     return Response(data)
     # return JsonResponse({"iDirection": iDirection, "oDirection": oDirection})
