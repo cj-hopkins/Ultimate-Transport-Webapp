@@ -238,6 +238,7 @@ class ContentBlock extends Component {
   
   render(){
     return (
+        <div style={{height:'100%'}}>
       <Grid fluid={true} style ={{backgroundColor:'white'}}>
              <ErrorBoundary>
         <RouteSelect 
@@ -315,6 +316,7 @@ class ContentBlock extends Component {
           </Col>
         </Row>
       </Grid>
+      </div>
     )
   }
 }
