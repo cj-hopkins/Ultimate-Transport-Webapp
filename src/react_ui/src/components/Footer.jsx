@@ -5,6 +5,10 @@ import StickyFooter from 'react-sticky-footer';
 class FooterPage extends React.Component {
     render(){
         return(
+        <div style={{position:"absolute",
+            left:0,
+            bottom:0,
+            right:0}}>
             <StickyFooter bottomThreshold={50}
     normalStyles={{
     backgroundColor: "#2196f3",
@@ -18,7 +22,7 @@ class FooterPage extends React.Component {
                         
                         &copy; {(new Date().getFullYear())} Copyright: Ultimate Transport
                 </div>
-            </StickyFooter>
+            </StickyFooter></div>
         );
     }
 }

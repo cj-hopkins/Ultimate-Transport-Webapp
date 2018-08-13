@@ -261,9 +261,10 @@ class App extends Component {
               
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
+            <FooterPage/>
     </div>;
     
-    const sidebarNoButton = 
+    const sidebarNoButton =
           <div style={{backgroundColor:"white", height:'100%'}}>
             <ContentHeader/>
             <Grid>
