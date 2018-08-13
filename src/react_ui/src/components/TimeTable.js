@@ -139,6 +139,20 @@ class TimeTable extends Component {
     this.props.onSelectedJourneyUpdate([marker])
   }
 
+  findStopIndex = (stop) => {
+    if (stop === "start") { 
+      return 0 
+    } else if (stop === "finish") {
+      return this.state.stops.length
+    }
+    const allStops = this.state.stops;
+    for (let i = 0; i < allStops.length; i++) {
+      if (allStops[i].stop_id === stop) return i;
+    }
+    return -1;
+  }
+
+
   getTable = () => {
     const endpoint = '/api/getTimeTable'
     try {
