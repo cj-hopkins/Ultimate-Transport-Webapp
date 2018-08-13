@@ -4,15 +4,11 @@ import "./App.css";
 import MapContainer from "./components/MapContainer";
 import ContentBlock from "./components/ContentBlock";
 import ContentHeader from "./components/ContentHeader";
-import Example from "./components/examples/Example";
 import RealTimePage from "./components/RealTimePage";
 import CustomNavbar from './components/CustomNavbar';
 import Sidebar from 'react-sidebar';
 import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
-import { PageHeader } from "react-bootstrap";
-import { Button } from 'react-bootstrap';
 import WeatherWidget from "./components/Weather";
-import LocationSearchInput from './components/LocationSearchInput';
 import JourneyPlanner from './components/JourneyPlanner';
 import { Table } from 'react-bootstrap';
 import TimeTable from "./components/TimeTable";
@@ -98,7 +94,6 @@ class App extends Component {
       selectedRealTimeStop: stop
     });
   }
-  
   onStopSelectGetRealTime(stop){
      this.setState({
       isRealTimeHidden:false
@@ -119,19 +114,6 @@ class App extends Component {
      })
       .catch(error => console.log('parsing failed',error))
   }
-  // parseCood = object => (String(object[object]()) > 6) ? object : parseFloat(String(object[object]()).substring(0,6))
-  // parseCoords = array => array.map(object => ({
-  //   let newLat = String(object.lat())
-  //   let newLng = String(object.lng())
-  //   newLat = (newLat.length > 6) ? = parseFloat(newLat.substring(0,6)) : parseFloat(newLat);
-  //   newLng = (newLng.length > 6) ? = parseFloat(newLng.substring(0,6)) : parseFloat(newLng);
-  //   return (({
-  //   lat: newLat,
-  //   lng: newLng
-  //   })
-  // )
-  // })
-  // Each JS object in the array has 2 functions, lat & lng. Run them to return the actual coords
   parseCoords = array => array.map(object => ({
     lat: parseFloat(object.lat()),
     lng: parseFloat(object.lng())
@@ -166,25 +148,12 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
             />;
         case 3:
-          return  <div><RealTimePage key={3} 
-                      onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
-                      selectedRealTimeStop= {this.state.selectedRealTimeStop}
-                      onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
-                          />
-            
-            <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
-        <Table>  {this.state.nextBuses}  </Table></div>;
-     {/*      
-            
-            <p>Works----------------------------------------</p>
-            
-            
-        
+          return  <div>
               <RealTimePage key={3} 
                       onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
                       selectedRealTimeStop= {this.state.selectedRealTimeStop}
                       onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
-                          />;
+                          />
 
               {!this.state.isRealTimeHidden &&
               <div>
@@ -193,7 +162,7 @@ class App extends Component {
                 <Table>  {this.state.nextBuses}  </Table>
               </div>
                }
-          </div>  */}
+          </div>  
         case 4.1:
           return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
         case 4.3:

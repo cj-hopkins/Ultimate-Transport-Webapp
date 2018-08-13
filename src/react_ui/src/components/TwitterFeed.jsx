@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import { TwitterTimelineEmbed} from 'react-twitter-embed';
-import { Button , Grid, Row, Col } from 'react-bootstrap'
 
 export class TwitterFeed extends Component {
   constructor(props, context) {

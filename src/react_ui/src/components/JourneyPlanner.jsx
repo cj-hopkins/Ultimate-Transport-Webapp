@@ -46,8 +46,6 @@ class JourneyPlanner extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      // (this.state.originLatLng !== prevState.originLatLng && this.state.originLatLng !== null) && 
-      // (this.state.destinationLatLng !== prevState.destinationLatLng && this.state.destinationLatLng !== null)
       (this.state.originLatLng !== null && this.state.destinationLatLng !== null) &&
       (this.state.originLatLng !== prevState.originLatLng || this.state.destinationLatLng !== prevState.destinationLatLng)
     ) {
@@ -76,7 +74,6 @@ class JourneyPlanner extends Component {
       travelMode: "TRANSIT",
       provideRouteAlternatives: true,
       transitOptions: {
-        // departureTime: new Date(1337675679473),
         modes: ["BUS"],
         routingPreference: "FEWER_TRANSFERS"
       }
@@ -85,7 +82,7 @@ class JourneyPlanner extends Component {
     // when we want to use setState
     const me = this;
     directionsService.route(request, (result, status) => {
-      if (status == "OK") {
+      if (status === "OK") {
         me.setState({
           directionsObject: result,
         });
@@ -94,7 +91,6 @@ class JourneyPlanner extends Component {
   }
 
   selectRoute = (key) => {
-    // console.log(key)
     this.setState({
       selectedRoute: key
     })
@@ -109,9 +105,6 @@ class JourneyPlanner extends Component {
     }
     // const parser = array => array.reduce((item, acc) => acc.push({lat: item.lat(), lng: item.lng()}), []);
     // const coords = parser(data);
-
-    // console.log(coords)
-    console.log(coordinates)
     this.props.getPolyCoordinates(coordinates)
     this.getMultiRoutePrediction(key)
   }
@@ -128,8 +121,6 @@ class JourneyPlanner extends Component {
         })
       );
       console.log(journeyObject)
-
-
 
     try {
       fetch(endpoint, {
@@ -202,7 +193,6 @@ class JourneyPlanner extends Component {
   componentWillMount() {
     this.props.onSelectedJourneyUpdate([])
   }
-
   render() {
     return (
       <div>

@@ -102,7 +102,6 @@ export class MapContainer extends Component {
     if (!this.props.loaded) return <div>Loading...</div>;
 
     const google = window.google;
-    const im = "https://www.robotwoods.com/dev/misc/bluecircle.png";
     return (
       <Map data-tip='Dublin'
         google={this.props.google}

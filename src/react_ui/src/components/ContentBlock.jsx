@@ -5,7 +5,6 @@ import StopSelect from "./StopSelect"
 import { Button} from "react-bootstrap"
 import TimeButton from './TimeSelect';
 import PredictionContainer from './PredictionContainer';
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
 import ErrorBoundary from './ErrorBoundary';
 import ReactTooltip from 'react-tooltip'
