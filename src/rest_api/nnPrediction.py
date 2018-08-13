@@ -36,8 +36,11 @@ class NNModel:
         stopsInJourney = sorted(stopsInJourney, key = lambda x: x['sequence_number'])
         self.stopsInJourney = stopsInJourney
 
-        columnsList = [i for i in range(len(self.stops) * 2)]
-        df = pd.DataFrame(columns=columnsList)
+        # columnsList = [i for i in range(len(self.stops) * 2)]
+        startColsList = ["start_stoppointid_{}".format(i['stop_id']) for i in self.stops]
+        endColsList = ['end_point_{}'.format(i['stop_id']) for i in self.stops]
+        startColsList.extend(endColsList)
+        df = pd.DataFrame(columns=startColsList)
 
         for i in range(len(self.stopsInJourney) - 1):
             item = self.stopsInJourney[i]
@@ -90,7 +93,7 @@ class NNModel:
         return distances
             
 
-    def makePrediction(self, model_path):
+    def makePrediction(self, model_path, df):
         # print("isRaining", isRaining)
         # df_test = pd.DataFrame([[isRaining,'20',1,0, 0, 1,0,0]]) #5-7pm
         #['raining','air_temp','weekday','10am-1pm', '1pm-5pm', '5pm-7pm', '8am-10am','before_8am']
@@ -99,6 +102,8 @@ class NNModel:
         # df_test.set_index(['dayofservice','tripid'], inplace=True)
         # result = rf_model.predict(df_test) # prediction for time between stops 
         nn_model = pickle.load(open(model_path, "rb"))
+        result = nn_model.predict(df)
+        print(result)
         # startCols = createStopArray()
         # finishCols = createStopArray()
 

@@ -161,16 +161,24 @@ def getModelPrediction(request):
     #df = pd.DataFrame(columns=[i for i in range(length)])
     
 
-    time_df =get_time_and_date_df(selectedTime,selectedDate, nn_model,stopDf)
+    time_df = get_time_and_date_df(selectedTime,selectedDate, nn_model,stopDf)
     weather_df = create_weather_df(rain, temp, stopDf, nn_model)
     index_to_insert_distances = 1    #distances has to go in middle of weather 
     weather_df.insert(loc=index_to_insert_distances, column='distance', value=distances)
     comined_df = pd.concat([weather_df, time_df,stopDf ], axis=1)
-    print ('combined df\n',comined_df )
+    # print ('combined df\n',comined_df )
+    # print(comined_df.columns)
+    x = comined_df.columns
+    for i in x:
+        print(i)
 
+    # print(comined_df.shape[0])
+    print(comined_df.head(5))
+    print(comined_df.shape)
     # Implement this 
     # startStopArray = createStopArray(route, direction getNumStopsInJourney(start, finish, route, direction))
     # makePrediction(pklFileName)cs 
+    nn_model.makePrediction(pkl, comined_df)
     return JsonResponse({'test': 'val'})
 
 
@@ -190,20 +198,6 @@ def getMultiRoutePrediction(request):
     #         # return JsonResponse({'prediction':result[0]})
     return JsonResponse({'test': 'val'})
 
-  
-# class getStopsForRoute(CsrfExemptMixin, APIView):
-#     def post(self, request):
-#         route = request.data.get('route')
-#         direction = request.data.get('direction')
-#         # print(route)
-#         # print(direction)
-#         stops = Composite.objects.filter(name=route).filter(route_direction=direction)
-#         data = list(stops.values())
-#         return Response(data)
-
-# def request(request):
-#     return Response("request made")
-
 def getNumStopsInJourney(start, finish, route, direction):
     stops = Composite.objects.filter(name=route).filter(route_direction = direction)
     stops = list(stops.values())
@@ -218,5 +212,3 @@ def getNumStopsInJourney(start, finish, route, direction):
             break
     indicesFound = startIndex != -1 and finishIndex != -1 
     return finishIndex - startIndex if indicesFound else -1
-  
-
