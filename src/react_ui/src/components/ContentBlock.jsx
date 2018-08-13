@@ -156,7 +156,7 @@ class ContentBlock extends Component {
       //   predictionForJourney: null,
       // })
       const index = this.findStopIndex(stop);
-      console.log(index)
+      console.log("Stop index", index)
       let newStops;
       if (isStart) {
         newStops = this.state.stops.slice(index, finishIndex)
