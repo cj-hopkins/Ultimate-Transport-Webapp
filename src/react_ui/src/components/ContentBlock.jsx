@@ -1,25 +1,17 @@
-import { Grid, Row, Col, Container } from 'react-bootstrap';
+import { Grid, Row, Col, Table } from 'react-bootstrap';
 import React, { Component } from "react"
 import RouteSelect from "./RouteSelect"
 import StopSelect from "./StopSelect"
-
 import { Button} from "react-bootstrap"
 import TimeButton from './TimeSelect';
-// import {PageHeader} from 'react-bootstrap';
-// import dublin_bus_icon from './dublin_bus_icon.png';
-// import WeatherWidget from "./Weather";
 import PredictionContainer from './PredictionContainer';
-// import ContentHeader from './ContentHeader';
-//import NowButton from './NowButton';
-//import TimeButton, {CalendarChooseDate, TimeDropdown} from './TimeButton';
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
-// import ContentHeader from './ContentHeader';
+import ErrorBoundary from './ErrorBoundary';
+import ReactTooltip from 'react-tooltip'
 
 class ContentBlock extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
       stops: [],
       chosenStops: null,
@@ -32,12 +24,12 @@ class ContentBlock extends Component {
       direction: 'I',
       plannedDate:moment(),
       plannedTime:moment(),
-      isDefaultTime:true,
+      isDefaultTime:true, // needed for when page loads and leave_now button
+      nextBuses:[], 
+      isRealTimeHidden:true
     }
   }
-
   routeReset () {
-    console.log("reset")
     this.setState({
         stops: [],
         chosenStops: null,
@@ -51,7 +43,6 @@ class ContentBlock extends Component {
     })
     this.props.onRouteUpdate([])
   }
-
   //Save the list of stops to contentBlock's state before
   //Calling App.js setState function - pass stops to map
   routeUpdate (route) {
@@ -76,9 +67,7 @@ class ContentBlock extends Component {
       predictionForJourney: null,
     })
   }
-
-  // Flip the current direction
-  onDirectionUpdate(){
+  onDirectionUpdate(){   // Flip the current direction
     const newDirection = (this.state.direction === 'I') ? 'O' : 'I'
     this.setState({
       direction: newDirection,
@@ -86,29 +75,36 @@ class ContentBlock extends Component {
       finishStop: 'finish'
     })
   }
-  
-  onResetTime(date, secsPastMidnight) {
-    this.onSelectDate(date)
-    this.onSelectTime(secsPastMidnight)
+  onResetNowContentBlock(){
     this.setState({
+      isHidden: !this.state.isHidden,
       isDefaultTime: true
     })
-  }
-
-  onSelectTime(time){
+  }               
+  onSelectTime(time){  //on change of time (time dropdown) 
     this.setState({
-    plannedTime:time,
-    isDefaultTime: false
+      plannedTime:time,
+      isDefaultTime: false
     })
   }
-  
-   onSelectDate(date){
+   onSelectDate(date){  //on change of date (calendar) 
     this.setState({
       plannedDate:date,
       isDefaultTime: false
      })
    }
-  
+  onPageLoadSetTime(time){  //on load of page set time = now
+    this.setState({
+      plannedTime:time,
+      isDefaultTime: true
+    })
+  }
+  onPageLoadSetDate(date){  //on load of page set date = now
+    this.setState({
+      plannedDate:date,
+      isDefaultTime: true
+    })
+  } 
   onStopDeselect(stop) {
     if (stop === 'start') {
       this.setState({startStop: "start"})
@@ -120,11 +116,29 @@ class ContentBlock extends Component {
       this.routeUpdate(newRoute, false)
     }
   }
-
+  onSelectStartGetRealTime(stopid){
+     this.setState({
+      isRealTimeHidden:false
+    })
+    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
+    fetch(endpoint)
+      .then (response => response.json())
+      .then(parsedJSON => {
+            this.setState({   //slice(0,4) to limit to top 4 results 
+                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
+                  <tr key={i} >
+                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>{post.duetime} minutes </td>
+                  </tr>
+                ))
+            });
+     })
+      .catch(error => console.log('parsing failed',error))
+  }
   async onStopUpdate(start = null, finish = null) {
     // Here be dragons - leave this code for now
     if (start === null || finish === null) {
-
       const isStart = (finish === null) ? true : false;
       const stop = isStart ? start : finish;
       const finishIndex = (this.state.finishStop === "finish") ? this.state.stops.length : this.findStopIndex(this.state.finishStop)
@@ -141,11 +155,9 @@ class ContentBlock extends Component {
       //   stopState: stop,
       //   predictionForJourney: null,
       // })
-
       const index = this.findStopIndex(stop);
       console.log(index)
       let newStops;
-
       if (isStart) {
         newStops = this.state.stops.slice(index, finishIndex)
         this.setState({startStop: stop})
@@ -153,7 +165,6 @@ class ContentBlock extends Component {
         newStops = this.state.stops.slice(startIndex, index);
         this.setState({finishStop: stop})
       }
-      
       this.setState({chosenStops: newStops});
       this.props.onSelectedJourneyUpdate(newStops);
       // if neither values are null then we are doing a direction switch
@@ -163,22 +174,17 @@ class ContentBlock extends Component {
           finishStop: finish,
           predictionForJourney: null
         });
-
         const startIndex = this.findStopIndex(start);
         console.log("start" + startIndex)
         const finishIndex = this.findStopIndex(finish);
         console.log("finish" + finishIndex)
         let newStops = this.state.stops.slice(startIndex, finishIndex);
         console.log(newStops);
-
         this.setState({chosenStops: newStops});
         this.props.onSelectedJourneyUpdate(newStops);
     }
-
   }
-
   findStopIndex = (stop) => {
-    // const allStops = this.state.chosenStops === null ? this.state.stops : this.state.chosenStops;
     if (stop === "start") { 
       return 0 
     } else if (stop === "finish") {
@@ -191,14 +197,12 @@ class ContentBlock extends Component {
     return -1;
   }
 
-  handleClick = () => {
+  handleClick = () => { 
     this.getPrediction()
   }
-
   getPrediction = () => {
     const endpoint = '/api/getPredictionForJourney' 
     try {
-      // const result = fetch(endpoint, {
       fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -211,74 +215,106 @@ class ContentBlock extends Component {
           finish: this.state.finishStop,
           direction: this.state.direction,
           selectedTime: this.state.plannedTime,
-          selectedDate: this.state.plannedDate.unix(),
+          selectedDate: (this.state.plannedDate.unix()).toString(),
           isDefaultTime: this.state.isDefaultTime
         })
       })
-        .then((response) => response.json())
+        .then(
+        (response) => response.json())
         .then((resp) => {
           const prediction = resp.prediction
           this.setState({
             predictionForJourney: prediction
           })
         })
-        // .then((resp) => console.log(resp.prediction))
     } catch(e) {
         console.log(e)
       }
   }
 
+  componentWillMount() {
+    this.props.getPolyCoordinates([])
+  }
+  
   render(){
-
     return (
-      <div>
-	     <RouteSelect className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
-                      chosenRoute={this.state.chosenRoute}
-                      direction={this.state.direction}
-                      route_destination={this.state.route_destination}
-                      route_origin={this.state.route_origin}
-                      onDirectionUpdate={this.onDirectionUpdate.bind(this)}
-                      onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
-                      onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
-                      routeReset={this.routeReset.bind(this)}/>
+      <Grid fluid={true} style ={{backgroundColor:'white'}}>
+             <ErrorBoundary>
+        <RouteSelect 
+            className="mb-3" 
+            chosenRoute={this.state.chosenRoute}
+            direction={this.state.direction}
+            route_destination={this.state.route_destination}
+            route_origin={this.state.route_origin}
+            onRouteUpdate={this.routeUpdate.bind(this)}
+            onDirectionUpdate={this.onDirectionUpdate.bind(this)}
+            onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
+            onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
+            routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-       <StopSelect stops={this.state.stops}
-                    startStop={this.state.startStop}
-                    finishStop={this.state.finishStop}
-                    direction={this.state.direction}
-                    onDirectionUpdate={this.onDirectionUpdate.bind(this)}
-                    onStopUpdate={this.onStopUpdate.bind(this)}
-                    onStopDeselect={this.onStopDeselect.bind(this)}
-                    chosenRoute={this.state.chosenRoute}
+        </ErrorBoundary>
+        <ErrorBoundary>
+ 
+        <StopSelect 
+          stops={this.state.stops}
+          startStop={this.state.startStop}
+          finishStop={this.state.finishStop}
+          direction={this.state.direction}
+          onDirectionUpdate={this.onDirectionUpdate.bind(this)}
+          onStopUpdate={this.onStopUpdate.bind(this)}
+          onStopDeselect={this.onStopDeselect.bind(this)}
+          chosenRoute={this.state.chosenRoute}
+          onSelectStartGetRealTime={this.onSelectStartGetRealTime.bind(this)}
                     />
-        {/* <CustomGeolocation /> */}
-
-              {/* TODO - use relative sizing here */}
-              <div style={{marginTop: '2em'}}> </div>
-              <div style={{marginTop: '2em'}}> </div>
-              
-              <Row><Col xs={2}></Col>
-              <Col xs={8}><TimeButton   onResetTime={this.onResetTime.bind(this)}
-                                        plannedTime = {this.state.plannedTime}
-                                        plannedDate = {this.state.plannedDate}
-                                        onSelectTime= {this.onSelectTime.bind(this)} 
-                                        onSelectDate= {this.onSelectDate.bind(this)} 
-                                        /></Col>
-              <Col xs={2}></Col></Row>
-
-             
-
-              <div style={{marginTop: '2em'}}> </div>
+        </ErrorBoundary>
+        
+        
+        <div style={{marginTop: '2em'}}> </div>
+        <div style={{marginTop: '2em'}}> </div>
+        <Row>
+          <Col xs={2}></Col>
+          <Col xs={8}>
+            <TimeButton  
+              onResetNowContentBlock= {this.onResetNowContentBlock.bind(this)} 
+              plannedTime = {this.state.plannedTime}
+              plannedDate = {this.state.plannedDate} 
+              isDefaultTime = {this.state.isDefaultTime} 
+              onSelectTime= {this.onSelectTime.bind(this)} 
+              onSelectDate= {this.onSelectDate.bind(this)} 
+              onPageLoadSetDate = {this.onPageLoadSetDate.bind(this)} 
+              onPageLoadSetTime= {this.onPageLoadSetTime.bind(this)} 
+                        />
+          </Col>
+          <Col xs={2}></Col>
+        </Row>  
+        <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
-        <Col xs={8}><Button onClick={this.handleClick} bsStyle='warning' bsSize='large' block>Go!</Button></Col>
+        <Col xs={8}>
+          <Button data-tip='Click here to see predicted journey time'
+            onClick={this.handleClick} 
+            bsStyle='warning' 
+            bsSize='large' 
+            block>Estimate journey time
+          </Button><ReactTooltip />
+        </Col>
         <Col xs={2}></Col></Row>
-        <PredictionContainer prediction={this.state.predictionForJourney} />
-       <div style={{marginTop: '2em'}}> </div>
-        <TwitterTimelineEmbed
-          sourceType="profile"
-          screenName="dublinbusnews"
-          options={{height:'20%', width: '100%', theme:'dark'}} />
-	</div>
+        <Row><Col xs={2}></Col>
+        <Col xs={8}>
+          <PredictionContainer prediction={this.state.predictionForJourney} />
+        </Col>
+        </Row>	
+        <div style={{marginTop: '2em'}}> </div>
+        <Row>
+          <Col xs={2}></Col>
+        <Col xs={8}>{(!this.state.isRealTimeHidden && this.state.isDefaultTime ) &&            
+            <div> <p>Real Time Information for Stop {this.state.startStop}</p>
+                <Table striped bordered condensed hover>{this.state.nextBuses}
+              </Table>
+            </div> 
+            } 
+          </Col>
+        </Row>
+      </Grid>
     )
   }
 }

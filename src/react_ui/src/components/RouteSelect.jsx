@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-// import { Panel, Button, DropdownButton, MenuItem } from 'react-bootstrap';
-// import { DropdownButton, MenuItem } from 'react-bootstrap';
-// import MapContainer from './MapContainer';
 import Select from 'react-select';
 
 class RouteSelect extends Component {
@@ -13,11 +10,12 @@ class RouteSelect extends Component {
     // needs that isn't controlled by ContentBlock is the array of route names
     this.state = {
       routes: [],
+//      start:this.props.route_origin,
+//      end:this.props.route_destination
     }
   }
-
   handleSelect = (event) => {
-
+//    console.log()
     if (event === this.state.chosenRoute) {
       return;
     }
@@ -29,9 +27,15 @@ class RouteSelect extends Component {
     // console.log("getting new route")
     this.props.onChosenRouteUpdate(event.value)
     //default to 'I' direction when new route is chosen
-    this.getStopsForRoute(event.value, 'I')
+    this.getStopsForRoute(event.value, 'I');
+    
+//    this.setState ({
+//      start:this.props.route_origin,
+//      end:this.props.route_destination
+//      
+//    });
+    
   }
-
   getStopsForRoute = (routeName, direction) => {
     const endpoint = '/api/getStopsForRoute' 
     try {
@@ -54,9 +58,7 @@ class RouteSelect extends Component {
         console.log(e)
       }
   }
-
   async componentWillMount(){
-
     let routeNames
     const endpoint = '/api/getAllRoutes';
     try {
@@ -65,26 +67,23 @@ class RouteSelect extends Component {
       this.setState({
         routes: routeNames
       });
-      // console.log(this.state.routes)
     } catch(e) {
       console.log(e);
     }
-
-    // Format routes to use with dropdown
-    const routeItems = []
+    const routeItems = []    // Format routes to use with dropdown
     routeNames.forEach(item => (
-      routeItems.push({value: item.route, label: item.route})
+      routeItems.push({value: item.route, 
+                       label: item.route
+                      })
     ))
     this.setState({routesAsOptions: routeItems})
   }
-
   componentWillReceiveProps(nextProps) {
     // Get new stops if direction changes, but only if a route reset has not been done
     if (nextProps.direction !== this.props.direction && nextProps.chosenRoute !== "Select Route") {
       this.getStopsForRoute(this.props.chosenRoute, nextProps.direction)
     }
   }
-
   render() {
     return (
           <div>
@@ -95,16 +94,13 @@ class RouteSelect extends Component {
               value={this.props.chosenRoute}
               onChange={this.handleSelect}  
               placeholder={"Select route"}
-        />
-        {/* Only show the change direction buttons when a route has already been selected */}
-        <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
-        <Button onClick={this.props.onDirectionUpdate} bsStyle="primary">Towards: {this.props.route_destination}</Button>
-        <Button onClick={this.props.onDirectionUpdate}> Towards {this.props.route_origin}</Button>
-        </div>
+          />
+          {/* Only show the change direction buttons when a route has already been selected */}
+          <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
+          <Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large">Towards {this.props.route_origin}</Button>
+          <Button onClick={this.props.onDirectionUpdate} bsStyle="warning"  bsSize="large"> Towards {this.props.route_destination}</Button>
+          </div>
           </div>
             )}
     }
-
-
-
 export default RouteSelect;
