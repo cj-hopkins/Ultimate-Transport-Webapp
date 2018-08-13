@@ -176,6 +176,7 @@ class TimeTable extends Component {
       { value: 'sunday', label: 'Sunday' }
     ];
     return (
+      <div style={{height:'100%'}}>
       <Grid fluid={true}>
       <RouteSelect 
             className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
@@ -216,6 +217,7 @@ class TimeTable extends Component {
               })}</tbody></Table></div>}
           </Col><Col xs={4}></Col></Row>
         </Grid>
+      </div>
     );
   }
 };
