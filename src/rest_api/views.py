@@ -140,6 +140,9 @@ def getModelPrediction(request):
     
     # pklFileName = parseRequest(route, direction)
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('stop_id').values()
+    uniqueStops = list(set(map(lambda x: x['stop_id'], stops)))
+    stops = [item for index, item in enumerate(stops) if item['stop_id'] not in uniqueStops[index + 1:]]
+    print(stops)
     
     # startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start !== 'start' else stops[0]
     startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0]
