@@ -5,6 +5,7 @@ import numpy as np
 import math
 import sklearn
 from rest_api.models import Composite 
+from functools import reduce
 
 class NNModel:
 
@@ -32,7 +33,13 @@ class NNModel:
     def createStopDf(self):
         
         stopsInJourney = [i for i in self.stops if 
-            self.startStop['sequence_number'] <= i['sequence_number'] <= self.finishStop['sequence_number']]
+            (i['sequence_number'] >= self.startStop['sequence_number'])
+            or (i['sequence_number'] <= self.finishStop['sequence_number'])]
+        # stopsInJourney = []
+        # for i in self.stops:
+        #     if i['sequence_number'] >= self.startStop['sequence_number'] or i['sequence_number'] <= self.finishStop['sequence_number']:
+        #         stopsInJourney.append(i)
+        # print("JOURNEY", stopsInJourney)
         stopsInJourney = sorted(stopsInJourney, key = lambda x: x['sequence_number'])
         self.stopsInJourney = stopsInJourney
 
@@ -48,11 +55,11 @@ class NNModel:
         
             startSeqIndex = next((index for (index, stop) in enumerate(self.stops) if stop["sequence_number"] == item['sequence_number']), None)
             finishSeqIndex = next((index for (index, stop) in enumerate(self.stops) if stop["sequence_number"] == nextItem['sequence_number']), None)
-            print(startSeqIndex, finishSeqIndex)
+            # print(startSeqIndex, finishSeqIndex)
 
             row = [0 for i in range(len(self.stops) * 2)]
             row[startSeqIndex] = 1
-            row[finishSeqIndex] = 1
+            row[len(stopsInJourney) + finishSeqIndex] = 1
             df.loc[i] = row
         return df
 
@@ -104,6 +111,8 @@ class NNModel:
         nn_model = pickle.load(open(model_path, "rb"))
         result = nn_model.predict(df)
         print(result)
+        sum = reduce(lambda x, acc: x+acc, result)
+        print(sum / 60)
         # startCols = createStopArray()
         # finishCols = createStopArray()
 

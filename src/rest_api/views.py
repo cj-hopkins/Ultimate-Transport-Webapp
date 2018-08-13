@@ -140,15 +140,19 @@ def getModelPrediction(request):
     
     # pklFileName = parseRequest(route, direction)
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('stop_id').values()
-    uniqueStops = sorted(list(set(map(lambda x: x['stop_id'], stops))))
+    # uniqueStops = sorted(list(set(map(lambda x: x['stop_id'], stops))))
     # print([i['stop_id'], j for i, j in stops, uniqueStops])
-    stops = [item for index, item in enumerate(stops) if item['stop_id'] not in uniqueStops[index + 1:]]
+    # stops = [item for index, item in enumerate(stops) if item['stop_id'] not in uniqueStops[index + 1:]]
+    stops = sorted(list({item["stop_id"]: item for item in stops}.values()), key = lambda x: x['stop_id'])
     print("STOPS LIST", len(stops))
+
     
     # startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start !== 'start' else stops[0]
-    startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0]
-    finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0]
-    # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish !== 'finish' else stops[:-1]
+    startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start != 'start' else stops[0]
+    # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0]
+    finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish != 'finish' else stops[-1]
+    print("FINSIH", type(finishStop))
+    print("FINSIH", finishStop)
     print("START", startStop)
     print("SEQ", startStop['sequence_number'])
     # stops = Composite.objects.filter()
