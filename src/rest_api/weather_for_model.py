@@ -74,7 +74,7 @@ def getWeatherForPrediction(isDefaultTime , selectedTime, selectedDate):
         weather_now_dict = {'rain':rain_now.iloc[0] ,'temperature':weather['temperature']}  
         return weather_now_dict
 
-  
+    
     current_time = time.time()
     epoch = datetime.datetime.utcfromtimestamp(0)
     time_in_5days_since_epoch = (datetime.datetime.now() + datetime.timedelta(days=5) - epoch).total_seconds() 

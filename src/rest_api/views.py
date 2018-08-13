@@ -140,6 +140,7 @@ def getModelPrediction(request):
     
     # pklFileName = parseRequest(route, direction)
     stops = Composite.objects.filter(name=route).filter(route_direction=direction).order_by('stop_id').values()
+    
     # startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start !== 'start' else stops[0]
     startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0]
     finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0]
@@ -152,10 +153,9 @@ def getModelPrediction(request):
     nn_model = NNModel(route, direction, startStop, finishStop, stops, rain)
     pkl = nn_model.parseRequest(nn_model.route, nn_model.direction)
     stopDf = nn_model.createStopDf()
-
     distances = nn_model.calculateDistances()
-    print('distances ', distances)
-
+    
+  
     #length = len(timeDf) + len(distances) + stopDf.shape[1] + 6
     #print('Num of cols', length)
     #df = pd.DataFrame(columns=[i for i in range(length)])
@@ -163,6 +163,8 @@ def getModelPrediction(request):
 
     time_df =get_time_and_date_df(selectedTime,selectedDate, nn_model,stopDf)
     weather_df = create_weather_df(rain, temp, stopDf, nn_model)
+    index_to_insert_distances = 1    #distances has to go in middle of weather 
+    weather_df.insert(loc=index_to_insert_distances, column='distance', value=distances)
     comined_df = pd.concat([weather_df, time_df,stopDf ], axis=1)
     print ('combined df\n',comined_df )
 
