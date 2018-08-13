@@ -218,16 +218,19 @@ class App extends Component {
                   alt="dublin_bus_icon"
                 /></Col>
                 <Col xs={3}>
-                  <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport</h1></Col><Col xs={3}><WeatherWidget />
+                  <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}>
                 </Col>
               </Row>
-              <Row>    <Col xs={2}></Col>
-        <Col xs={8}>
-                <h3 style ={{color: '#2979ff', fontSize:'16px', fontFamily: 'Titillium Web, sans-serif'}} >Plan Your Journey With Dublin Bus</h3>
+              <Row>    <Col xs={1}></Col>
+              <Col xs={9}>
+                 <div style={{marginTop: '2em'}}> </div>
+                  <h2>
+                    <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus
+                    </Badge>
+                  </h2>
                 </Col>
                  <Col xs={2}></Col>
               </Row>
-              
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
             <FooterPage/>
@@ -238,10 +241,11 @@ class App extends Component {
             <ContentHeader/>
             <Grid>
               <Row>
-                <Col xs={4}></Col>
-                  <Col xs={4}>
-                    <h3 style={{width: '100%', color: '#2979ff', fontSize:'16px', fontFamily: 'Titillium Web, sans-serif'}} >Plan Your Journey With Dublin Bus</h3>
-                    
+                <Col xs={2}></Col>
+                  <Col xs={6}>
+                 <h2>
+                   <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
+                </h2>
                 </Col>
                 <Col xs={4}></Col>
               </Row>
@@ -266,11 +270,13 @@ class App extends Component {
           <Col xs={3}>
             <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1>
           </Col>
-          <Col xs={3}><WeatherWidget /></Col>
+          <Col xs={3}></Col>
         </Row>
-        <Row><Col xs={2}></Col>
-          <Col xs={8}>
-            <h3 style ={{color: '#ffeb3b', fontSize:'16px'}}  >Plan Your Journey With Dublin Bus</h3>
+        <Row><Col xs={0}></Col>
+          <Col xs={10}>
+            <h2>
+               <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
+            </h2>
           </Col>
            <Col xs={2}></Col>
         </Row>
