@@ -104,8 +104,8 @@ class App extends Component {
       .then (response => response.json())
       .then(parsedJSON => {
             this.setState({   
-                nextBuses: parsedJSON.results.map((post, i) => (
-                  <tr key={i} >
+                nextBuses: parsedJSON.results.slice(0, 10).map((post, i) => (
+                  <tr key={i} className = 'real_time_box_sidebar'>
                     <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.duetime} minutes </td>
@@ -234,7 +234,7 @@ class App extends Component {
               </Row>
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
-      {/*  <FooterPage/>  */}    
+ {/*     <FooterPage/>  */}
     </div>;
     
     const sidebarNoButton =
@@ -254,7 +254,6 @@ class App extends Component {
          
             <CustomNavbar swapUI={this.swapUI.bind(this)}/>{this.renderSwitch()}
         <FooterPage/>   
-          {/*   <FooterBootstrap />  */}  
           </div>;
 
     const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;
@@ -297,6 +296,7 @@ class App extends Component {
       dragToggleDistance: this.state.dragToggleDistance,
       transitions: this.state.transitions,
       onSetOpen: this.onSetOpen,
+      style:{backgroundColor:'white'}
     };
     return (
       <Sidebar {...sidebarProps}>

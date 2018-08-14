@@ -8,7 +8,7 @@ import PredictionContainer from './PredictionContainer';
 import moment from "moment";
 import ErrorBoundary from './ErrorBoundary';
 import ReactTooltip from 'react-tooltip'
-
+import "./../App.css";
 class ContentBlock extends Component {
   constructor(props) {
     super(props)
@@ -126,7 +126,7 @@ class ContentBlock extends Component {
       .then(parsedJSON => {
             this.setState({   //slice(0,4) to limit to top 4 results 
                 nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-                  <tr key={i} >
+                  <tr key={i} className = 'real_time_box_sidebar'>
                     <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.duetime} minutes </td>
@@ -238,8 +238,8 @@ class ContentBlock extends Component {
   
   render(){
     return (
-        <div style={{height:'100%'}}>
-      <Grid fluid={true} style ={{backgroundColor:'white'}}>
+        <div style={{height:'100%', backgroundColor:'white'}}>
+      <Grid fluid={true}>
              <ErrorBoundary>
         <RouteSelect 
             className="mb-3" 
@@ -289,30 +289,35 @@ class ContentBlock extends Component {
           <Col xs={2}></Col>
         </Row>  
         <div style={{marginTop: '2em'}}> </div>
-        <Row><Col xs={2}></Col>
-        <Col xs={8}>
-          <Button data-tip='Click here to see predicted journey time'
-            onClick={this.handleClick} 
-            bsStyle='warning' 
-            bsSize='large' 
-            block>Estimate journey time
-          </Button><ReactTooltip />
-        </Col>
-        <Col xs={2}></Col></Row>
-        <Row><Col xs={2}></Col>
-        <Col xs={8}>
-          <PredictionContainer prediction={this.state.predictionForJourney} />
-        </Col>
+        <Row>
+          <Col xs={2}></Col>
+          <Col xs={8}>
+            <Button data-tip='Click here to see predicted journey time'
+              onClick={this.handleClick} 
+              bsStyle='warning' 
+              bsSize='large' 
+              block>Estimate journey time
+            </Button>
+            <ReactTooltip />
+          </Col>
+          <Col xs={2}></Col>
+        </Row>
+        <Row>
+          <Col xs={2}></Col>
+          <Col xs={8}>
+            <PredictionContainer prediction={this.state.predictionForJourney} />
+          </Col>
+          <Col xs={2}></Col>
         </Row>	
         <div style={{marginTop: '2em'}}> </div>
         <Row>
-          <Col xs={2}></Col>
-        <Col xs={8}>{(!this.state.isRealTimeHidden && this.state.isDefaultTime ) &&            
-            <div> <p>Real Time Information for Stop {this.state.startStop}</p>
-                <Table striped bordered condensed hover>{this.state.nextBuses}
-              </Table>
-            </div> 
-            } 
+      
+          <Col xs={12}>{(!this.state.isRealTimeHidden && this.state.isDefaultTime ) &&            
+              <div> <p  >Real Time Information for Stop {this.state.startStop}</p>
+                  <Table striped bordered condensed hover>{this.state.nextBuses}
+                </Table>
+              </div> 
+              } 
           </Col>
         </Row>
       </Grid>
