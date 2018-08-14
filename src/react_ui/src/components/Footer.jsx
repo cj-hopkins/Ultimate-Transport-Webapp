@@ -26,17 +26,25 @@ class FooterPage extends React.Component {
                 <Row>
                   <Col xs={2}>
                   <div>
-                     <a href='http://www.dublinbus.ie/' target='blank'/><img
+                     <a href='http://www.dublinbus.ie/' target='blank'/>
+                    <img
                       src={'https://media.glassdoor.com/sql/1043913/dublin-bus-squarelogo-1440748899751.png '}
-                      style={{ width: "50px", height: "50px" }}
-                      alt="dublin_bus_icon"
-                                                                           /> 
+                      style={{ width: "50px", height: "50px", borderRadius: '50%'}}
+                      alt="dublin_bus_icon" /> 
                      </div>    
                   </Col> 
-                  <Col xs={2} > <SocialIcon url="http://twitter.com/dublinbusnews" /></Col>
-                  
-                  <Col xs={2} >      <SocialIcon url="http://www.facebook.com/DublinBusNews/" /> </Col>
-                    <Col xs={2}>      <SocialIcon url="http://www.instagram.com/dublinbusnews/" /> </Col>
+                  <Col xs={2} > <SocialIcon 
+                                  url="http://twitter.com/dublinbusnews"
+                                  color='white'
+                                      /></Col>
+                  <Col xs={2} >      <SocialIcon 
+                                       url="http://www.facebook.com/DublinBusNews/" 
+                                       color='white'
+                                       /> </Col>
+                    <Col xs={2}>      <SocialIcon 
+                                        url="http://www.instagram.com/dublinbusnews/" 
+                                        color='white'
+                                        /> </Col>
                 
                 </Row>
                 <Row>
