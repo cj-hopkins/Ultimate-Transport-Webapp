@@ -15,9 +15,10 @@ import TimeTable from "./components/TimeTable";
 import { TwitterFeed } from "./components/TwitterFeed";
 import {Badge} from "react-bootstrap";
 import ReactTooltip from 'react-tooltip'
-import FooterPage from './components/Footer'
+import FooterPage from './components/Footer';
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
+
 
 const styles = {
   contentHeaderMenuLink: {
@@ -103,8 +104,8 @@ class App extends Component {
       .then (response => response.json())
       .then(parsedJSON => {
             this.setState({   
-                nextBuses: parsedJSON.results.map((post, i) => (
-                  <tr key={i} >
+                nextBuses: parsedJSON.results.slice(0, 10).map((post, i) => (
+                  <tr key={i} className = 'real_time_box_sidebar'>
                     <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.duetime} minutes </td>
@@ -148,7 +149,7 @@ class App extends Component {
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
             />;
         case 3:
-          return  <div>
+          return  <div style={{height:'100%'}}> 
               <RealTimePage key={3} 
                       onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
                       selectedRealTimeStop= {this.state.selectedRealTimeStop}
@@ -166,7 +167,7 @@ class App extends Component {
         case 4.1:
           return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
         case 4.3:
-          return <div>  <TwitterFeed />  </div>
+          return <div style={{height:'100%'}}>  <TwitterFeed />  </div>
         default:
           return <div key={4} />;
       }
@@ -233,7 +234,7 @@ class App extends Component {
               </Row>
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
-            <FooterPage/>
+ {/*     <FooterPage/>  */}
     </div>;
     
     const sidebarNoButton =
@@ -252,7 +253,7 @@ class App extends Component {
             </Grid>
          
             <CustomNavbar swapUI={this.swapUI.bind(this)}/>{this.renderSwitch()}
-            <FooterPage/>
+        <FooterPage/>   
           </div>;
 
     const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;
@@ -295,6 +296,7 @@ class App extends Component {
       dragToggleDistance: this.state.dragToggleDistance,
       transitions: this.state.transitions,
       onSetOpen: this.onSetOpen,
+      style:{backgroundColor:'white'}
     };
     return (
       <Sidebar {...sidebarProps}>
