@@ -25,6 +25,7 @@ class ContentBlock extends Component {
       plannedDate:moment(),
       plannedTime:moment(),
       isDefaultTime:true, // needed for when page loads and leave_now button
+      isToday:true,
       nextBuses:[], 
       isRealTimeHidden:true
     }
@@ -78,31 +79,34 @@ class ContentBlock extends Component {
   onResetNowContentBlock(){
     this.setState({
       isHidden: !this.state.isHidden,
-      isDefaultTime: true
+      isDefaultTime: true,
+      isToday:true
     })
   }               
   onSelectTime(time){  //on change of time (time dropdown) 
     this.setState({
       plannedTime:time,
-      isDefaultTime: false
+      isDefaultTime: false, 
     })
   }
    onSelectDate(date){  //on change of date (calendar) 
     this.setState({
       plannedDate:date,
-      isDefaultTime: false
+      isDefaultTime: false, 
+      isToday:false
      })
    }
   onPageLoadSetTime(time){  //on load of page set time = now
     this.setState({
       plannedTime:time,
-      isDefaultTime: true
+      isDefaultTime: true,
     })
   }
   onPageLoadSetDate(date){  //on load of page set date = now
     this.setState({
       plannedDate:date,
-      isDefaultTime: true
+      isDefaultTime: true, 
+      isToday:true
     })
   } 
   onStopDeselect(stop) {
@@ -240,7 +244,7 @@ class ContentBlock extends Component {
     return (
         <div style={{height:'100%', backgroundColor:'white'}}>
       <Grid fluid={true}>
-             <ErrorBoundary>
+      {/*         <ErrorBoundary> */}
         <RouteSelect 
             className="mb-3" 
             chosenRoute={this.state.chosenRoute}
@@ -253,9 +257,8 @@ class ContentBlock extends Component {
             onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
             routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-        </ErrorBoundary>
-        <ErrorBoundary>
- 
+     {/*  </ErrorBoundary>
+        <ErrorBoundary>    */} 
         <StopSelect 
           stops={this.state.stops}
           startStop={this.state.startStop}
@@ -267,9 +270,7 @@ class ContentBlock extends Component {
           chosenRoute={this.state.chosenRoute}
           onSelectStartGetRealTime={this.onSelectStartGetRealTime.bind(this)}
                     />
-        </ErrorBoundary>
-        
-        
+       {/*    </ErrorBoundary>    */} 
         <div style={{marginTop: '2em'}}> </div>
         <div style={{marginTop: '2em'}}> </div>
         <Row>
@@ -280,6 +281,7 @@ class ContentBlock extends Component {
               plannedTime = {this.state.plannedTime}
               plannedDate = {this.state.plannedDate} 
               isDefaultTime = {this.state.isDefaultTime} 
+              isToday = {this.state.isToday}
               onSelectTime= {this.onSelectTime.bind(this)} 
               onSelectDate= {this.onSelectDate.bind(this)} 
               onPageLoadSetDate = {this.onPageLoadSetDate.bind(this)} 
