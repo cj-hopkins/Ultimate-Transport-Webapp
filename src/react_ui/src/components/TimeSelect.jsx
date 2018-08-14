@@ -72,7 +72,9 @@ class TimeButton extends Component {
               <Col>
                 <TimeDropdown
                   isToday = {this.props.isToday}
+                  dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   plannedTime= {this.props.plannedTime}
+                  plannedDate={this.props.plannedDate}
                   onSelectTime={this.timeUpdate.bind(this)}
                   onSelectDate={this.dateUpdate.bind(this)}
                   />
@@ -81,6 +83,7 @@ class TimeButton extends Component {
                 {" "}
                 <CalendarChooseDate
                   isToday = {this.props.isToday}
+                  dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   plannedDate={this.props.plannedDate}
                   onSelectDate={this.dateUpdate.bind(this)}
                 />
@@ -88,6 +91,7 @@ class TimeButton extends Component {
               <Col>
                 <NowButton
                   isToday = {this.props.isToday}
+                  dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   onResetNow= {this.onResetNow.bind(this)}
                   onSelectTime={this.timeUpdate.bind(this)}
                   onSelectDate={this.dateUpdate.bind(this)}
@@ -108,9 +112,6 @@ class CalendarChooseDate extends Component {
     };
   }
   handleChange(date) {
-  /*  this.setState({
-      isToday: false
-    }); */
     this.props.onSelectDate(date);
   }
   render() {
@@ -129,7 +130,8 @@ class TimeDropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      plannedTimeNotNow: moment()
+      plannedTimeNotNow: moment(), 
+      todaysDate : ((moment().month()).toString().concat(moment().date()).toString())
     };
   }
   handleTimeChange(time) { // seconds passed midnight
@@ -137,10 +139,19 @@ class TimeDropdown extends Component {
       chosenTime: time
     });
     this.props.onSelectTime(time);
+    
+    
   }
   render() {
     let startingTime ;
-    if (this.props.isToday){
+    const todaysDate = ((moment().month()).toString().concat(moment().date()).toString());
+    
+    {/*
+    
+    if ((this.props.isToday) && (this.props.dateOfMonthToTravel == this.todaysDate  ) ){  */}
+     if (this.props.dateOfMonthToTravel == this.state.todaysDate ){ 
+      
+      
        /* https://stackoverflow.com/questions/25323823/round-moment-js-object-time-to-nearest-30-minute-interval*/
       startingTime = (moment(moment()).add(30 - (moment().minute() % 30) , "minutes").format('HH:mm')).toString()  
     } else {
