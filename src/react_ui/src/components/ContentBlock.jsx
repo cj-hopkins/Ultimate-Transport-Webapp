@@ -27,7 +27,8 @@ class ContentBlock extends Component {
       isDefaultTime:true, // needed for when page loads and leave_now button
       isToday:true,
       nextBuses:[], 
-      isRealTimeHidden:true
+      isRealTimeHidden:true, 
+      dateOfMonthToTravel: ((moment().month()).toString().concat(moment().date()).toString())
     }
   }
   routeReset () {
@@ -203,6 +204,7 @@ class ContentBlock extends Component {
 
   handleClick = () => { 
     this.getPrediction()
+    console.log('DAY OF TRAVEL STRING ______' + this.state.dayOfTravel)
   }
   getPrediction = () => {
     const endpoint = '/api/getPredictionForJourney' 
@@ -282,11 +284,12 @@ class ContentBlock extends Component {
               plannedDate = {this.state.plannedDate} 
               isDefaultTime = {this.state.isDefaultTime} 
               isToday = {this.state.isToday}
+              dateOfMonthToTravel = {this.state.dateOfMonthToTravel} 
               onSelectTime= {this.onSelectTime.bind(this)} 
               onSelectDate= {this.onSelectDate.bind(this)} 
               onPageLoadSetDate = {this.onPageLoadSetDate.bind(this)} 
               onPageLoadSetTime= {this.onPageLoadSetTime.bind(this)} 
-                        />
+          />
           </Col>
           <Col xs={2}></Col>
         </Row>  
