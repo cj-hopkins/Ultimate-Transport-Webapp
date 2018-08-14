@@ -14,7 +14,9 @@ class JourneyPlanner extends Component {
       destinationLatLng: null,
       // directionsObject: null,
       possibleRoutes: [],
-      selectedRoute: null
+      selectedRoute: null,
+      busStart: null,
+      busFinish: null,
     };
   }
 
@@ -86,6 +88,7 @@ class JourneyPlanner extends Component {
         me.setState({
           directionsObject: result,
         });
+        console.log(result)
       }
     });
   }
@@ -95,6 +98,16 @@ class JourneyPlanner extends Component {
       selectedRoute: key
     })
     const route = this.state.directionsObject.routes[key].legs[0].steps;
+    console.log("hi",route)
+    const busPoints =[]
+    for (var i =0; i < route.length; i++){
+      console.log(route[i])
+      if (route[i].travel_mode==="TRANSIT"){
+        busPoints.push({lat:route[i].transit.arrival_stop.location.lat(), lng: route[i].transit.arrival_stop.location.lng(), name: route[i].transit.arrival_stop.name})
+        busPoints.push({lat:route[i].transit.departure_stop.location.lat(), lng: route[i].transit.departure_stop.location.lng(), name: route[i].transit.departure_stop.name})
+      }
+    }
+    console.log(busPoints,"hi")
     let coordinates = []
 
     for (let i = 0; i < route.length; i++) {
@@ -105,6 +118,7 @@ class JourneyPlanner extends Component {
     }
     // const parser = array => array.reduce((item, acc) => acc.push({lat: item.lat(), lng: item.lng()}), []);
     // const coords = parser(data);
+    this.props.getBusCoords(busPoints)
     this.props.getPolyCoordinates(coordinates)
     this.getMultiRoutePrediction(key)
   }

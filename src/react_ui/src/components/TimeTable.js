@@ -204,22 +204,6 @@ class TimeTable extends Component {
         table.push({value: this.state.times[i]})
       } 
     }
-    //     table.push(<tr></tr>)
-    //     for(var i=0; i < rows; i++){
-    //       if (i % 3===0){
-    //         table.push(<tr></tr>)
-    //       }
-    //       table.push(<th>{this.state.times[i]}</th>)
-    //     }
-    //     table.push(<tr></tr>)
-    // }
-
-
-
-
-          // { this.state.times.map(function(time, index){
-          //     return <tr style={{width:'30px'}}><th>{time}</th></tr>;
-          //     })}</tbody></Table></div>)}
     return (
       <div style={{height:'100%'}}>
       <Grid fluid={true}>
