@@ -84,42 +84,26 @@ class RouteSelect extends Component {
               options={this.state.routesAsOptions}
               value={this.props.chosenRoute}
               onChange={this.handleSelect}  
-              placeholder={"Select route"}
-          />
+              placeholder={"Select route"}/>
           {/* Only show the change direction buttons when a route has already been selected */}
-          <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
-      <Grid>
-      {/*   <Row>
-        <Col xs={7}>
-            <p> Towards: {this.props.route_destination}</p> 
-          </Col>
-          <Col xs={1}> 
-          </Col>
-          <Col xs={4}>
-            <div style ={{position: 'absolute', right:0}}>
-              <Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large" block>
-               Change Direction
-              </Button>
-            </div>  
-          </Col>
-        </Row>  
-        */} 
-         <Row>
-          <Col xs={2}></Col>
-          <Col xs={8}><p> Towards: {this.props.route_destination}</p></Col>
-          <Col xs={2}></Col>
-        </Row>
-         <Row>
-          <Col xs={2}></Col>
-          <Col xs={8}><Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large" block>
-               Change Direction
-              </Button></Col>
-          <Col xs={2}></Col>
-        </Row>  
-        </Grid>
+            <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
+              <Grid>
+                <Row>
+                  <Col xs={2}></Col>
+                  <Col xs={8}><p> Towards: {this.props.route_destination}</p></Col>
+                  <Col xs={2}></Col>
+                </Row>
+                <Row>
+                  <Col xs={2}></Col>
+                  <Col xs={8}>
+                    <Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large" block>
+                       Change Direction
+                      </Button></Col>
+                  <Col xs={2}></Col>
+                </Row>  
+              </Grid>
+            </div>
           </div>
-            
-          </div>
-            )}
-    }
+          )}
+  }
 export default RouteSelect;
