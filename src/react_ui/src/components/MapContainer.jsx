@@ -10,6 +10,8 @@ import db2 from "./db2.png";
 import MapMarker from "./MapMarker.png";
 import ReactTooltip from 'react-tooltip'
 import CustomGeolocation from './Geolocation';
+import A from './green_MarkerA.png'
+import B from './red_MarkerB.png'
 
 
 export class MapContainer extends Component {
@@ -25,24 +27,11 @@ export class MapContainer extends Component {
         lng: -6.2603
       },
       nextBuses: [],
-      polylineCoordinates: [
-        { lat: 53.378, lng: -6.057 },
-        { lat: 53.378, lng: -6.056 },
-        { lat: 53.378, lng: -6.056 }
-      ]
     };
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
 
-  onLocationUpdate(coords){
-    console.log("updating location", coords)
-    this.setState({
-      currentPosition: {
-        lat: coords.latitude,
-        lng: coords.longitude
-      }
-    })
-  }
+  
 
   // async componentWillMount() {
   //   const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
@@ -113,6 +102,9 @@ export class MapContainer extends Component {
   render() {
     if (!this.props.loaded) return <div>Loading...</div>;
 
+    const endPoint = (this.props.polylineCoordinates.length < 1)? null: this.props.polylineCoordinates.length-1
+    console.log('endPoint')
+    console.log(endPoint)
     const google = window.google;
     return (
       <Map data-tip='Dublin'
@@ -126,7 +118,7 @@ export class MapContainer extends Component {
         }}
       ><ReactTooltip />
 
-        <CustomGeolocation onLocationUpdate={this.onLocationUpdate.bind(this)}/>
+        <CustomGeolocation onLocationUpdate={this.props.onLocationUpdate}/>
 
         <Polyline
           fillColor="#2979ff"
@@ -141,8 +133,8 @@ export class MapContainer extends Component {
           name={"Current location"}
           // position={this.props.currentPosition} />
           position={{
-            lat: this.state.currentPosition.lat,
-            lng: this.state.currentPosition.lng
+            lat: this.props.currentPosition.lat,
+            lng: this.props.currentPosition.lng
           }}
           icon={{
             url: MapMarker,
@@ -150,6 +142,29 @@ export class MapContainer extends Component {
             scaledSize: new google.maps.Size(64, 64)
           }}
         /><ReactTooltip />
+        {this.props.polylineCoordinates.length < 1? null:
+        <Marker
+          name={"Start"}
+          position={{
+            lat: this.props.polylineCoordinates[0].lat,
+            lng: this.props.polylineCoordinates[0].lng
+          }}
+          icon={{
+            url: A,
+          }}
+        />}
+        {this.props.polylineCoordinates.length < 1? null:
+        <Marker
+          name={"End"}
+          position={{
+            lat: this.props.polylineCoordinates[endPoint].lat,
+            lng: this.props.polylineCoordinates[endPoint].lng
+          }}
+          icon={{
+            url: B,
+          }}
+        />}
+
 
         {this.props.selectedStops.map(item => (
           <Marker

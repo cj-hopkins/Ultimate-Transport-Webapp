@@ -4,17 +4,8 @@ import { geolocated, geoPropTypes } from "react-geolocated";
 class CustomGeolocation extends Component {
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.coords !== this.props.coords)
+    if (nextProps.coords !== this.props.coords && nextProps.coords !== undefined)
       this.props.onLocationUpdate(nextProps.coords);
-  }
-
-  parseCoords = (coords) => {
-      if (coords !== undefined)
-          // ? this.props.onLocationUpdate({
-          //     lat: 53.3498,
-          //     lng: -6.2603
-          // })
-          this.props.onLocationUpdate(this.props.coords)
   }
 
   render() {

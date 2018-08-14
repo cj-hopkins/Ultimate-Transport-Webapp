@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import RouteSelect from './RouteSelect';
 import TimeTableStop from "./TimeTableStop";
-import { Button, Grid, Row, Col, Table } from "react-bootstrap";
+import { Button, Grid, Row, Col} from "react-bootstrap";
+import Table from 'rc-table';
 import Select from 'react-select';
 
 class TimeTable extends Component {
@@ -189,6 +190,36 @@ class TimeTable extends Component {
       { value: 'saturday', label: 'Saturday' },
       { value: 'sunday', label: 'Sunday' }
     ];
+    const rows = (this.state.times===null)? null : this.state.times.length
+    console.log(rows)
+    console.log(this.state.times)
+    const table = []
+    const columns = [{
+      title: 'Time', dataIndex: 'value', key:'value', width: 100,
+      }, ];
+
+
+    if (this.state.times !== null){
+      for(var i=0; i < rows; i++){
+        table.push({value: this.state.times[i]})
+      } 
+    }
+    //     table.push(<tr></tr>)
+    //     for(var i=0; i < rows; i++){
+    //       if (i % 3===0){
+    //         table.push(<tr></tr>)
+    //       }
+    //       table.push(<th>{this.state.times[i]}</th>)
+    //     }
+    //     table.push(<tr></tr>)
+    // }
+
+
+
+
+          // { this.state.times.map(function(time, index){
+          //     return <tr style={{width:'30px'}}><th>{time}</th></tr>;
+          //     })}</tbody></Table></div>)}
     return (
       <div style={{height:'100%'}}>
       <Grid fluid={true}>
@@ -222,13 +253,13 @@ class TimeTable extends Component {
         <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
           <Col xs={8}>
-        <Button onClick={this.getTable} bsStyle='warning' bsSize='large' block>Get timetable
+        <Button onClick={this.getTable} bsStyle='warning' bsSize='large' block>Get Timetable
           </Button></Col></Row><div style={{marginTop: '2em'}}> </div><Row><Col xs={4}></Col>
           <Col xs={4}>{!(this.state.times===null) && <div className='timetable'>
-          <Table striped bordered condensed hover responsive size={'sm'}><tbody>
-          { this.state.times.map(function(time, index){
-              return <tr><th style={{textAlign:'center'}}>{time}</th></tr>;
-              })}</tbody></Table></div>}
+    <Table 
+    emptyText="Please ensure all options are selected to see a valid timetable"
+    columns={columns} data={table} style={{fontSize: '12px', borderColor: '#000' }} /></div>
+          }
           </Col><Col xs={4}></Col></Row>
         </Grid>
       </div>

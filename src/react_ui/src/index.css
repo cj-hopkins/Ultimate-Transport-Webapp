@@ -77,3 +77,12 @@ img {
     margin-left: auto;
     margin-right: auto;
 }
+.timetable{
+  max-height: 150px;
+  overflow: auto;
+  text-align: center;
+  align-items: center;
+}
+table, tbody {
+  overflow-y: scroll;
+  }

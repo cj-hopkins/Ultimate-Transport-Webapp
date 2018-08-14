@@ -146,7 +146,6 @@ class TimeDropdown extends Component {
     } else {
        startingTime = "06:30"
     }
-    
     return (
       <div>
         <TimePicker

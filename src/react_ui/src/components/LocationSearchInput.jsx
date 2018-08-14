@@ -5,6 +5,8 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import ReactTooltip from 'react-tooltip'
+import {Button} from 'react-bootstrap';
+import { WSAEINVALIDPROVIDER } from 'constants';
 
 
 class LocationSearchInput extends React.Component {
@@ -65,6 +67,18 @@ class LocationSearchInput extends React.Component {
     this.props.onChangeAddress2(null)
     this.props.getDestinationGeolocation(null)
   };
+
+  useCurrentLocation = () => {
+    console.log(this.props.currentPosition)
+    const google = window.google;
+    const geocoder = new google.maps.Geocoder;
+    const me = this;
+    geocoder.geocode({'location': this.props.currentPosition}, res => {
+        me.handleSelect1(res[0].formatted_address)
+      }
+    )
+  }
+
   render() {
     const google = window.google
     const searchOptions = {
@@ -119,6 +133,7 @@ class LocationSearchInput extends React.Component {
           </div>
         )}
       </PlacesAutocomplete>
+      <Button onClick={this.useCurrentLocation}>use current location</Button>
       <PlacesAutocomplete
         value={this.state.address2}
         onChange={this.handleChange2}
