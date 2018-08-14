@@ -300,7 +300,7 @@ class App extends Component {
         </Row>
       </Grid>
     );
-    const header = (!this.state.mql.matches) ? contentHeader : null 
+    const header = (!this.state.mql.matches && !this.state.open)  ? contentHeader : null 
     const sidebarProps = {
       sidebar: sidebar,
       docked: this.state.docked,
@@ -313,7 +313,7 @@ class App extends Component {
       dragToggleDistance: this.state.dragToggleDistance,
       transitions: this.state.transitions,
       onSetOpen: this.onSetOpen,
-      style:{backgroundColor:'white'}
+      styles:defaultStyles
     };
     return (
       <Sidebar {...sidebarProps}>
@@ -329,3 +329,55 @@ class App extends Component {
   }
 }
 export default App;
+
+var defaultStyles = {
+  root: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+    backgroundColor: "white",
+  },
+  sidebar: {
+    zIndex: 2,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    transition: 'transform .3s ease-out',
+    WebkitTransition: '-webkit-transform .3s ease-out',
+    willChange: 'transform',
+    overflowY: 'auto',
+    backgroundColor: "white",
+  },
+  content: {
+    position: 'absolute',
+    backgroundColor: "white",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflowY: 'scroll',
+    WebkitOverflowScrolling: 'touch',
+    transition: 'left .3s ease-out, right .3s ease-out'
+  },
+  overlay: {
+    zIndex: 1,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'opacity .3s ease-out, visibility .3s ease-out',
+    backgroundColor: 'rgba(0,0,0,.3)'
+  },
+  dragHandle: {
+    zIndex: 1,
+    position: 'fixed',
+    top: 0,
+    bottom: 0
+  }
+};
