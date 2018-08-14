@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
 import ReactTooltip from 'react-tooltip'
 
 class CustomNavbar extends Component {
   render() {
     return (
+      <Navbar>
       <Nav style={{ display: "flex", flexDirection: "row" , fontSize:'16px'}}>
         <NavItem eventKey={0} onSelect={this.props.swapUI} data-tip='Plan using bus number'><ReactTooltip />
           By Route
@@ -22,6 +23,7 @@ class CustomNavbar extends Component {
           <MenuItem eventKey={4.3} onSelect={this.props.swapUI} >Twitter Feed</MenuItem>
         </NavDropdown>
       </Nav>
+        </Navbar>
     );
   }
 }

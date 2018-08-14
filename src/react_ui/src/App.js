@@ -172,7 +172,7 @@ class App extends Component {
           </div>  
         case 4.1:
           return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
-        case 4.3:
+     case 4.3:
           return <div style={{height:'100%'}}>  <TwitterFeed />  </div>
         default:
           return <div key={4} />;
@@ -224,7 +224,7 @@ class App extends Component {
   }
 
   render() {
-    const siderbarWithButton = 
+    const siderbarMobile = 
           <div style={{backgroundColor:"white", height:'100%'}}>
             <Grid fluid={true}>
               <Row>
@@ -251,10 +251,10 @@ class App extends Component {
               </Row>
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
-     <FooterPage/> 
+  {/*  <FooterPage/>   */} 
     </div>;
     
-    const sidebarNoButton =
+    const sidebarDesktop =
           <div style={{backgroundColor:"white", height:'100%'}}>
             <ContentHeader/>
             <Grid>
@@ -273,7 +273,7 @@ class App extends Component {
         <FooterPage/>   
           </div>;
 
-    const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;
+    const sidebar = (!this.state.mql.matches) ? siderbarMobile : sidebarDesktop ;
     const contentHeader = (
       <Grid fluid={true}>
         <Row>

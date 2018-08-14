@@ -25,7 +25,6 @@ class ContentBlock extends Component {
       plannedDate:moment(),
       plannedTime:moment(),
       isDefaultTime:true, // needed for when page loads and leave_now button
-      isToday:true,
       nextBuses:[], 
       isRealTimeHidden:true, 
       dateOfMonthToTravel: ((moment().month()).toString().concat(moment().date()).toString())
@@ -80,8 +79,7 @@ class ContentBlock extends Component {
   onResetNowContentBlock(){
     this.setState({
       isHidden: !this.state.isHidden,
-      isDefaultTime: true,
-      isToday:true
+      isDefaultTime: true
     })
   }               
   onSelectTime(time){  //on change of time (time dropdown) 
@@ -93,8 +91,7 @@ class ContentBlock extends Component {
    onSelectDate(date){  //on change of date (calendar) 
     this.setState({
       plannedDate:date,
-      isDefaultTime: false, 
-      isToday:false,
+      isDefaultTime: false,
       dateOfMonthToTravel: ((date.month()).toString().concat(date.date()).toString())
      })
    }
@@ -107,8 +104,7 @@ class ContentBlock extends Component {
   onPageLoadSetDate(date){  //on load of page set date = now
     this.setState({
       plannedDate:date,
-      isDefaultTime: true, 
-      isToday:true
+      isDefaultTime: true
     })
   } 
   onStopDeselect(stop) {
@@ -277,14 +273,13 @@ class ContentBlock extends Component {
         <div style={{marginTop: '2em'}}> </div>
         <div style={{marginTop: '2em'}}> </div>
         <Row>
-          <Col xs={2}></Col>
-          <Col xs={8}>
+          <Col xs={0}></Col>
+          <Col xs={12}>
             <TimeButton  
               onResetNowContentBlock= {this.onResetNowContentBlock.bind(this)} 
               plannedTime = {this.state.plannedTime}
               plannedDate = {this.state.plannedDate} 
-              isDefaultTime = {this.state.isDefaultTime} 
-              isToday = {this.state.isToday}
+              isDefaultTime = {this.state.isDefaultTime}
               dateOfMonthToTravel = {this.state.dateOfMonthToTravel} 
               onSelectTime= {this.onSelectTime.bind(this)} 
               onSelectDate= {this.onSelectDate.bind(this)} 
@@ -292,28 +287,27 @@ class ContentBlock extends Component {
               onPageLoadSetTime= {this.onPageLoadSetTime.bind(this)} 
           />
           </Col>
-          <Col xs={2}></Col>
+          <Col xs={0}></Col>
         </Row>  
         <div style={{marginTop: '2em'}}> </div>
         <Row>
-          <Col xs={2}></Col>
-          <Col xs={8}>
-            <Button data-tip='Click here to see predicted journey time'
+         <Col xs={0}></Col>  
+          <Col xs={12}> 
+            <Button 
               onClick={this.handleClick} 
               bsStyle='warning' 
               bsSize='large' 
               block>Estimate journey time
             </Button>
-            <ReactTooltip />
           </Col>
-          <Col xs={2}></Col>
+          <Col xs={0}></Col>  
         </Row>
         <Row>
-          <Col xs={2}></Col>
-          <Col xs={8}>
+       <Col xs={0}></Col>
+          <Col xs={12}>  
             <PredictionContainer prediction={this.state.predictionForJourney} />
-          </Col>
-          <Col xs={2}></Col>
+         </Col>
+          <Col xs={0}></Col> 
         </Row>	
         <div style={{marginTop: '2em'}}> </div>
         <Row>
