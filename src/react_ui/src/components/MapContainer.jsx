@@ -9,6 +9,8 @@ import {
 import db2 from "./db2.png";
 import MapMarker from "./MapMarker.png";
 import ReactTooltip from 'react-tooltip'
+import CustomGeolocation from './Geolocation';
+
 
 export class MapContainer extends Component {
   constructor(props) {
@@ -32,33 +34,43 @@ export class MapContainer extends Component {
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
 
-  async componentWillMount() {
-    const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
-    const endpoint = `https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`;
-    try {
-      fetch(endpoint, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          homeMobileCountryCode: 353
-        })
-      })
-        .then(response => response.json())
-        .then(resp => {
-          this.setState({
-            currentPosition: {
-              lat: resp.location.lat,
-              lng: resp.location.lng
-            }
-          });
-        });
-    } catch (e) {
-      console.log(e);
-    }
+  onLocationUpdate(coords){
+    console.log("updating location", coords)
+    this.setState({
+      currentPosition: {
+        lat: coords.latitude,
+        lng: coords.longitude
+      }
+    })
   }
+
+  // async componentWillMount() {
+  //   const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
+  //   const endpoint = `https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`;
+  //   try {
+  //     fetch(endpoint, {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: JSON.stringify({
+  //         homeMobileCountryCode: 353
+  //       })
+  //     })
+  //       .then(response => response.json())
+  //       .then(resp => {
+  //         this.setState({
+  //           currentPosition: {
+  //             lat: resp.location.lat,
+  //             lng: resp.location.lng
+  //           }
+  //         });
+  //       });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   fetchRealTime(stopid) {
     const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
@@ -113,6 +125,8 @@ export class MapContainer extends Component {
           lng: -6.2603
         }}
       ><ReactTooltip />
+
+        <CustomGeolocation onLocationUpdate={this.onLocationUpdate.bind(this)}/>
 
         <Polyline
           fillColor="#2979ff"

@@ -5,6 +5,7 @@ src/ultimate_transport/__pycache__/
 src/map_interface/migrations/
 src/map_interface/migrations/__pycache__/
 src/node_modules/
+src/.vscode
 
 
 parsed_log.md
