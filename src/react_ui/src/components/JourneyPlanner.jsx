@@ -203,6 +203,7 @@ class JourneyPlanner extends Component {
           onChangeAddress2={this.onChangeAddress2.bind(this)}
           getOriginGeolocation={this.getOriginGeolocation.bind(this)}
           getDestinationGeolocation={this.getDestinationGeolocation.bind(this)}
+          currentPosition={this.props.currentPosition}
         />
         {/* <button onClick={this.onClick.bind(this)}>TEST</button> */}
         {/* <p>{this.parseJourney}</p> */}

@@ -51,7 +51,12 @@ class App extends Component {
       activatedUI: 0,
       polylineCoordinates: [], 
       nextBuses:[], 
-      isRealTimeHidden:true
+      isRealTimeHidden:true,
+      currentPosition: {
+        //dublin city centre co-ordinates
+        lat: 53.3498,
+        lng: -6.2603
+      }
     }
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.renderPropCheckbox = this.renderPropCheckbox.bind(this);
@@ -142,6 +147,7 @@ class App extends Component {
           return <JourneyPlanner key={1} 
             getPolyCoordinates={this.getPolyCoordinates.bind(this)}
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            currentPosition={this.state.currentPosition}
           />;
         case 2:
         return <TimeTable key={2} 
@@ -206,6 +212,17 @@ class App extends Component {
       </p>
     );
   }
+
+  onLocationUpdate(coords){
+    console.log("updating location", coords)
+    this.setState({
+      currentPosition: {
+        lat: coords.latitude,
+        lng: coords.longitude
+      }
+    })
+  }
+
   render() {
     const siderbarWithButton = 
           <div style={{backgroundColor:"white", height:'100%'}}>
@@ -303,6 +320,8 @@ class App extends Component {
         <MaterialTitlePanel title={header}>
             <MapContainer selectedStops={this.state.selectedJourney}
               polylineCoordinates={this.state.polylineCoordinates}
+              currentPosition={this.state.currentPosition}
+              onLocationUpdate={this.onLocationUpdate.bind(this)}
             />
         </MaterialTitlePanel>
       </Sidebar>
