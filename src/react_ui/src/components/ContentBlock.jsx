@@ -94,7 +94,8 @@ class ContentBlock extends Component {
     this.setState({
       plannedDate:date,
       isDefaultTime: false, 
-      isToday:false
+      isToday:false,
+      dateOfMonthToTravel: ((date.month()).toString().concat(date.date()).toString())
      })
    }
   onPageLoadSetTime(time){  //on load of page set time = now
