@@ -49,7 +49,8 @@ class App extends Component {
       selectedJourney: [],
       selectedRealTimeStop:0,
       activatedUI: 0,
-      polylineCoordinates: [], 
+      polylineCoordinates: [],
+      busCoords:[], 
       nextBuses:[], 
       isRealTimeHidden:true,
       currentPosition: {
@@ -132,6 +133,12 @@ class App extends Component {
     });
     console.log("coords in App", coords)
   }
+  getBusCoords(points){
+    console.log("points",points)
+    this.setState({
+      busCoords: points,
+    })
+  }
   renderSwitch = () => {
     console.log(this.state.activatedUI)
     switch (this.state.activatedUI) {
@@ -145,6 +152,7 @@ class App extends Component {
         case 1:
         // this.setState({selectedJourney: []});
           return <JourneyPlanner key={1} 
+            getBusCoords={this.getBusCoords.bind(this)}
             getPolyCoordinates={this.getPolyCoordinates.bind(this)}
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
             currentPosition={this.state.currentPosition}
@@ -319,6 +327,7 @@ class App extends Component {
       <Sidebar {...sidebarProps}>
         <MaterialTitlePanel title={header}>
             <MapContainer selectedStops={this.state.selectedJourney}
+              busCoords={this.state.busCoords}
               polylineCoordinates={this.state.polylineCoordinates}
               currentPosition={this.state.currentPosition}
               onLocationUpdate={this.onLocationUpdate.bind(this)}

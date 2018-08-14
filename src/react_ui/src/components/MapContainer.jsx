@@ -10,8 +10,10 @@ import db2 from "./db2.png";
 import MapMarker from "./MapMarker.png";
 import ReactTooltip from 'react-tooltip'
 import CustomGeolocation from './Geolocation';
-import A from './green_MarkerA.png'
-import B from './red_MarkerB.png'
+import A from './green_MarkerA.png';
+import B from './red_MarkerB.png';
+import red from './redStop.png';
+import green from './greenStop.png';
 
 
 export class MapContainer extends Component {
@@ -30,7 +32,6 @@ export class MapContainer extends Component {
     };
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
-
   
 
   // async componentWillMount() {
@@ -103,8 +104,8 @@ export class MapContainer extends Component {
     if (!this.props.loaded) return <div>Loading...</div>;
 
     const endPoint = (this.props.polylineCoordinates.length < 1)? null: this.props.polylineCoordinates.length-1
-    console.log('endPoint')
-    console.log(endPoint)
+    //console.log('endPoint')
+    //console.log(endPoint)
     const google = window.google;
     return (
       <Map data-tip='Dublin'
@@ -164,6 +165,32 @@ export class MapContainer extends Component {
             url: B,
           }}
         />}
+        {(this.props.busCoords===undefined) ? null: 
+        this.props.busCoords.map((item,i) => (
+        (i<2)? 
+        <Marker
+            onClick={this.onMarkerClick}
+            title="Bus Journey 1"
+            name={item.name}
+            icon={db2}
+            position={{ lat: item.lat, lng: item.lng }}
+          /> : (i<4) ? 
+          <Marker
+            onClick={this.onMarkerClick}
+            title="Bus Journey 2"
+            name={item.name}
+            icon={green}
+            position={{ lat: item.lat, lng: item.lng }}
+          /> :<Marker
+            onClick={this.onMarkerClick}
+            title="Bus Journey 3"
+            name={item.name}
+            icon={red}
+            position={{ lat: item.lat, lng: item.lng }}
+          />  
+        ))
+        }
+
 
 
         {this.props.selectedStops.map(item => (
@@ -171,7 +198,7 @@ export class MapContainer extends Component {
             icon={db2}
             key={item.identifier}
             onClick={this.onMarkerClick}
-            title={item.stop_id.toString()}
+            title={"Stop " + item.stop_id.toString()}
             name={item.location_text.concat(" ", item.address)}
             position={{ lat: item.stop_lat, lng: item.stop_lon }}
           />
@@ -182,7 +209,7 @@ export class MapContainer extends Component {
           visible={this.state.showingInfoWindow}
         >
           <div>
-            <h1>Stop {this.state.activeMarker.title}</h1>
+            <h1>{this.state.activeMarker.title}</h1>
             <p>{this.state.activeMarker.name}</p>
             <p>Real time Information:</p>
             <ul>
