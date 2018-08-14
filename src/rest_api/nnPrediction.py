@@ -1,3 +1,5 @@
+from rest_api.models import Modelstops
+
 import os
 import pickle
 import pandas as pd
@@ -44,23 +46,66 @@ class NNModel:
         self.stopsInJourney = stopsInJourney
 
         # columnsList = [i for i in range(len(self.stops) * 2)]
-        startColsList = ["start_stoppointid_{}".format(i['stop_id']) for i in self.stops]
-        endColsList = ['end_point_{}'.format(i['stop_id']) for i in self.stops]
+        convertDir = lambda x: 2 if x == 'I' else 1
+        stopsColsList = sorted(Modelstops.objects
+                .filter(route=self.route)
+                .filter(direction=convertDir(self.direction))
+                .values()[0]['stopids']
+                .split(' ')
+                , key=lambda x: int(x)
+            )
+        
+        print(stopsColsList)
+        # for i in stopsColsList:
+        #     print(i)
+
+                
+        # startColsList = ["start_stoppointid_{}".format(i['stop_id']) for i in self.stops]
+        # endColsList = ['end_point_{}'.format(i['stop_id']) for i in self.stops]
+        # startColsList.extend(endColsList)
+        startColsList = ["start_stoppointid_{}".format(i) for i in stopsColsList]
+        endColsList = ["end_point_{}".format(i) for i in stopsColsList]
         startColsList.extend(endColsList)
         df = pd.DataFrame(columns=startColsList)
+        print("df created")
+        print(df.head())
+        errorCount = 0
+        stopsColsList = [int(i) for i in stopsColsList]
 
         for i in range(len(self.stopsInJourney) - 1):
             item = self.stopsInJourney[i]
             nextItem = self.stopsInJourney[i + 1]
+            # print(item)
         
-            startSeqIndex = next((index for (index, stop) in enumerate(self.stops) if stop["sequence_number"] == item['sequence_number']), None)
-            finishSeqIndex = next((index for (index, stop) in enumerate(self.stops) if stop["sequence_number"] == nextItem['sequence_number']), None)
-            # print(startSeqIndex, finishSeqIndex)
+            startStopId = next((stop['stop_id'] for (index, stop) in enumerate(self.stops) if stop["sequence_number"] == item['sequence_number']), None)
+            finishStopId = next((stop['stop_id'] for (index, stop) in enumerate(self.stops) if stop["sequence_number"] == nextItem['sequence_number']), None)
+            # print("GOT STOP INDEXES")
+            # print(startStopId, finishStopId)
+            # print(type(startStopId), type(finishStopId))
+            try:
+                startIndex = stopsColsList.index(int(startStopId))
+            except ValueError as e:
+                print(e)
+                errorCount += 1
+            try:
+                finishIndex = stopsColsList.index(int(finishStopId))
+            except ValueError as e:
+                print(e)
+                errorCount += 1
+                continue
+            # print("ERRORS", errorCount)
+            print(startIndex, finishIndex)
+            print(type(startIndex), type(finishIndex))
 
-            row = [0 for i in range(len(self.stops) * 2)]
-            row[startSeqIndex] = 1
-            row[len(stopsInJourney) + finishSeqIndex] = 1
+            row = [0 for i in range(len(stopsColsList) * 2)]
+            # row = [0 for i in range(len(stopsColsList) * 2)]
+            row[startIndex] = 1
+            # print(row)
+            row[len(stopsColsList) + finishIndex] = 1
+            print(row)
             df.loc[i] = row
+
+        print("ERRORS", errorCount)
         return df
 
     def createTimeDf(self, hour, day):
