@@ -12,7 +12,8 @@ class TimeButton extends Component {
     this.state = {
       isHidden: true,
       plannedTime: "",
-      isDefaultTime:  true
+      isDefaultTime:  true, 
+      isToday:true
     };
   }
    //ensures time in format 'seconds past midnight' on load of page
@@ -22,7 +23,8 @@ class TimeButton extends Component {
       const diffInSeconds = newTime.diff(newTimeMidnight, "seconds");
       this.setState({
         plannedTime: diffInSeconds,
-        isDefaultTime: true
+        isDefaultTime: true, 
+        isToday:true
       });
       this.props.onPageLoadSetTime(diffInSeconds);
       this.props.onPageLoadSetDate(newTime);
@@ -35,7 +37,8 @@ class TimeButton extends Component {
   onResetNow(){
     this.setState({
       isHidden: !this.state.isHidden,
-      isDefaultTime: true
+      isDefaultTime: true, 
+      isToday:true
     });
     this.props.onResetNowContentBlock();
   }
@@ -68,19 +71,23 @@ class TimeButton extends Component {
             <Row>
               <Col>
                 <TimeDropdown
+                  isToday = {this.props.isToday}
                   plannedTime= {this.props.plannedTime}
-                  onSelectTime={this.timeUpdate.bind(this)} 
+                  onSelectTime={this.timeUpdate.bind(this)}
+                  onSelectDate={this.dateUpdate.bind(this)}
                   />
               </Col>
               <Col>
                 {" "}
                 <CalendarChooseDate
+                  isToday = {this.props.isToday}
                   plannedDate={this.props.plannedDate}
                   onSelectDate={this.dateUpdate.bind(this)}
                 />
               </Col>
               <Col>
                 <NowButton
+                  isToday = {this.props.isToday}
                   onResetNow= {this.onResetNow.bind(this)}
                   onSelectTime={this.timeUpdate.bind(this)}
                   onSelectDate={this.dateUpdate.bind(this)}
@@ -101,6 +108,9 @@ class CalendarChooseDate extends Component {
     };
   }
   handleChange(date) {
+  /*  this.setState({
+      isToday: false
+    }); */
     this.props.onSelectDate(date);
   }
   render() {
@@ -129,13 +139,19 @@ class TimeDropdown extends Component {
     this.props.onSelectTime(time);
   }
   render() {
+    let startingTime ;
+    if (this.props.isToday){
+       /* https://stackoverflow.com/questions/25323823/round-moment-js-object-time-to-nearest-30-minute-interval*/
+      startingTime = (moment(moment()).add(30 - (moment().minute() % 30) , "minutes").format('HH:mm')).toString()  
+    } else {
+       startingTime = "06:30"
+    }
+    
     return (
       <div>
         <TimePicker
-          /* https://stackoverflow.com/questions/25323823/round-moment-js-object-time-to-nearest-30-minute-interval*/
-          start= { (moment(moment()).add(30 - (moment().minute() % 30) , "minutes").format('HH:mm')).toString()}
+          start= {startingTime}
           end="23:30"
-        /*    format="24"  */
           step={30}
           onChange={this.handleTimeChange.bind(this)}
           value={this.state.chosenTime}
@@ -149,7 +165,8 @@ class NowButton extends Component {
     super(props);
     this.state = {
       plannedTime: moment(),
-      isDefaultTime:false
+      isDefaultTime:false, 
+      isToday:false
     };
   }
   handleClick(date) {
@@ -158,7 +175,8 @@ class NowButton extends Component {
     const diffInSeconds = newTime.diff(newTimeMidnight, "seconds");
     this.setState({
       plannedTime: diffInSeconds,
-      isDefaultTime:true
+      isDefaultTime:true,
+      isToday:true
     });
     this.props.onSelectTime(diffInSeconds);
     this.props.onSelectDate(newTime);
