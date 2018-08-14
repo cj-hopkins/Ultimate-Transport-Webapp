@@ -234,7 +234,7 @@ class App extends Component {
               </Row>
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
- {/*     <FooterPage/>  */}
+     <FooterPage/> 
     </div>;
     
     const sidebarNoButton =
