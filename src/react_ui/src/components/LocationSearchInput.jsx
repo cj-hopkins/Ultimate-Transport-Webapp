@@ -117,8 +117,8 @@ class LocationSearchInput extends React.Component {
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { textAlign: 'center',  backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
-                  : { textAlign: 'center', backgroundColor: '#ffffff', cursor: 'pointer' };
+                  ? { fontSize: '15px', textAlign: 'center',  backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
+                  : { fontSize: '12px', textAlign: 'center', backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
@@ -135,6 +135,7 @@ class LocationSearchInput extends React.Component {
       </PlacesAutocomplete>
       <Grid fluid={true}><Row><Col xs={4}></Col>
       <Col xs={4}><Button  
+        bsSize='large' 
         style={{alignSelf:'center'}}
         onClick={this.useCurrentLocation}>Use Current Location</Button></Col><Col xs={4}></Col></Row></Grid>
       <PlacesAutocomplete
@@ -165,8 +166,8 @@ class LocationSearchInput extends React.Component {
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { textAlign: 'center', backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
-                  : { textAlign: 'center', backgroundColor: '#ffffff', cursor: 'pointer' };
+                  ? { fontSize: '15px', textAlign: 'center', backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
+                  : { fontSize: '12px', textAlign: 'center', backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
