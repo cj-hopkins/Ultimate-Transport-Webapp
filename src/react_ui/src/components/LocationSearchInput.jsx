@@ -5,7 +5,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import ReactTooltip from 'react-tooltip'
-import {Button} from 'react-bootstrap';
+import {Button, Grid, Row, Col} from 'react-bootstrap';
 import { WSAEINVALIDPROVIDER } from 'constants';
 
 
@@ -110,15 +110,15 @@ class LocationSearchInput extends React.Component {
                     </button>
                   )}
             <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
+              {loading && <div style={{ textAlign: 'center'}}>Loading...</div>}
               {suggestions.map(suggestion => {
                 const className = suggestion.active
                   ? 'suggestion-item--active'
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  ? { textAlign: 'center',  backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
+                  : { textAlign: 'center', backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
@@ -133,7 +133,10 @@ class LocationSearchInput extends React.Component {
           </div>
         )}
       </PlacesAutocomplete>
-      <Button onClick={this.useCurrentLocation}>use current location</Button>
+      <Grid fluid={true}><Row><Col xs={4}></Col>
+      <Col xs={4}><Button  
+        style={{alignSelf:'center'}}
+        onClick={this.useCurrentLocation}>Use Current Location</Button></Col><Col xs={4}></Col></Row></Grid>
       <PlacesAutocomplete
         value={this.state.address2}
         onChange={this.handleChange2}
@@ -155,15 +158,15 @@ class LocationSearchInput extends React.Component {
                     </button>
                   )}
             <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
+              {loading && <div style={{ textAlign: 'center'}}>Loading...</div>}
               {suggestions.map(suggestion => {
                 const className = suggestion.active
                   ? 'suggestion-item--active'
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  ? { textAlign: 'center', backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
+                  : { textAlign: 'center', backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
