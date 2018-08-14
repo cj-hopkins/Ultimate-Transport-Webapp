@@ -16,7 +16,6 @@ import { TwitterFeed } from "./components/TwitterFeed";
 import {Badge} from "react-bootstrap";
 import ReactTooltip from 'react-tooltip'
 import FooterPage from './components/Footer';
-import FooterBootstrap from './components/FooterBootstrap'
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
 
