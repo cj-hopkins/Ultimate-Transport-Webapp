@@ -24,6 +24,15 @@ class FooterPage extends React.Component {
               
               <Grid>
                 <Row>
+                  <Col xs={1} ></Col>
+                  <Col xs={2} > <SocialIcon 
+                                  url="http://twitter.com/dublinbusnews"
+                                  color='white'
+                                      /></Col>
+                  <Col xs={2} >      <SocialIcon 
+                                       url="http://www.facebook.com/DublinBusNews/" 
+                                       color='white'
+                                       /> </Col>
                   <Col xs={2}>
                   <div>
                      <a href='http://www.dublinbus.ie/' target='blank'/>
@@ -33,22 +42,22 @@ class FooterPage extends React.Component {
                       alt="dublin_bus_icon" /> 
                      </div>    
                   </Col> 
-                  <Col xs={2} > <SocialIcon 
-                                  url="http://twitter.com/dublinbusnews"
-                                  color='white'
-                                      /></Col>
-                  <Col xs={2} >      <SocialIcon 
-                                       url="http://www.facebook.com/DublinBusNews/" 
-                                       color='white'
-                                       /> </Col>
-                    <Col xs={2}>      <SocialIcon 
-                                        url="http://www.instagram.com/dublinbusnews/" 
-                                        color='white'
-                                        /> </Col>
-                
+                    <Col xs={2}>      
+                      <SocialIcon 
+                          url="http://www.instagram.com/dublinbusnews/" 
+                          color='white'
+                          /> 
+                  </Col>
+                   <Col xs={2}>      
+                      <SocialIcon 
+                          url="https://www.youtube.com/user/dublinbusnews" 
+                          color='white'
+                          /> 
+                  </Col>
+                  <Col xs={1} ></Col>
                 </Row>
                 <Row>
-                  <Col xs={0}>
+                  <Col xs={2}>
                   </Col>
                   <Col xs={8}>
                     <div className="footer-copyright text-center py-3">
@@ -56,7 +65,7 @@ class FooterPage extends React.Component {
                       </div>
                   </Col>
                   
-                   <Col xs={4}>
+                   <Col xs={2}>
                   </Col>
                    </Row>
                 </Grid>
