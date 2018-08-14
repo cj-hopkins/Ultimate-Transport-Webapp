@@ -34,15 +34,7 @@ export class MapContainer extends Component {
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
 
-  onLocationUpdate(coords){
-    console.log("updating location", coords)
-    this.setState({
-      currentPosition: {
-        lat: coords.latitude,
-        lng: coords.longitude
-      }
-    })
-  }
+  
 
   // async componentWillMount() {
   //   const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
@@ -126,7 +118,7 @@ export class MapContainer extends Component {
         }}
       ><ReactTooltip />
 
-        <CustomGeolocation onLocationUpdate={this.onLocationUpdate.bind(this)}/>
+        <CustomGeolocation onLocationUpdate={this.props.onLocationUpdate}/>
 
         <Polyline
           fillColor="#2979ff"
@@ -141,8 +133,8 @@ export class MapContainer extends Component {
           name={"Current location"}
           // position={this.props.currentPosition} />
           position={{
-            lat: this.state.currentPosition.lat,
-            lng: this.state.currentPosition.lng
+            lat: this.props.currentPosition.lat,
+            lng: this.props.currentPosition.lng
           }}
           icon={{
             url: MapMarker,
