@@ -1,6 +1,12 @@
 {
 	"folders": [
 		{
+			"path": "src/react_ui"
+		},
+		{
+			"path": "src/rest_api"
+		},
+		{
 			"path": "src"
 		}
 	],
