@@ -23,6 +23,7 @@ import time
 from rest_api.nnPrediction import NNModel
 from rest_api.weather_for_model import *
 from rest_api.time_for_model import *
+import decimal
 
 class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
@@ -194,17 +195,22 @@ def getModelPrediction(request):
 @api_view(['POST'])
 def getMultiRoutePrediction(request):
     print("REQUEST", request.data)
+    data = request.data['busRoutes']
     totalPrediction = 0
-    # for item in request.data['busRoutes']:
-    #     print("KEY", key)
-    #     if isDefaultTime:
-    #         isRaining = getRainNow()
-    #         temp = getTempNow()
-    #         print('temp',temp)
-    #         result = getPrediction(item['numStops'], isRaining,temp, selectedTime)
-    #         print(result)
-    #         totalPrediction += result
-    #         # return JsonResponse({'prediction':result[0]})
+    route = data[0]['route']
+    direction = 'I'
+    startLat = str(round(decimal.Decimal(str(data[0]['start']['lat'])), 2))
+    startLng = str(round(decimal.Decimal(str(data[0]['start']['lng'])), 2))
+    # print(round(x,4))
+    # print(round(y,5))
+    print(startLat)
+    print(startLng)
+    # startStop = Composite.objects.filter(name=route).filter(route_direction = direction).filter(stop_lat = startLat).filter(stop_lon = startLng).values()
+    # startStop = Composite.objects.filter(stop_lat = startLat).filter(stop_lon = startLng).values().filter(name = route).filter(route_direction = direction)
+    # startStop = Composite.objects.filter(stop_lat = startLat).filter(stop_lon = startLng).filter(name = route).filter(route_direction = direction).values()
+    startStop = Composite.objects.filter(stop_lat__regex=r'^{}.*$'.format(startLat)).filter(stop_lon__regex=r'^{}.*$'.format(startLng)).filter(name = route).filter(route_direction = direction).values()
+    print(startStop)
+    print(len(startStop))
     return JsonResponse({'test': 'val'})
 
 def getNumStopsInJourney(start, finish, route, direction):

@@ -140,7 +140,7 @@ class App extends Component {
     this.setState({
       polylineCoordinates: coords
     });
-    console.log("coords in App", coords)
+    // console.log("coords in App", coords)
   }
   renderSwitch = () => {
     console.log(this.state.activatedUI)

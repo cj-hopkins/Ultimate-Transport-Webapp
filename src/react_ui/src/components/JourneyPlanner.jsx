@@ -88,6 +88,7 @@ class JourneyPlanner extends Component {
         me.setState({
           directionsObject: result,
         });
+        console.log(result)
       }
     });
   }
@@ -113,17 +114,47 @@ class JourneyPlanner extends Component {
     console.log(coordinates)
     this.props.getPolyCoordinates(coordinates)
     this.getMultiRoutePrediction(key)
+
+    for (let i = 0; i < route.length; i++) {
+      if (route[i].travel_mode === 'TRANSIT') {
+        let startStop = {
+          lat: route[i].transit.departure_stop.location.lat(),
+          lng: route[i].transit.departure_stop.location.lng()
+        }
+        let finishStop = {
+          lat: route[i].transit.arrival_stop.location.lat(),
+          lng: route[i].transit.arrival_stop.location.lng()
+        }
+        console.log("ROUTE", route[i].transit.line.short_name)
+        console.log("DEPART", startStop, route[i].transit.departure_stop.name);
+        console.log("ARRIVE", finishStop);
+      }
+    }
   }
 
   getMultiRoutePrediction = chosenRouteKey => {
+  //  let startStop = {
+  //         lat: route[i].transit.departure_stop.location.lat(),
+  //         lng: route[i].transit.departure_stop.location.lng()
+  //       }
+  //   let finishStop = {
+  //     lat: route[i].transit.arrival_stop.location.lat(),
+  //     lng: route[i].transit.arrival_stop.location.lng()
+  //   } 
     const endpoint = '/api/getMultiRoutePrediction' 
     const journeyObject = this.state.directionsObject.routes[chosenRouteKey].legs[0].steps
       .filter(item => item.travel_mode === 'TRANSIT')
       .map(item => ({
         route: item.transit.line.short_name,
         stops: item.transit.num_stops,
-        start: item.transit.departure_stop,
-        finish: item.transit.arrival_stop
+        start: {
+          lat: item.transit.departure_stop.location.lat(),
+          lng: item.transit.departure_stop.location.lng()
+        },
+        finish: {
+          lat: item.transit.arrival_stop.location.lat(),
+          lng: item.transit.arrival_stop.location.lng()
+        }
         })
       );
       console.log(journeyObject)
