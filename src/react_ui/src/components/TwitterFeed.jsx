@@ -14,7 +14,7 @@ render() {
         <TwitterTimelineEmbed
           sourceType="profile"
           screenName="dublinbusnews"
-          options={{height:'20%', width: '100%', theme:'dark'}} 
+          options={{theme:'light', height:'500px'}}
         />
         );
       }
