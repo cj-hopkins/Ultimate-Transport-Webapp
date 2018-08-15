@@ -78,6 +78,7 @@ export class MapContainer extends Component {
             </tr>
           ))
         });
+        console.log(this.state.nextBuses)
       })
       .catch(error => console.log("parsing failed", error));
   }
@@ -145,7 +146,9 @@ export class MapContainer extends Component {
         /><ReactTooltip />
         {this.props.polylineCoordinates.length < 1? null:
         <Marker
-          name={"Start"}
+          onClick={this.onMarkerClick}
+          name={""}
+          title="Start"
           position={{
             lat: this.props.polylineCoordinates[0].lat,
             lng: this.props.polylineCoordinates[0].lng
@@ -156,7 +159,9 @@ export class MapContainer extends Component {
         />}
         {this.props.polylineCoordinates.length < 1? null:
         <Marker
-          name={"End"}
+          onClick={this.onMarkerClick}
+          name=""
+          title="End"
           position={{
             lat: this.props.polylineCoordinates[endPoint].lat,
             lng: this.props.polylineCoordinates[endPoint].lng
@@ -195,10 +200,10 @@ export class MapContainer extends Component {
 
         {this.props.selectedStops.map((item,i) => (
           <Marker
-            icon={i===0 ? A : db2} 
+            icon={i===0 ? A : i===(this.props.selectedStops.length-1)? B : db2} 
             key={item.identifier}
             onClick={this.onMarkerClick}
-            title={"Stop " + item.stop_id.toString()}
+            title={item.stop_id.toString()}
             name={item.location_text.concat(" ", item.address)}
             position={{ lat: item.stop_lat, lng: item.stop_lon }}
           />
@@ -208,14 +213,15 @@ export class MapContainer extends Component {
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
         >
-          <div>
-            <h1>{this.state.activeMarker.title}</h1>
+          {this.state.nextBuses===undefined ? null : (this.state.nextBuses.length===0) ? 
+          <div><h2>{this.state.activeMarker.title}</h2>
+            <p>{this.state.activeMarker.name}</p></div> :
+            <div><h1>Stop {this.state.activeMarker.title}</h1>
             <p>{this.state.activeMarker.name}</p>
             <p>Real time Information:</p>
             <ul>
               <table>{this.state.nextBuses}</table>
-            </ul>
-          </div>
+            </ul></div>}
         </InfoWindow>
       </Map>
     );
