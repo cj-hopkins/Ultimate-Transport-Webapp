@@ -161,10 +161,12 @@ class App extends Component {
         return <TimeTable key={2} 
             onRouteUpdate={this.onRouteUpdate.bind(this)}
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            getPolyCoordinates={this.getPolyCoordinates.bind(this)}
             />;
         case 3:
           return  <div style={{height:'100%'}}> 
               <RealTimePage key={3} 
+                      getPolyCoordinates={this.getPolyCoordinates.bind(this)}
                       onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
                       selectedRealTimeStop= {this.state.selectedRealTimeStop}
                       onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
@@ -181,7 +183,7 @@ class App extends Component {
         case 4.1:
           return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
      case 4.3:
-          return <div style={{height:'100%'}}>  <TwitterFeed />  </div>
+          return <div style={{height:'100%'}}>  <TwitterFeed getPolyCoordinates={this.getPolyCoordinates.bind(this)} />  </div>
         default:
           return <div key={4} />;
       }
@@ -253,9 +255,9 @@ class App extends Component {
                </Col>
               </Row>
               <Row style={{margin:'auto'}}>    <Col xs={3}></Col>
-              <Col xs={9}>
-                 <div style={{marginTop: '2em'}}> </div>
-                    <h2 style={{fontSize:'16px', color:"white"}}>Plan Your Journey with Dublin Bus</h2>
+              <Col xs={12}>
+                {/*  <div style={{marginTop: '2em'}}> </div> */}
+                    <h2 style={{fontSize:'14px', color:"white"}}>Plan Your Journey with Dublin Bus</h2>
                   {/* <h2>
                     <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus
                     </Badge>
@@ -275,8 +277,8 @@ class App extends Component {
               <Row style={{margin:'auto'}}>
                 
                   <Col xs={12}>
-                   <div style={{marginTop: '2em'}}> </div>
-                    <h2 style={{fontSize:'16px', color:"white", textAlign:'center'}}> Plan Your Journey with Dublin Bus </h2>
+                   {/* <div style={{marginTop: '2em'}}> </div> */}
+                    <h2 style={{fontSize:'14px', color:"white", textAlign:'center'}}> Plan Your Journey with Dublin Bus </h2>
                 {/*  <h2>
                    <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
                 </h2> */}
@@ -312,9 +314,9 @@ class App extends Component {
         </Row>
         <Row style={{margin:'auto'}}>
           <Col xs={3}></Col>
-          <Col xs={9}>
-            <div style={{marginTop: '2em'}}> </div>
-            <h2 style={{fontSize:'16px', color: "white", textAlign:'center'}} >Plan Your Journey with Dublin Bus
+          <Col xs={12}>
+           {/* <div style={{marginTop: '2em'}}> </div> */}
+            <h2 style={{fontSize:'14px', color: "white", textAlign:'center'}} >Plan Your Journey with Dublin Bus
               {/*  <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge> */}
             </h2>
           </Col>

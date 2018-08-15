@@ -74,7 +74,7 @@ export class MapContainer extends Component {
             <tr key={i}>
               <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
               <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-              <td>{post.duetime} minutes </td>
+              <td>{post.duetime} minute(s)</td>
             </tr>
           ))
         });
@@ -83,7 +83,7 @@ export class MapContainer extends Component {
       .catch(error => console.log("parsing failed", error));
   }
 
-  onMarkerClick(props, marker, e) {
+  onMarkerClick (props, marker, e){
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
@@ -214,11 +214,12 @@ export class MapContainer extends Component {
           visible={this.state.showingInfoWindow}
         >
           {this.state.nextBuses===undefined ? null : (this.state.nextBuses.length===0) ? 
-          <div><h2>{this.state.activeMarker.title}</h2>
-            <p>{this.state.activeMarker.name}</p></div> :
+          <div><h1>{this.state.activeMarker.title}</h1>
+            <p>Stop {this.state.activeMarker.name}</p>
+            <p>No Real Time Information Currently Available</p></div> :
             <div><h1>Stop {this.state.activeMarker.title}</h1>
             <p>{this.state.activeMarker.name}</p>
-            <p>Real time Information:</p>
+            <p>Real Time Information:</p>
             <ul>
               <table>{this.state.nextBuses}</table>
             </ul></div>}

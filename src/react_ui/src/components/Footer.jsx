@@ -9,7 +9,6 @@ class FooterPage extends React.Component {
           /*position:"absolute",*/
         <div style={{
             left:0,
-            bottom:0,
             right:0}}>
             <StickyFooter bottomThreshold={50}
     normalStyles={{

@@ -9,8 +9,9 @@ class RealTimePage extends Component {
         stops:[]
     }
   }
+
  async componentWillMount(){
-   
+    this.props.getPolyCoordinates([])
     let  stopIds
     const endpoint = '/api/getAllStopNumbers';
     try {

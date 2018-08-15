@@ -25,6 +25,9 @@ class TimeTable extends Component {
       times:null,
     }
   }
+  componentWillMount() {
+    this.props.getPolyCoordinates([])
+  }
   handleSelect = (chosenDay) => {
       this.setState({ chosenDay });
       console.log(`Option selected:`, chosenDay);
