@@ -126,6 +126,10 @@ class ContentBlock extends Component {
     })   
   }
   onPressRealTimeButtonSidebar(stopid){
+    this.setState({
+      isRealTimeHidden:false,
+       isRealTimeHidden: !this.state.isRealTimeHidden
+    })
      const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
     fetch(endpoint)
       .then (response => response.json())
@@ -140,10 +144,6 @@ class ContentBlock extends Component {
                 ))
             });
      })
-    .then( this.setState({
-      isRealTimeHidden:false,
-       isRealTimeHidden: !this.state.isRealTimeHidden
-    }))
       .catch(error => console.log('parsing failed',error))
   }
   
