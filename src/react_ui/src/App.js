@@ -161,10 +161,12 @@ class App extends Component {
         return <TimeTable key={2} 
             onRouteUpdate={this.onRouteUpdate.bind(this)}
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            getPolyCoordinates={this.getPolyCoordinates.bind(this)}
             />;
         case 3:
           return  <div style={{height:'100%'}}> 
               <RealTimePage key={3} 
+                      getPolyCoordinates={this.getPolyCoordinates.bind(this)}
                       onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
                       selectedRealTimeStop= {this.state.selectedRealTimeStop}
                       onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
@@ -181,7 +183,7 @@ class App extends Component {
         case 4.1:
           return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
      case 4.3:
-          return <div style={{height:'100%'}}>  <TwitterFeed />  </div>
+          return <div style={{height:'100%'}}>  <TwitterFeed getPolyCoordinates={this.getPolyCoordinates.bind(this)} />  </div>
         default:
           return <div key={4} />;
       }

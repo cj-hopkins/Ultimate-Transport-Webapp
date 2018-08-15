@@ -9,6 +9,9 @@ export class TwitterFeed extends Component {
       open: true
     };
   }
+  componentWillMount() {
+    this.props.getPolyCoordinates([])
+  }
 render() {
     return(
         <TwitterTimelineEmbed

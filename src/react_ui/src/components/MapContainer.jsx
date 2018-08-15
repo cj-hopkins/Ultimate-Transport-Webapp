@@ -215,7 +215,7 @@ export class MapContainer extends Component {
         >
           {this.state.nextBuses===undefined ? null : (this.state.nextBuses.length===0) ? 
           <div><h1>{this.state.activeMarker.title}</h1>
-            <p>{this.state.activeMarker.name}</p>
+            <p>Stop {this.state.activeMarker.name}</p>
             <p>No Real Time Information Currently Available</p></div> :
             <div><h1>Stop {this.state.activeMarker.title}</h1>
             <p>{this.state.activeMarker.name}</p>
