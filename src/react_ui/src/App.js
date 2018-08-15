@@ -240,7 +240,7 @@ class App extends Component {
                 <Col xs={3}>
                   <img
                   src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
-                  style={{ width: "80px", height: "80px" }}
+                  style={{ margin: '10px', width: "80px", height: "80px" }}
                   alt="dublin_bus_icon"
                 /></Col>
                 <Col xs={3}>
@@ -250,10 +250,11 @@ class App extends Component {
               <Row>    <Col xs={1}></Col>
               <Col xs={9}>
                  <div style={{marginTop: '2em'}}> </div>
-                  <h2>
+                    <h2 style={{fontSize:'16px', color:"white"}}> Plan Your Journey with Dublin Bus</h2>
+                  {/* <h2>
                     <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus
                     </Badge>
-                  </h2>
+                  </h2> */}
                 </Col>
                  <Col xs={2}></Col>
               </Row>
@@ -269,9 +270,10 @@ class App extends Component {
               <Row>
                 <Col xs={2}></Col>
                   <Col xs={6}>
-                 <h2>
+                    <h2 style={{fontSize:'16px', color:"white"}}> Plan Your Journey with Dublin Bus </h2>
+                {/*  <h2>
                    <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
-                </h2>
+                </h2> */}
                 </Col>
                 <Col xs={4}></Col>
               </Row>
@@ -289,7 +291,7 @@ class App extends Component {
           <Col xs={3}>
             <img
             src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
-            style={{ width: "80px", height: "80px" }}
+            style={{ margin: '10px', width: "80px", height: "80px" }}
             alt="dublin_bus_icon"
             />
           </Col>
@@ -300,8 +302,8 @@ class App extends Component {
         </Row>
         <Row><Col xs={0}></Col>
           <Col xs={10}>
-            <h2>
-               <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
+            <h2 style={{fontSize:'16px', color: "white"}} >Plan Your Journey with Dublin Bus
+              {/*  <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge> */}
             </h2>
           </Col>
            <Col xs={2}></Col>

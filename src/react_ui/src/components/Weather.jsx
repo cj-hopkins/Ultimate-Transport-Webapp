@@ -24,7 +24,7 @@ class WeatherWidget extends Component{
   }
   render() {
     return(
-      <div>  
+      <div style={{marginRight:'10px'}}>  
         <p></p> {/* empty paragraph for space at top*/}
       <img data-tip="Current weather" src={`https://openweathermap.org/img/w/${this.state.icon}.png`} alt={this.state.description}/><ReactTooltip />  
       <h3><Badge pullRight={true} bsStyle="warning">{this.state.temperature}°C</ Badge></h3>
