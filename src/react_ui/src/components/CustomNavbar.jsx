@@ -21,6 +21,7 @@ class CustomNavbar extends Component {
         </NavItem>
         <NavDropdown eventKey={4} title="More" id="basic-nav-dropdown">
           <MenuItem eventKey={4.3} onSelect={this.props.swapUI} >Twitter Feed</MenuItem>
+          <MenuItem eventKey={4.4} href="https://docs.google.com/forms/d/19MOVUQfcuwqBbxna6HVr4HycpMutYrlFwO3t_eJzG74/viewform?ts=5b61c3a8&edit_requested=true" target='blank'> Feedback Form </MenuItem>
         </NavDropdown>
       </Nav>
         </Navbar>
