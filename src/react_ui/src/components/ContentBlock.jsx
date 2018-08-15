@@ -122,12 +122,10 @@ class ContentBlock extends Component {
   onSelectStartDisplayRealTimeButton(stopid){ //get Real time info when user picks start stop 
      this.setState({
        isRealTimeButtonHidden:false,
+       isRealTimeHidden: true
     })   
   }
   onPressRealTimeButtonSidebar(stopid){
-    this.setState({
-      isRealTimeHidden:false
-    })
      const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
     fetch(endpoint)
       .then (response => response.json())
@@ -142,6 +140,10 @@ class ContentBlock extends Component {
                 ))
             });
      })
+    .then( this.setState({
+      isRealTimeHidden:false,
+       isRealTimeHidden: !this.state.isRealTimeHidden
+    }))
       .catch(error => console.log('parsing failed',error))
   }
   
@@ -321,10 +323,10 @@ class ContentBlock extends Component {
                 bsSize='large' 
                 block>Get Real Time Information for Stop {this.state.startStop}
               </Button>
-               <Table striped bordered condensed hover>{this.state.nextBuses}</Table>
+               
             </div>
             }
-              {!this.state.isRealTimeHidden && <div> Hello </div>} 
+              {!this.state.isRealTimeHidden && <div> <Table striped bordered condensed hover>{this.state.nextBuses}</Table> </div>} 
               
               
               
