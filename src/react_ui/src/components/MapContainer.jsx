@@ -78,6 +78,7 @@ export class MapContainer extends Component {
             </tr>
           ))
         });
+        console.log(this.state.nextBuses)
       })
       .catch(error => console.log("parsing failed", error));
   }
@@ -208,14 +209,15 @@ export class MapContainer extends Component {
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
         >
-          <div>
-            <h1>Stop {this.state.activeMarker.title}</h1>
+          {this.state.nextBuses===undefined ? null : (this.state.nextBuses.length===0) ? 
+          <div><h2>{this.state.activeMarker.title}</h2>
+            <p>{this.state.activeMarker.name}</p></div> :
+            <div><h1>Stop {this.state.activeMarker.title}</h1>
             <p>{this.state.activeMarker.name}</p>
             <p>Real time Information:</p>
             <ul>
               <table>{this.state.nextBuses}</table>
-            </ul>
-          </div>
+            </ul></div>}
         </InfoWindow>
       </Map>
     );
