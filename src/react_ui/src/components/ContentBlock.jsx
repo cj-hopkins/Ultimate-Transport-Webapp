@@ -26,6 +26,7 @@ class ContentBlock extends Component {
       plannedTime:moment(),
       isDefaultTime:true, // needed for when page loads and leave_now button
       nextBuses:[], 
+      isRealTimeButtonHidden:true, 
       isRealTimeHidden:true, 
       dateOfMonthToTravel: ((moment().month()).toString().concat(moment().date()).toString())
     }
@@ -118,11 +119,14 @@ class ContentBlock extends Component {
       this.routeUpdate(newRoute, false)
     }
   }
-  onSelectStartGetRealTime(stopid){
+  onSelectStartDisplayRealTimeButton(stopid){ //get Real time info when user picks start stop 
      this.setState({
-      isRealTimeHidden:false
-    })
-    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
+       isRealTimeButtonHidden:false,
+       isRealTimeHidden: true
+    })   
+  }
+  onPressRealTimeButtonSidebar(stopid){
+     const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
     fetch(endpoint)
       .then (response => response.json())
       .then(parsedJSON => {
@@ -136,8 +140,13 @@ class ContentBlock extends Component {
                 ))
             });
      })
+    .then( this.setState({
+      isRealTimeHidden:false,
+       isRealTimeHidden: !this.state.isRealTimeHidden
+    }))
       .catch(error => console.log('parsing failed',error))
   }
+  
   async onStopUpdate(start = null, finish = null) {
     // Here be dragons - leave this code for now
     if (start === null || finish === null) {
@@ -145,18 +154,6 @@ class ContentBlock extends Component {
       const stop = isStart ? start : finish;
       const finishIndex = (this.state.finishStop === "finish") ? this.state.stops.length : this.findStopIndex(this.state.finishStop)
       const startIndex = (this.state.startStop === "start") ? 0 : this.findStopIndex(this.state.startStop)
-
-      // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
-      // if (stop === "Start" || stop === "Finish") {
-      //   this.setState({
-      //     startStop: "Start",
-      //     finishStop: "Finish"
-      //   })
-      // }
-      // this.setState({
-      //   stopState: stop,
-      //   predictionForJourney: null,
-      // })
       const index = this.findStopIndex(stop);
       console.log("Stop index", index)
       let newStops;
@@ -169,8 +166,7 @@ class ContentBlock extends Component {
       }
       this.setState({chosenStops: newStops});
       this.props.onSelectedJourneyUpdate(newStops);
-      // if neither values are null then we are doing a direction switch
-    } else {
+    } else {   // if neither values are null then switch direction 
         this.setState({
           startStop: start,
           finishStop: finish,
@@ -267,7 +263,7 @@ class ContentBlock extends Component {
           onStopUpdate={this.onStopUpdate.bind(this)}
           onStopDeselect={this.onStopDeselect.bind(this)}
           chosenRoute={this.state.chosenRoute}
-          onSelectStartGetRealTime={this.onSelectStartGetRealTime.bind(this)}
+          onSelectStartDisplayRealTimeButton={this.onSelectStartDisplayRealTimeButton.bind(this)}
                     />
        {/*    </ErrorBoundary>    */} 
         <div style={{marginTop: '2em'}}> </div>
@@ -312,12 +308,31 @@ class ContentBlock extends Component {
         <div style={{marginTop: '2em'}}> </div>
         <Row>
       
-          <Col xs={12}>{(!this.state.isRealTimeHidden && this.state.isDefaultTime ) &&            
-              <div> <p  >Real Time Information for Stop {this.state.startStop}</p>
-                  <Table striped bordered condensed hover>{this.state.nextBuses}
-                </Table>
-              </div> 
-              } 
+          <Col xs={12}>
+            <div>
+            {(!this.state.isRealTimeButtonHidden && this.state.isDefaultTime ) &&            
+            <div> 
+                   {/* 
+                    <p  >Real Time Information for Stop {this.state.startStop}</p>
+                   <Table striped bordered condensed hover>{this.state.nextBuses}
+                  </Table>
+                  */}
+              <Button 
+                onClick={this.onPressRealTimeButtonSidebar.bind(this,this.state.startStop )} 
+                style ={{backgroundColor:'LightGrey'}}
+                bsSize='large' 
+                block>Get Real Time Information for Stop {this.state.startStop}
+              </Button>
+               
+            </div>
+            }
+              {!this.state.isRealTimeHidden && <div> <Table striped bordered condensed hover>{this.state.nextBuses}</Table> </div>} 
+              
+              
+              
+              
+              
+            </div>
           </Col>
         </Row>
       </Grid>
