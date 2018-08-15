@@ -162,6 +162,11 @@ class JourneyPlanner extends Component {
       }
     console.log(journeyObject)
   }
+  escapeRegExp(str) {
+    var regex = /<[^>]*>/g
+    return str.replace(regex, "");
+  }
+
 
   parseSingleJourney = (journey, index) => {
     // console.log(journey)
@@ -175,7 +180,17 @@ class JourneyPlanner extends Component {
        <div>
         {journey.legs[0].steps.map(item => {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
-          return <p style={{textAlign:'left'}}>{item.instructions} {routeName}</p>
+          const instructions = []
+          if (item.travel_mode === 'TRANSIT'){
+            instructions.push(<p style={{textAlign:'left'}}>{"Take Dublin Bus, route number " + routeName + ", towards " + item.transit.headsign}</p>)
+            instructions.push(<p style={{textAlign:'left'}}>{"Exit bus at "+item.transit.arrival_stop.name}</p>)
+            } 
+          else {
+            for(var i=0; i<item.steps.length;i++){
+                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions)}</p>)
+            }} 
+          return instructions
+          
         })}
         </div>
       </Collapse>
