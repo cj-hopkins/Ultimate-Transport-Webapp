@@ -114,7 +114,7 @@ class CalendarChooseDate extends Component {
         onChange={this.handleChange.bind(this)} // when value changed
         minDate={moment()}
         highlightDates={[moment()]}
-        dateFormat="LL"
+        dateFormat="DD-MM-YYYY " 
       />
     );
   }
@@ -184,6 +184,7 @@ class NowButton extends Component {
       <div>
         <Button className="float-right"
           value={this.state.plannedTime}
+          style = {{fontSize:'14px'}}
       /*    bsStyle="primary"  */
           onClick={this.handleClick.bind(this)}
           block
