@@ -7,7 +7,7 @@ import { Media } from "react-bootstrap";
 import ReactTooltip from 'react-tooltip'
 
 const ContentHeader = () => (
-  <Media><Media.Left>
+  <Media style={{backgroundColor:"#2196f3"}}><Media.Left>
       <img data-tip='Ultimate Transport'
         src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
         style={{ width: "80px", height: "80px" }}

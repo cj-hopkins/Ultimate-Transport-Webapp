@@ -193,9 +193,9 @@ export class MapContainer extends Component {
 
 
 
-        {this.props.selectedStops.map(item => (
+        {this.props.selectedStops.map((item,i) => (
           <Marker
-            icon={db2}
+            icon={i===0 ? A : db2} 
             key={item.identifier}
             onClick={this.onMarkerClick}
             title={"Stop " + item.stop_id.toString()}
