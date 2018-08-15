@@ -65,7 +65,7 @@ class TimeButton extends Component {
         {!this.state.isHidden && (
           <Grid>
             <Row>
-              <Col xs={4}>
+              <Col md={4} xs={4}>
                 <TimeDropdown
                   dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   plannedTime= {this.props.plannedTime}
@@ -74,7 +74,7 @@ class TimeButton extends Component {
                   onSelectDate={this.dateUpdate.bind(this)}
                   />
               </Col>
-              <Col  xs={4}>
+              <Col  md={4} xs={12}>
                 {" "}
                 <CalendarChooseDate
                   dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
@@ -82,7 +82,7 @@ class TimeButton extends Component {
                   onSelectDate={this.dateUpdate.bind(this)}
                 />
               </Col>
-              <Col  xs={3}>
+              <Col  md={4} xs={4}>
                 <NowButton
                   dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   onResetNow= {this.onResetNow.bind(this)}
@@ -115,6 +115,7 @@ class CalendarChooseDate extends Component {
         minDate={moment()}
         highlightDates={[moment()]}
         dateFormat="DD-MM-YYYY " 
+        style ={{width:'100%'}}
       />
     );
   }
@@ -185,10 +186,10 @@ class NowButton extends Component {
       <div>
         <Button className="float-right"
           value={this.state.plannedTime}
-          style = {{fontSize:'14px'}}
+          style = {{fontSize:'14px', textAlign:'left'}}
       /*    bsStyle="primary"  */
           onClick={this.handleClick.bind(this)}
-    
+    block
         >
           {" "}
           Leave now
