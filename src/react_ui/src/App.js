@@ -265,7 +265,7 @@ class App extends Component {
     const sidebarDesktop =
           <div style={{backgroundColor:"white", height:'100%'}}>
             <ContentHeader/>
-            <Grid>
+            <Grid style={{backgroundColor:"#2196f3"}}>
               <Row>
                 <Col xs={2}></Col>
                   <Col xs={6}>

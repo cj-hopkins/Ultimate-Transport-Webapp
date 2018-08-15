@@ -193,12 +193,12 @@ export class MapContainer extends Component {
 
 
 
-        {this.props.selectedStops.map(item => (
+        {this.props.selectedStops.map((item,i) => (
           <Marker
-            icon={db2}
+            icon={i===0 ? A : i===(this.props.selectedStops.length-1)? B : db2} 
             key={item.identifier}
             onClick={this.onMarkerClick}
-            title={"Stop " + item.stop_id.toString()}
+            title={item.stop_id.toString()}
             name={item.location_text.concat(" ", item.address)}
             position={{ lat: item.stop_lat, lng: item.stop_lon }}
           />
@@ -209,7 +209,7 @@ export class MapContainer extends Component {
           visible={this.state.showingInfoWindow}
         >
           <div>
-            <h1>{this.state.activeMarker.title}</h1>
+            <h1>Stop {this.state.activeMarker.title}</h1>
             <p>{this.state.activeMarker.name}</p>
             <p>Real time Information:</p>
             <ul>
