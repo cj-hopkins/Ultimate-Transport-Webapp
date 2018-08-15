@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import VirtualizedSelect from 'react-virtualized-select'
+import VirtualizedSelect from 'react-virtualized-select';
+import { Grid } from 'react-bootstrap';
 
 class RealTimePage extends Component {
   constructor(props) {
@@ -42,19 +43,19 @@ class RealTimePage extends Component {
   } 
   render(){
     return (
-      <div>
-        
+      <Grid fluid={true}>        
       {/* <p style={{fontSize:'16px'}}>Search by stop number or address:</p>  */} 
       <VirtualizedSelect ref="citySelect"
 					options={this.state.stopsAsOptions}
 					simpleValue
 					clearable
+          placeholder="Search by Stop Number or Address"
 					name="select-city"
 					value={this.props.selectedRealTimeStop}
 					onChange={this.handleSelect}
 					searchable
 				/>
-      </div>
+      </Grid>
     );
   }
 };

@@ -170,7 +170,7 @@ export class MapContainer extends Component {
             url: B,
           }}
         />}
-        {(this.props.busCoords===undefined) ? null: 
+        {(this.props.polylineCoordinates.length < 1) ? null: 
         this.props.busCoords.map((item,i) => (
         (i<2)? 
         <Marker
