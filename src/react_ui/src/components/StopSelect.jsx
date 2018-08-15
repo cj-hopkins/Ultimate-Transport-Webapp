@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import { Button } from 'react-bootstrap';
 import Select from "react-select";
 // TODO: refactor to use a single handleSelect, pass the select name (start or finish)
 
@@ -17,24 +16,12 @@ class StopSelect extends Component {
       this.props.onStopDeselect("start");
     } else {
       this.props.onStopUpdate(start.value, null);
-      this.props.onSelectStartGetRealTime(start.value)
+      this.props.onSelectStartDisplayRealTimeButton(start.value)
     }
   };
 
   handleToggle = event => {
-    // const currentStart = this.props.startStop
-    // const currentFinish = this.props.finishStop
-    // const currentStart = this.state.selectedOptionStart;
-    // const currentFinish = this.state.selectedOptionFinish;
-    // this.setState({
-    //   selectedOptionStart: currentFinish,
-    //   selectedOptionFinish: currentStart
-    // });
-    // this.handleStartSelect(currentFinish);
-    // this.handleFinishSelect(currentStart);
-    // const newDirection = (this.props.direction === 'I') ? 'O' : 'I'
     this.props.onDirectionUpdate();
-    // this.props.onStopUpdate(currentFinish, currentStart)
   };
 
   render() {
@@ -54,8 +41,6 @@ class StopSelect extends Component {
         })
       );
     
-    // let finishStopsAsOptions = [...stopsAsOptions].reverse();
-
     return (
       <div>
         <Select

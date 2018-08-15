@@ -119,26 +119,10 @@ class ContentBlock extends Component {
       this.routeUpdate(newRoute, false)
     }
   }
-  onSelectStartGetRealTime(stopid){ //get Real time info when user picks start stop 
+  onSelectStartDisplayRealTimeButton(stopid){ //get Real time info when user picks start stop 
      this.setState({
        isRealTimeButtonHidden:false,
-  /*    isRealTimeHidden:false  */
     })   
-  /*  const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
-    fetch(endpoint)
-      .then (response => response.json())
-      .then(parsedJSON => {
-            this.setState({   //slice(0,4) to limit to top 4 results 
-                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-                  <tr key={i} className = 'real_time_box_sidebar'>
-                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.duetime} minutes </td>
-                  </tr>
-                ))
-            });
-     })
-      .catch(error => console.log('parsing failed',error))  */
   }
   onPressRealTimeButtonSidebar(stopid){
     this.setState({
@@ -277,7 +261,7 @@ class ContentBlock extends Component {
           onStopUpdate={this.onStopUpdate.bind(this)}
           onStopDeselect={this.onStopDeselect.bind(this)}
           chosenRoute={this.state.chosenRoute}
-          onSelectStartGetRealTime={this.onSelectStartGetRealTime.bind(this)}
+          onSelectStartDisplayRealTimeButton={this.onSelectStartDisplayRealTimeButton.bind(this)}
                     />
        {/*    </ErrorBoundary>    */} 
         <div style={{marginTop: '2em'}}> </div>
@@ -322,29 +306,31 @@ class ContentBlock extends Component {
         <div style={{marginTop: '2em'}}> </div>
         <Row>
       
-          <Col xs={12}>{(!this.state.isRealTimeButtonHidden && this.state.isDefaultTime ) &&            
-          <div> 
-                 {/* 
-                  <p  >Real Time Information for Stop {this.state.startStop}</p>
-                 <Table striped bordered condensed hover>{this.state.nextBuses}
-                </Table>
-                
-                */}
-                <Button 
-                 onClick={this.onPressRealTimeButtonSidebar.bind(this,this.state.startStop )} 
-          
-                  style ={{backgroundColor:'LightGrey'}}
-                    bsSize='large' 
-                    block>Get Real Time Information for Stop {this.state.startStop}
-            </Button>
-               <Table striped bordered condensed hover>{this.state.nextBuses}
-                </Table>
-                
-                
-              </div>
+          <Col xs={12}>
+            <div>
+            {(!this.state.isRealTimeButtonHidden && this.state.isDefaultTime ) &&            
+            <div> 
+                   {/* 
+                    <p  >Real Time Information for Stop {this.state.startStop}</p>
+                   <Table striped bordered condensed hover>{this.state.nextBuses}
+                  </Table>
+                  */}
+              <Button 
+                onClick={this.onPressRealTimeButtonSidebar.bind(this,this.state.startStop )} 
+                style ={{backgroundColor:'LightGrey'}}
+                bsSize='large' 
+                block>Get Real Time Information for Stop {this.state.startStop}
+              </Button>
+               <Table striped bordered condensed hover>{this.state.nextBuses}</Table>
+            </div>
+            }
+              {!this.state.isRealTimeHidden && <div> Hello </div>} 
               
               
-              } 
+              
+              
+              
+            </div>
           </Col>
         </Row>
       </Grid>
