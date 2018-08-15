@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, Media } from 'react-bootstrap';
 import "./App.css";
 import MapContainer from "./components/MapContainer";
 import ContentBlock from "./components/ContentBlock";
@@ -234,7 +234,7 @@ class App extends Component {
   render() {
     const siderbarMobile = 
           <div style={{backgroundColor:"white", height:'100%'}}>
-            <Grid fluid={true}>
+            <Grid fluid={true} style={{backgroundColor:'#3399ff'}}>
               <Row>
                 <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a></Col>
                 <Col xs={3}>
@@ -244,19 +244,24 @@ class App extends Component {
                   alt="dublin_bus_icon"
                 /></Col>
                 <Col xs={3}>
-                  <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1></Col><Col xs={3}>
+                  <h1 style={{fontFamily: 'Titillium Web, sans-serif', color:"white"}}>ULTIMATE TRANSPORT DUBLIN</h1></Col><Col xs={3}>
                 </Col>
+                <Col xs={2}>
+                <div style={{position:'absolute', right:'0px'}}>
+                <WeatherWidget />
+                </div>
+               </Col>
               </Row>
-              <Row>    <Col xs={1}></Col>
+              <Row style={{margin:'auto'}}>    <Col xs={3}></Col>
               <Col xs={9}>
                  <div style={{marginTop: '2em'}}> </div>
-                    <h2 style={{fontSize:'16px', color:"white"}}> Plan Your Journey with Dublin Bus</h2>
+                    <h2 style={{fontSize:'16px', color:"white"}}>Plan Your Journey with Dublin Bus</h2>
                   {/* <h2>
                     <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus
                     </Badge>
                   </h2> */}
                 </Col>
-                 <Col xs={2}></Col>
+                
               </Row>
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
@@ -266,16 +271,16 @@ class App extends Component {
     const sidebarDesktop =
           <div style={{backgroundColor:"white", height:'100%'}}>
             <ContentHeader/>
-            <Grid style={{backgroundColor:"#2196f3"}}>
-              <Row>
-                <Col xs={2}></Col>
-                  <Col xs={6}>
-                    <h2 style={{fontSize:'16px', color:"white"}}> Plan Your Journey with Dublin Bus </h2>
+            <Grid style={{backgroundColor:"#3399ff"}}>
+              <Row style={{margin:'auto'}}>
+                
+                  <Col xs={12}>
+                    <h2 style={{fontSize:'16px', color:"white", textAlign:'center'}}> Plan Your Journey with Dublin Bus </h2>
                 {/*  <h2>
                    <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
                 </h2> */}
                 </Col>
-                <Col xs={4}></Col>
+                
               </Row>
             </Grid>
          
@@ -285,7 +290,7 @@ class App extends Component {
 
     const sidebar = (!this.state.mql.matches) ? siderbarMobile : sidebarDesktop ;
     const contentHeader = (
-      <Grid fluid={true}>
+      <Grid fluid={true} style={{backgroundColor:'#3399ff'}}>
         <Row>
           <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a></Col>
           <Col xs={3}>
@@ -296,17 +301,20 @@ class App extends Component {
             />
           </Col>
           <Col xs={3}>
-            <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1>
+            <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>ULTIMATE TRANSPORT DUBLIN</h1>
           </Col>
-          <Col xs={3}></Col>
+          <Col xs={3}>
+                <div style={{position:'absolute', right:'0px'}}>
+                <WeatherWidget />
+                </div>
+          </Col>
         </Row>
-        <Row><Col xs={0}></Col>
-          <Col xs={10}>
-            <h2 style={{fontSize:'16px', color: "white"}} >Plan Your Journey with Dublin Bus
+        <Row style={{margin:'auto'}}>
+          <Col xs={12}>
+            <h2 style={{fontSize:'16px', color: "white", textAlign:'center'}} >Plan Your Journey with Dublin Bus
               {/*  <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge> */}
             </h2>
           </Col>
-           <Col xs={2}></Col>
         </Row>
       </Grid>
     );
