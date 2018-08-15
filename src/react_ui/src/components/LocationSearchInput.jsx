@@ -133,11 +133,10 @@ class LocationSearchInput extends React.Component {
           </div>
         )}
       </PlacesAutocomplete>
-      <Grid fluid={true}><Row><Col xs={4}></Col>
-      <Col xs={4}><Button  
+      <div style={{marginLeft:'5%'}}><Button
+        bsStyle='warning'  
         bsSize='large' 
-        style={{alignSelf:'center'}}
-        onClick={this.useCurrentLocation}>Use Current Location</Button></Col><Col xs={4}></Col></Row></Grid>
+        onClick={this.useCurrentLocation}>Use Current Location</Button></div>
       <PlacesAutocomplete
         value={this.state.address2}
         onChange={this.handleChange2}
