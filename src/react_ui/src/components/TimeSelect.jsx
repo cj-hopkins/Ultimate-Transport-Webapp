@@ -82,7 +82,7 @@ class TimeButton extends Component {
                   onSelectDate={this.dateUpdate.bind(this)}
                 />
               </Col>
-              <Col  xs={4}>
+              <Col  xs={3}>
                 <NowButton
                   dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   onResetNow= {this.onResetNow.bind(this)}
@@ -152,6 +152,7 @@ class TimeDropdown extends Component {
           step={30}
           onChange={this.handleTimeChange.bind(this)}
           value={this.state.chosenTime}
+          style={{fontSize:'14px'}}
         />
       </div>
     );
@@ -187,7 +188,7 @@ class NowButton extends Component {
           style = {{fontSize:'14px'}}
       /*    bsStyle="primary"  */
           onClick={this.handleClick.bind(this)}
-          block
+    
         >
           {" "}
           Leave now
