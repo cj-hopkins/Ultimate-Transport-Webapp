@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import LocationSearchInput from "./LocationSearchInput";
 import {Collapse} from 'react-collapse';
-import { Button } from 'react-bootstrap';
+import { Button, Grid, Row, Col } from 'react-bootstrap';
 import ReactTooltip from 'react-tooltip'
 
 class JourneyPlanner extends Component {
@@ -168,14 +168,14 @@ class JourneyPlanner extends Component {
     return (
     
      <div>
-     <Button data-tip='Select a route to take' style={{padding: '5px', margin: '5px', marginLeft:'5%'}} bsStyle="primary" onClick={() => this.selectRoute(index)}>Select Route</Button>
+     <Button data-tip='Select a route to take' style={{padding: '5px', margin: '5px', marginLeft:'5%'}} bsStyle="primary" onClick={() => this.selectRoute(index)}>{'Journey ' + (index+1)}</Button>
 <ReactTooltip />
       {/* <Button onClick={this.setState({selectedRoute: index})}>route</Button> */}
-      <Collapse style={{border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px', color: '#606060'}} isOpened={(this.state.selectedRoute === index) ? true : false} onClick={this.isOpened = !this.isOpened}>
+      <Collapse style={{ border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px', color: '#606060'}} isOpened={(this.state.selectedRoute === index) ? true : false} onClick={this.isOpened = !this.isOpened}>
        <div>
         {journey.legs[0].steps.map(item => {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
-          return <p>{item.instructions} {routeName}</p>
+          return <p style={{textAlign:'left'}}>{item.instructions} {routeName}</p>
         })}
         </div>
       </Collapse>

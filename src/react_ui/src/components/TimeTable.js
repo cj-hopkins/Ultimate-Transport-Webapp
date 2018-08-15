@@ -75,14 +75,13 @@ class TimeTable extends Component {
   routeUpdate (route) {
     console.log("route update")
     console.log(route)
-    const route_orig = route[0].rtpi_origin
+    const route_orig = route[1].rtpi_origin
     const route_dest = route[route.length - 1].rtpi_destination
     this.setState({
       stops: route,
-      route_destination: route_dest,
-      route_origin: route_orig,
+      route_destination: route_orig,
+      route_origin: route_dest,
     })
-    this.props.onRouteUpdate(route)
   }
   async onChosenRouteUpdate(route) {
     this.setState({
