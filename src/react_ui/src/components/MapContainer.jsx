@@ -146,7 +146,9 @@ export class MapContainer extends Component {
         /><ReactTooltip />
         {this.props.polylineCoordinates.length < 1? null:
         <Marker
-          name={"Start"}
+          onClick={this.onMarkerClick}
+          name={""}
+          title="Start"
           position={{
             lat: this.props.polylineCoordinates[0].lat,
             lng: this.props.polylineCoordinates[0].lng
@@ -157,7 +159,9 @@ export class MapContainer extends Component {
         />}
         {this.props.polylineCoordinates.length < 1? null:
         <Marker
-          name={"End"}
+          onClick={this.onMarkerClick}
+          name=""
+          title="End"
           position={{
             lat: this.props.polylineCoordinates[endPoint].lat,
             lng: this.props.polylineCoordinates[endPoint].lng
