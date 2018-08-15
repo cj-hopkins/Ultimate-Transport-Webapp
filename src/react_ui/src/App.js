@@ -244,7 +244,7 @@ class App extends Component {
                   alt="dublin_bus_icon"
                 /></Col>
                 <Col xs={3}>
-                  <h1 style={{fontFamily: 'Titillium Web, sans-serif', color:"white"}}>ULTIMATE TRANSPORT DUBLIN</h1></Col><Col xs={3}>
+                  <h1 style={{fontFamily: 'Titillium Web, sans-serif', color:"white", marginTop:'5px'}}>ULTIMATE TRANSPORT DUBLIN</h1></Col><Col xs={3}>
                 </Col>
                 <Col xs={2}>
                 <div style={{position:'absolute', right:'0px'}}>
@@ -275,6 +275,7 @@ class App extends Component {
               <Row style={{margin:'auto'}}>
                 
                   <Col xs={12}>
+                   <div style={{marginTop: '2em'}}> </div>
                     <h2 style={{fontSize:'16px', color:"white", textAlign:'center'}}> Plan Your Journey with Dublin Bus </h2>
                 {/*  <h2>
                    <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
@@ -301,16 +302,18 @@ class App extends Component {
             />
           </Col>
           <Col xs={3}>
-            <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>ULTIMATE TRANSPORT DUBLIN</h1>
+            <h1 style={{fontFamily: 'Titillium Web, sans-serif', marginTop:'5px'}}>ULTIMATE TRANSPORT DUBLIN</h1>
           </Col>
-          <Col xs={3}>
+          <Col xs={5}>
                 <div style={{position:'absolute', right:'0px'}}>
                 <WeatherWidget />
                 </div>
           </Col>
         </Row>
         <Row style={{margin:'auto'}}>
-          <Col xs={12}>
+          <Col xs={3}></Col>
+          <Col xs={9}>
+            <div style={{marginTop: '2em'}}> </div>
             <h2 style={{fontSize:'16px', color: "white", textAlign:'center'}} >Plan Your Journey with Dublin Bus
               {/*  <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge> */}
             </h2>
