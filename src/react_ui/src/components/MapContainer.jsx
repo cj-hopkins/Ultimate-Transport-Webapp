@@ -85,12 +85,11 @@ export class MapContainer extends Component {
 
   onMarkerClick (props, marker, e){
     this.setState({
-      selectedPlace: props,
+      currentPosition: { lat: parseFloat(props.position.lat),lng: parseFloat(props.position.lng)},
       activeMarker: marker,
       showingInfoWindow: true,
       nextBuses: this.fetchRealTime(marker.title)
     });
-
     //    console.log('selectedPlace',this.state.selectedPlace.title);
     //    console.log('activeMarker', this.state.activeMarker.title);
   }
@@ -118,6 +117,7 @@ export class MapContainer extends Component {
           lat: 53.3498,
           lng: -6.2603
         }}
+        centerAroundCurrentLocation={true}
       ><ReactTooltip />
 
         <CustomGeolocation onLocationUpdate={this.props.onLocationUpdate}/>
