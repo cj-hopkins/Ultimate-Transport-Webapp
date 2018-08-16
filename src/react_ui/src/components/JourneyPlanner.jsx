@@ -164,7 +164,8 @@ class JourneyPlanner extends Component {
   }
   escapeRegExp(str) {
     var regex = /<[^>]*>/g
-    return str.replace(regex, "");
+    var reg2= "&nbsp;"
+    return str.replace(regex, " ").replace(reg2, "");
   }
 
 
@@ -182,12 +183,12 @@ class JourneyPlanner extends Component {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
           const instructions = []
           if (item.travel_mode === 'TRANSIT'){
-            instructions.push(<p style={{textAlign:'left'}}>{"Take Dublin Bus, route number " + routeName + ", towards " + item.transit.headsign}</p>)
-            instructions.push(<p style={{textAlign:'left'}}>{"Exit bus at "+item.transit.arrival_stop.name}</p>)
+            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops"}</p>)
+            instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}</p>)
             } 
           else {
             for(var i=0; i<item.steps.length;i++){
-                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions)}</p>)
+                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions) + "(" + item.steps[i].distance.text + "/ "+ item.steps[i].duration.text + " walk)"}</p>)
             }} 
           return instructions
           
@@ -224,7 +225,7 @@ class JourneyPlanner extends Component {
   }
   render() {
     return (
-      <div style={{minHeight:'50%', maxHeight:'800px'}} >
+      <div style={{minHeight:'50%', maxHeight:'1000px'}} >
         <LocationSearchInput
           value1={this.state.origin}
           value2={this.state.destination}
