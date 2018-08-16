@@ -5,10 +5,10 @@ import StopSelect from "./StopSelect"
 import { Button} from "react-bootstrap"
 import TimeButton from './TimeSelect';
 import PredictionContainer from './PredictionContainer';
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import moment from "moment";
 import ErrorBoundary from './ErrorBoundary';
-
+import ReactTooltip from 'react-tooltip'
+import "./../App.css";
 class ContentBlock extends Component {
   constructor(props) {
     super(props)
@@ -26,7 +26,9 @@ class ContentBlock extends Component {
       plannedTime:moment(),
       isDefaultTime:true, // needed for when page loads and leave_now button
       nextBuses:[], 
-      isRealTimeHidden:true
+      isRealTimeButtonHidden:true, 
+      isRealTimeHidden:true, 
+      dateOfMonthToTravel: ((moment().month()).toString().concat(moment().date()).toString())
     }
   }
   routeReset () {
@@ -84,19 +86,20 @@ class ContentBlock extends Component {
   onSelectTime(time){  //on change of time (time dropdown) 
     this.setState({
       plannedTime:time,
-      isDefaultTime: false
+      isDefaultTime: false, 
     })
   }
    onSelectDate(date){  //on change of date (calendar) 
     this.setState({
       plannedDate:date,
-      isDefaultTime: false
+      isDefaultTime: false,
+      dateOfMonthToTravel: ((date.month()).toString().concat(date.date()).toString())
      })
    }
   onPageLoadSetTime(time){  //on load of page set time = now
     this.setState({
       plannedTime:time,
-      isDefaultTime: true
+      isDefaultTime: true,
     })
   }
   onPageLoadSetDate(date){  //on load of page set date = now
@@ -116,17 +119,24 @@ class ContentBlock extends Component {
       this.routeUpdate(newRoute, false)
     }
   }
-  onSelectStartGetRealTime(stopid){
+  onSelectStartDisplayRealTimeButton(stopid){ //get Real time info when user picks start stop 
      this.setState({
-      isRealTimeHidden:false
+       isRealTimeButtonHidden:false,
+       isRealTimeHidden: true
+    })   
+  }
+  onPressRealTimeButtonSidebar(stopid){
+    this.setState({
+      isRealTimeHidden:false,
+       isRealTimeHidden: !this.state.isRealTimeHidden
     })
-    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
+     const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
     fetch(endpoint)
       .then (response => response.json())
       .then(parsedJSON => {
             this.setState({   //slice(0,4) to limit to top 4 results 
                 nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-                  <tr key={i} >
+                  <tr key={i} className = 'real_time_box_sidebar'>
                     <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.duetime} minutes </td>
@@ -136,6 +146,7 @@ class ContentBlock extends Component {
      })
       .catch(error => console.log('parsing failed',error))
   }
+  
   async onStopUpdate(start = null, finish = null) {
     // Here be dragons - leave this code for now
     if (start === null || finish === null) {
@@ -143,20 +154,8 @@ class ContentBlock extends Component {
       const stop = isStart ? start : finish;
       const finishIndex = (this.state.finishStop === "finish") ? this.state.stops.length : this.findStopIndex(this.state.finishStop)
       const startIndex = (this.state.startStop === "start") ? 0 : this.findStopIndex(this.state.startStop)
-
-      // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
-      // if (stop === "Start" || stop === "Finish") {
-      //   this.setState({
-      //     startStop: "Start",
-      //     finishStop: "Finish"
-      //   })
-      // }
-      // this.setState({
-      //   stopState: stop,
-      //   predictionForJourney: null,
-      // })
       const index = this.findStopIndex(stop);
-      console.log(index)
+      console.log("Stop index", index)
       let newStops;
       if (isStart) {
         newStops = this.state.stops.slice(index, finishIndex)
@@ -167,8 +166,7 @@ class ContentBlock extends Component {
       }
       this.setState({chosenStops: newStops});
       this.props.onSelectedJourneyUpdate(newStops);
-      // if neither values are null then we are doing a direction switch
-    } else {
+    } else {   // if neither values are null then switch direction 
         this.setState({
           startStop: start,
           finishStop: finish,
@@ -199,6 +197,7 @@ class ContentBlock extends Component {
 
   handleClick = () => { 
     this.getPrediction()
+    console.log('DAY OF TRAVEL STRING ______' + this.state.dayOfTravel)
   }
   getPrediction = () => {
     // const endpoint = '/api/getPredictionForJourney' 
@@ -239,8 +238,9 @@ class ContentBlock extends Component {
   
   render(){
     return (
-      <Grid fluid={true} style ={{backgroundColor:'white'}}>
-             <ErrorBoundary>
+        <div style={{minHeight: '50%', maxHeight:'600px', backgroundColor:'white'}}>
+      <Grid fluid={true}>
+      {/*         <ErrorBoundary> */}
         <RouteSelect 
             className="mb-3" 
             chosenRoute={this.state.chosenRoute}
@@ -253,9 +253,8 @@ class ContentBlock extends Component {
             onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
             routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-        </ErrorBoundary>
-        <ErrorBoundary>
- 
+     {/*  </ErrorBoundary>
+        <ErrorBoundary>    */} 
         <StopSelect 
           stops={this.state.stops}
           startStop={this.state.startStop}
@@ -265,57 +264,80 @@ class ContentBlock extends Component {
           onStopUpdate={this.onStopUpdate.bind(this)}
           onStopDeselect={this.onStopDeselect.bind(this)}
           chosenRoute={this.state.chosenRoute}
-          onSelectStartGetRealTime={this.onSelectStartGetRealTime.bind(this)}
+          onSelectStartDisplayRealTimeButton={this.onSelectStartDisplayRealTimeButton.bind(this)}
                     />
-        </ErrorBoundary>
-        
-        
+       {/*    </ErrorBoundary>    */} 
         <div style={{marginTop: '2em'}}> </div>
         <div style={{marginTop: '2em'}}> </div>
         <Row>
-          <Col xs={2}></Col>
-          <Col xs={8}>
+          <Col xs={0}></Col>
+          <Col xs={12}>
             <TimeButton  
               onResetNowContentBlock= {this.onResetNowContentBlock.bind(this)} 
               plannedTime = {this.state.plannedTime}
               plannedDate = {this.state.plannedDate} 
-              isDefaultTime = {this.state.isDefaultTime} 
+              isDefaultTime = {this.state.isDefaultTime}
+              dateOfMonthToTravel = {this.state.dateOfMonthToTravel} 
               onSelectTime= {this.onSelectTime.bind(this)} 
               onSelectDate= {this.onSelectDate.bind(this)} 
               onPageLoadSetDate = {this.onPageLoadSetDate.bind(this)} 
               onPageLoadSetTime= {this.onPageLoadSetTime.bind(this)} 
-                        />
+          />
           </Col>
-          <Col xs={2}></Col>
+          <Col xs={0}></Col>
         </Row>  
         <div style={{marginTop: '2em'}}> </div>
-        <Row><Col xs={2}></Col>
-        <Col xs={8}>
-          <Button 
-            onClick={this.handleClick} 
-            bsStyle='warning' 
-            bsSize='large' 
-            block>Estimate journey time
-          </Button>
-        </Col>
-        <Col xs={2}></Col></Row>
-        <Row><Col xs={2}></Col>
-        <Col xs={8}>
-          <PredictionContainer prediction={this.state.predictionForJourney} />
-        </Col>
+        <Row>
+         <Col xs={0}></Col>  
+          <Col xs={12}> 
+            <Button 
+              onClick={this.handleClick} 
+              bsStyle='warning' 
+              bsSize='large' 
+              block>Estimate journey time
+            </Button>
+          </Col>
+          <Col xs={0}></Col>  
+        </Row>
+        <Row>
+       <Col xs={0}></Col>
+          <Col xs={12}>  
+            <PredictionContainer prediction={this.state.predictionForJourney} />
+         </Col>
+          <Col xs={0}></Col> 
         </Row>	
         <div style={{marginTop: '2em'}}> </div>
         <Row>
-          <Col xs={2}></Col>
-        <Col xs={8}>{(!this.state.isRealTimeHidden && this.state.isDefaultTime ) &&            
-            <div> <p>Real Time Information for Stop {this.state.startStop}</p>
-                <Table striped bordered condensed hover>{this.state.nextBuses}
-              </Table>
-            </div> 
-            } 
+      
+          <Col xs={12}>
+            <div>
+            {(!this.state.isRealTimeButtonHidden && this.state.isDefaultTime ) &&            
+            <div> 
+                   {/* 
+                    <p  >Real Time Information for Stop {this.state.startStop}</p>
+                   <Table striped bordered condensed hover>{this.state.nextBuses}
+                  </Table>
+                  */}
+              <Button 
+                onClick={this.onPressRealTimeButtonSidebar.bind(this,this.state.startStop )} 
+                style ={{backgroundColor:'LightGrey'}}
+                bsSize='large' 
+                block>Get Real Time Information for Stop {this.state.startStop}
+              </Button>
+               
+            </div>
+            }
+              {!this.state.isRealTimeHidden && <div> <Table striped bordered condensed hover>{this.state.nextBuses}</Table> </div>} 
+              
+              
+              
+              
+              
+            </div>
           </Col>
         </Row>
       </Grid>
+      </div>
     )
   }
 }

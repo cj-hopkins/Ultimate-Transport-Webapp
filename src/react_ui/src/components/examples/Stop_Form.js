@@ -13,7 +13,6 @@ class StopForm extends Component {
   }
 
   async componentDidMount(){
-
     const endpoint = "/api";
     try {
       const res = await fetch(endpoint)

@@ -53,7 +53,7 @@ class TimeButton extends Component {
   render() {
     return (
       <div>
-        <Button
+        <Button style={{marginBottom: '5px'}}
           onClick={this.toggleHidden.bind(this)}
           bsStyle="primary"
           bsSize="large"
@@ -65,21 +65,26 @@ class TimeButton extends Component {
         {!this.state.isHidden && (
           <Grid>
             <Row>
-              <Col>
+              <Col md={4} xs={4}>
                 <TimeDropdown
+                  dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   plannedTime= {this.props.plannedTime}
-                  onSelectTime={this.timeUpdate.bind(this)} 
+                  plannedDate={this.props.plannedDate}
+                  onSelectTime={this.timeUpdate.bind(this)}
+                  onSelectDate={this.dateUpdate.bind(this)}
                   />
               </Col>
-              <Col>
+              <Col  md={4} xs={12}>
                 {" "}
                 <CalendarChooseDate
+                  dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   plannedDate={this.props.plannedDate}
                   onSelectDate={this.dateUpdate.bind(this)}
                 />
               </Col>
-              <Col>
+              <Col  md={4} xs={4}>
                 <NowButton
+                  dateOfMonthToTravel = {this.props.dateOfMonthToTravel}
                   onResetNow= {this.onResetNow.bind(this)}
                   onSelectTime={this.timeUpdate.bind(this)}
                   onSelectDate={this.dateUpdate.bind(this)}
@@ -109,7 +114,8 @@ class CalendarChooseDate extends Component {
         onChange={this.handleChange.bind(this)} // when value changed
         minDate={moment()}
         highlightDates={[moment()]}
-        dateFormat="LL"
+        dateFormat="DD-MM-YYYY " 
+        style ={{width:'100%'}}
       />
     );
   }
@@ -118,7 +124,8 @@ class TimeDropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      plannedTimeNotNow: moment()
+      plannedTimeNotNow: moment(), 
+      todaysDate : ((moment().month()).toString().concat(moment().date()).toString())
     };
   }
   handleTimeChange(time) { // seconds passed midnight
@@ -126,18 +133,27 @@ class TimeDropdown extends Component {
       chosenTime: time
     });
     this.props.onSelectTime(time);
+    
+    
   }
   render() {
+    let startingTime ;
+    const todaysDate = ((moment().month()).toString().concat(moment().date()).toString());
+     if (this.props.dateOfMonthToTravel == this.state.todaysDate ){ 
+       /* https://stackoverflow.com/questions/25323823/round-moment-js-object-time-to-nearest-30-minute-interval*/
+      startingTime = (moment(moment()).add(30 - (moment().minute() % 30) , "minutes").format('HH:mm')).toString()  
+    } else {
+       startingTime = "06:30"
+    }
     return (
       <div>
         <TimePicker
-          /* https://stackoverflow.com/questions/25323823/round-moment-js-object-time-to-nearest-30-minute-interval*/
-          start= { (moment(moment()).add(30 - (moment().minute() % 30) , "minutes").format('HH:mm')).toString()}
+          start= {startingTime}
           end="23:30"
-        /*    format="24"  */
           step={30}
           onChange={this.handleTimeChange.bind(this)}
           value={this.state.chosenTime}
+          style={{fontSize:'14px'}}
         />
       </div>
     );
@@ -168,11 +184,12 @@ class NowButton extends Component {
   render() {
     return (
       <div>
-        <Button
+        <Button className="float-right"
           value={this.state.plannedTime}
-          bsStyle="default"
+          style = {{fontSize:'14px', textAlign:'left'}}
+      /*    bsStyle="primary"  */
           onClick={this.handleClick.bind(this)}
-          block
+    block
         >
           {" "}
           Leave now

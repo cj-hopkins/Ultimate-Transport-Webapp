@@ -1,25 +1,24 @@
 import React, { Component } from "react";
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, Media } from 'react-bootstrap';
 import "./App.css";
 import MapContainer from "./components/MapContainer";
 import ContentBlock from "./components/ContentBlock";
 import ContentHeader from "./components/ContentHeader";
-import Example from "./components/examples/Example";
 import RealTimePage from "./components/RealTimePage";
 import CustomNavbar from './components/CustomNavbar';
 import Sidebar from 'react-sidebar';
 import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
-import { PageHeader } from "react-bootstrap";
-import { Button } from 'react-bootstrap';
 import WeatherWidget from "./components/Weather";
-import LocationSearchInput from './components/LocationSearchInput';
 import JourneyPlanner from './components/JourneyPlanner';
 import { Table } from 'react-bootstrap';
 import TimeTable from "./components/TimeTable";
 import { TwitterFeed } from "./components/TwitterFeed";
 import {Badge} from "react-bootstrap";
+import ReactTooltip from 'react-tooltip'
+import FooterPage from './components/Footer';
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
+
 
 const styles = {
   contentHeaderMenuLink: {
@@ -50,9 +49,15 @@ class App extends Component {
       selectedJourney: [],
       selectedRealTimeStop:0,
       activatedUI: 0,
-      polylineCoordinates: [], 
+      polylineCoordinates: [],
+      busCoords:[], 
       nextBuses:[], 
-      isRealTimeHidden:true
+      isRealTimeHidden:true,
+      currentPosition: {
+        //dublin city centre co-ordinates
+        lat: 53.3498,
+        lng: -6.2603
+      }
     }
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.renderPropCheckbox = this.renderPropCheckbox.bind(this);
@@ -96,7 +101,6 @@ class App extends Component {
       selectedRealTimeStop: stop
     });
   }
-  
   onStopSelectGetRealTime(stop){
      this.setState({
       isRealTimeHidden:false
@@ -106,8 +110,8 @@ class App extends Component {
       .then (response => response.json())
       .then(parsedJSON => {
             this.setState({   
-                nextBuses: parsedJSON.results.map((post, i) => (
-                  <tr key={i} >
+                nextBuses: parsedJSON.results.slice(0, 10).map((post, i) => (
+                  <tr key={i} className = 'real_time_box_sidebar'>
                     <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>{post.duetime} minutes </td>
@@ -117,19 +121,6 @@ class App extends Component {
      })
       .catch(error => console.log('parsing failed',error))
   }
-  // parseCood = object => (String(object[object]()) > 6) ? object : parseFloat(String(object[object]()).substring(0,6))
-  // parseCoords = array => array.map(object => ({
-  //   let newLat = String(object.lat())
-  //   let newLng = String(object.lng())
-  //   newLat = (newLat.length > 6) ? = parseFloat(newLat.substring(0,6)) : parseFloat(newLat);
-  //   newLng = (newLng.length > 6) ? = parseFloat(newLng.substring(0,6)) : parseFloat(newLng);
-  //   return (({
-  //   lat: newLat,
-  //   lng: newLng
-  //   })
-  // )
-  // })
-  // Each JS object in the array has 2 functions, lat & lng. Run them to return the actual coords
   parseCoords = array => array.map(object => ({
     lat: parseFloat(object.lat()),
     lng: parseFloat(object.lng())
@@ -141,6 +132,12 @@ class App extends Component {
       polylineCoordinates: coords
     });
     // console.log("coords in App", coords)
+  }
+  getBusCoords(points){
+    console.log("points",points)
+    this.setState({
+      busCoords: points,
+    })
   }
   renderSwitch = () => {
     console.log(this.state.activatedUI)
@@ -155,33 +152,38 @@ class App extends Component {
         case 1:
         // this.setState({selectedJourney: []});
           return <JourneyPlanner key={1} 
+            getBusCoords={this.getBusCoords.bind(this)}
             getPolyCoordinates={this.getPolyCoordinates.bind(this)}
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            currentPosition={this.state.currentPosition}
           />;
         case 2:
         return <TimeTable key={2} 
             onRouteUpdate={this.onRouteUpdate.bind(this)}
             onSelectedJourneyUpdate={this.onSelectedJourneyUpdate.bind(this)}
+            getPolyCoordinates={this.getPolyCoordinates.bind(this)}
             />;
         case 3:
-          return 
-            <div>
-              <RealTimePage key={3} 
+          return <div style={{minHeight:'50%', maxHeight:'800px'}}> 
+             <RealTimePage key={3} 
+                      getPolyCoordinates={this.getPolyCoordinates.bind(this)}
                       onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
                       selectedRealTimeStop= {this.state.selectedRealTimeStop}
                       onRealTimeStopUpdate= {this.onRealTimeStopUpdate.bind(this)}    
-                          />;
+                          />
+
               {!this.state.isRealTimeHidden &&
               <div>
                 <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
+
                 <Table>  {this.state.nextBuses}  </Table>
               </div>
-                }
-            </div> 
+               }
+            </div>
         case 4.1:
           return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
-        case 4.3:
-          return <div>  <TwitterFeed />  </div>
+     case 4.3:
+          return  <TwitterFeed getPolyCoordinates={this.getPolyCoordinates.bind(this)} />
         default:
           return <div key={4} />;
       }
@@ -220,80 +222,108 @@ class App extends Component {
       </p>
     );
   }
+
+  onLocationUpdate(coords){
+    console.log("updating location", coords)
+    this.setState({
+      currentPosition: {
+        lat: coords.latitude,
+        lng: coords.longitude
+      }
+    })
+  }
+
   render() {
-    const siderbarWithButton = 
+    const siderbarMobile = 
           <div style={{backgroundColor:"white", height:'100%'}}>
-            <Grid fluid={true}>
+            <Grid fluid={true} style={{backgroundColor:'#3399ff'}}>
               <Row>
                 <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a></Col>
                 <Col xs={3}>
                   <img
                   src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
-                  style={{ width: "80px", height: "80px" }}
+                  style={{ margin: '10px', width: "80px", height: "80px" }}
                   alt="dublin_bus_icon"
                 /></Col>
                 <Col xs={3}>
-                  <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport</h1></Col><Col xs={3}><WeatherWidget />
+                  <h1 style={{fontFamily: 'Titillium Web, sans-serif', color:"white", marginTop:'5px'}}>ULTIMATE TRANSPORT DUBLIN</h1></Col><Col xs={3}>
                 </Col>
+                <Col xs={2}>
+                <div style={{position:'absolute', right:'0px'}}>
+                <WeatherWidget />
+                </div>
+               </Col>
               </Row>
-              <Row>    <Col xs={2}></Col>
-        <Col xs={8}>
-                <h3>
-                  <Badge bsStyle="primary" style ={{fontSize:'16px'}} >Plan Your Journey</ Badge>
-                </h3>
+              <Row style={{margin:'auto'}}>    <Col xs={3}></Col>
+              <Col xs={12}>
+                {/*  <div style={{marginTop: '2em'}}> </div> */}
+                    <h2 style={{fontSize:'14px', color:"white"}}>Plan Your Journey with Dublin Bus</h2>
+                  {/* <h2>
+                    <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus
+                    </Badge>
+                  </h2> */}
                 </Col>
-                 <Col xs={2}></Col>
+                
               </Row>
             </Grid>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
+     <FooterPage/>
     </div>;
     
-    const sidebarNoButton = 
+    const sidebarDesktop =
           <div style={{backgroundColor:"white", height:'100%'}}>
             <ContentHeader/>
-            <Grid>
-              <Row>
-                <Col xs={4}></Col>
-                  <Col xs={4}>
-                    <h3>
-                      <Badge bsStyle="primary"  style ={{fontSize:'16px'}}  >Plan Your Journey</ Badge>
-                    </h3>
+            <Grid style={{backgroundColor:"#3399ff"}}>
+              <Row style={{margin:'auto'}}>
+                
+                  <Col xs={12}>
+                   {/* <div style={{marginTop: '2em'}}> </div> */}
+                    <h2 style={{fontSize:'14px', color:"white", textAlign:'center'}}> Plan Your Journey with Dublin Bus </h2>
+                {/*  <h2>
+                   <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
+                </h2> */}
                 </Col>
-                <Col xs={4}></Col>
+                
               </Row>
             </Grid>
          
             <CustomNavbar swapUI={this.swapUI.bind(this)}/>{this.renderSwitch()}
+        <FooterPage/>   
           </div>;
 
-    const sidebar = (!this.state.mql.matches) ? siderbarWithButton : sidebarNoButton;
+    const sidebar = (!this.state.mql.matches) ? siderbarMobile : sidebarDesktop ;
     const contentHeader = (
-      <Grid fluid={true}>
+      <Grid fluid={true} style={{backgroundColor:'#3399ff'}}>
         <Row>
           <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a></Col>
           <Col xs={3}>
             <img
             src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
-            style={{ width: "80px", height: "80px" }}
+            style={{ margin: '10px', width: "80px", height: "80px" }}
             alt="dublin_bus_icon"
             />
           </Col>
           <Col xs={3}>
-            <h1 style={{fontFamily: 'Titillium Web, sans-serif'}}>Ultimate Transport Dublin</h1>
+            <h1 style={{fontFamily: 'Titillium Web, sans-serif', marginTop:'5px'}}>ULTIMATE TRANSPORT DUBLIN</h1>
           </Col>
-          <Col xs={3}><WeatherWidget /></Col>
+          <Col xs={5}>
+                <div style={{position:'absolute', right:'0px'}}>
+                <WeatherWidget />
+                </div>
+          </Col>
         </Row>
-        <Row><Col xs={2}></Col>
-          <Col xs={8}>
-            <h3>
-              <Badge bsStyle="warning"  style ={{fontSize:'16px'}}  >Plan Your Journey</ Badge>
-            </h3>
+        <Row style={{margin:'auto'}}>
+          <Col xs={3}></Col>
+          <Col xs={12}>
+           {/* <div style={{marginTop: '2em'}}> </div> */}
+            <h2 style={{fontSize:'14px', color: "white", textAlign:'center'}} >Plan Your Journey with Dublin Bus
+              {/*  <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge> */}
+            </h2>
           </Col>
-           <Col xs={2}></Col>
         </Row>
       </Grid>
     );
-    const header = (!this.state.mql.matches) ? contentHeader : null 
+    const header = (!this.state.mql.matches && !this.state.open)  ? contentHeader : null 
     const sidebarProps = {
       sidebar: sidebar,
       docked: this.state.docked,
@@ -306,12 +336,16 @@ class App extends Component {
       dragToggleDistance: this.state.dragToggleDistance,
       transitions: this.state.transitions,
       onSetOpen: this.onSetOpen,
+      styles:defaultStyles
     };
     return (
       <Sidebar {...sidebarProps}>
         <MaterialTitlePanel title={header}>
             <MapContainer selectedStops={this.state.selectedJourney}
+              busCoords={this.state.busCoords}
               polylineCoordinates={this.state.polylineCoordinates}
+              currentPosition={this.state.currentPosition}
+              onLocationUpdate={this.onLocationUpdate.bind(this)}
             />
         </MaterialTitlePanel>
       </Sidebar>
@@ -319,3 +353,56 @@ class App extends Component {
   }
 }
 export default App;
+
+var defaultStyles = {
+  root: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+    backgroundColor: "white",
+  },
+  sidebar: {
+    zIndex: 2,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    transition: 'transform .3s ease-out',
+    WebkitTransition: '-webkit-transform .3s ease-out',
+    willChange: 'transform',
+    overflowY: 'auto',
+    backgroundColor: "white",
+    maxWidth:'540px'
+  },
+  content: {
+    position: 'absolute',
+    backgroundColor: "white",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflowY: 'scroll',
+    WebkitOverflowScrolling: 'touch',
+    transition: 'left .3s ease-out, right .3s ease-out'
+  },
+  overlay: {
+    zIndex: 1,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'opacity .3s ease-out, visibility .3s ease-out',
+    backgroundColor: 'rgba(0,0,0,.3)'
+  },
+  dragHandle: {
+    zIndex: 1,
+    position: 'fixed',
+    top: 0,
+    bottom: 0
+  }
+};

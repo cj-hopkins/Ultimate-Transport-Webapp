@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import RouteSelect from './RouteSelect';
 import TimeTableStop from "./TimeTableStop";
-import { Button, Grid, Row, Col, Table } from "react-bootstrap";
-import moment from "moment";
+import { Button, Grid, Row, Col} from "react-bootstrap";
+import Table from 'rc-table';
 import Select from 'react-select';
 
 class TimeTable extends Component {
@@ -18,17 +18,15 @@ class TimeTable extends Component {
       finishStop:'finish',
       direction: 'I',
       sqlDirection: 1,
-      plannedDate:moment(),
-      plannedTime:moment(),
-      isDefaultTime:true, // needed for when page loads and leave_now button
-      nextBuses:[], 
-      isRealTimeHidden:true,
       weekday: 0,
       saturday: 0,
       sunday: 0,
       chosenDay: null,
       times:null,
     }
+  }
+  componentWillMount() {
+    this.props.getPolyCoordinates([])
   }
   handleSelect = (chosenDay) => {
       this.setState({ chosenDay });
@@ -77,23 +75,17 @@ class TimeTable extends Component {
     })
     this.props.onRouteUpdate([])
   }
-  //Save the list of stops to contentBlock's state before
-  //Calling App.js setState function - pass stops to map
   routeUpdate (route) {
     console.log("route update")
     console.log(route)
-    // TODO get rtpi dest and origin factoring in the time - currently
-    // they are often incorrect
-    const route_orig = route[0].rtpi_origin
+    const route_orig = route[1].rtpi_origin
     const route_dest = route[route.length - 1].rtpi_destination
     this.setState({
       stops: route,
-      route_destination: route_dest,
-      route_origin: route_orig,
+      route_destination: route_orig,
+      route_origin: route_dest,
     })
-    this.props.onRouteUpdate(route)
   }
-  // chosen route NAME: '31', '11' etc. - TODO make this clearer
   async onChosenRouteUpdate(route) {
     this.setState({
       chosenRoute: route,
@@ -111,18 +103,6 @@ class TimeTable extends Component {
       finishStop: 'finish'
     })
   }              
-  onPageLoadSetTime(time){  //on load of page set time = now
-    this.setState({
-      plannedTime:time,
-      isDefaultTime: true
-    })
-  }
-  onPageLoadSetDate(date){  //on load of page set date = now
-    this.setState({
-      plannedDate:date,
-      isDefaultTime: true
-    })
-  } 
   onStopDeselect(stop) {
     if (stop === 'start') {
       this.setState({
@@ -153,64 +133,15 @@ class TimeTable extends Component {
      })
       .catch(error => console.log('parsing failed',error))
   }
-  // async onStopUpdate(start = null, finish = null) {
-  //   // Here be dragons - leave this code for now
-  //   if (start === null || finish === null) {
-  //     const isStart = (finish === null) ? true : false;
-  //     const stop = isStart ? start : finish;
-  //     const finishIndex = this.findStopIndex(this.state.startStop)+1 
-  //     const startIndex = this.findStopIndex(this.state.startStop)
 
-  //     // TODO handle deselect of start/finish stop properly - "Start" currently returned on deselect of start etc
-  //     // if (stop === "Start" || stop === "Finish") {
-  //     //   this.setState({
-  //     //     startStop: "Start",
-  //     //     finishStop: "Finish"
-  //     //   })
-  //     // }
-  //     // this.setState({
-  //     //   stopState: stop,
-  //     //   predictionForJourney: null,
-  //     // })
-  //     const index = this.findStopIndex(stop);
-  //     console.log(index)
-  //     let newStops;
-  //     if (isStart) {
-  //       newStops = this.state.stops.slice(index, finishIndex)
-  //       this.setState({
-  //         startStop: stop,
-  //         finishStop: start+1
-  //         })
-  //     } else {
-  //       newStops = this.state.stops.slice(startIndex, index);
-  //       this.setState({
-  //         startStop: stop,
-  //         finishStop: start+1
-  //       })
-  //     }
-  //     this.setState({
-  //         chosenStops: newStops,
-  //         times:null});
-  //     this.props.onSelectedJourneyUpdate(newStops);
-  //     // if neither values are null then we are doing a direction switch
-  //   } else {
-  //       this.setState({
-  //         startStop: start,
-  //         finishStop: start+1
-  //       });
-  //       const startIndex = this.findStopIndex(start);
-  //       console.log("start" + startIndex)
-  //       const finishIndex = this.findStopIndex(start)+1;
-  //       console.log("finish" + finishIndex)
-  //       let newStops = this.state.stops.slice(startIndex, finishIndex);
-  //       console.log(newStops);
-  //       this.setState({
-  //         chosenStops: newStops,
-  //         times:null
-  //       });
-  //       this.props.onSelectedJourneyUpdate(newStops);
-  //   }
-  // }
+  async onStopUpdate(item) {
+    console.log("STOP UPDAATE", item)
+    this.setState({startStop: item})
+    const marker = this.state.stops[this.findStopIndex(item)]
+    console.log(marker)
+    this.props.onSelectedJourneyUpdate([marker])
+  }
+
   findStopIndex = (stop) => {
     if (stop === "start") { 
       return 0 
@@ -224,13 +155,6 @@ class TimeTable extends Component {
     return -1;
   }
 
-  async onStopUpdate(item) {
-    console.log("STOP UPDAATE", item)
-    this.setState({startStop: item})
-    const marker = this.state.stops[this.findStopIndex(item)]
-    console.log(marker)
-    this.props.onSelectedJourneyUpdate([marker])
-  }
 
   getTable = () => {
     const endpoint = '/api/getTimeTable'
@@ -262,18 +186,28 @@ class TimeTable extends Component {
         console.log(e)
       }
   }
-
-  // handleClick(){
-  //   this.getTable()
-  // }
-
   render(){
     const options = [
       { value: 'weekday', label: 'Monday-Friday' },
       { value: 'saturday', label: 'Saturday' },
       { value: 'sunday', label: 'Sunday' }
     ];
+    const rows = (this.state.times===null)? null : this.state.times.length
+    console.log(rows)
+    console.log(this.state.times)
+    const table = []
+    const columns = [{
+      title: 'Time', dataIndex: 'value', key:'value', width: 100,
+      }, ];
+
+
+    if (this.state.times !== null){
+      for(var i=0; i < rows; i++){
+        table.push({value: this.state.times[i]})
+      } 
+    }
     return (
+      <div style={{minHeight:'50%', maxHeight:'500px'}}>
       <Grid fluid={true}>
       <RouteSelect 
             className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
@@ -293,30 +227,29 @@ class TimeTable extends Component {
           onDirectionUpdate={this.onDirectionUpdate.bind(this)}
           onStopUpdate={this.onStopUpdate.bind(this)}
           onStopDeselect={this.onStopDeselect.bind(this)}
-          chosenRoute={this.state.chosenRoute}
-                    />
+          chosenRoute={this.state.chosenRoute}/>
         <div style={{marginTop: '2em'}}> </div>
         <Select
-              id="daySelect"
-              name="form-field-name"
-              options= {options}
-              value={this.state.chosenDay}
-              onChange={this.handleSelect}
-              placeholder={"Select day of travel"}
-        /><div style={{marginTop: '2em'}}> </div>
+          id="daySelect"
+          name="form-field-name"
+          options= {options}
+          value={this.state.chosenDay}
+          onChange={this.handleSelect}
+          placeholder={"Select day of travel"}/>
+        <div style={{marginTop: '2em'}}> </div>
         <Row><Col xs={2}></Col>
           <Col xs={8}>
-        <Button onClick={this.getTable} bsStyle='warning' bsSize='large' block>Get timetable
+        <Button onClick={this.getTable} bsStyle='warning' bsSize='large' block>Get Timetable
           </Button></Col></Row><div style={{marginTop: '2em'}}> </div><Row><Col xs={4}></Col>
           <Col xs={4}>{!(this.state.times===null) && <div className='timetable'>
-          <Table striped bordered condensed hover responsive size={'sm'}><tbody>
-          { this.state.times.map(function(time, index){
-              return <tr><th style={{textAlign:'center'}}>{time}</th></tr>;
-              })}</tbody></Table></div>}
+    <Table 
+    emptyText="Please ensure all options are selected to see a valid timetable"
+    columns={columns} data={table} style={{fontSize: '12px', borderColor: '#000' }} /><div>&nbsp</div></div>
+          }
           </Col><Col xs={4}></Col></Row>
         </Grid>
+      </div>
     );
   }
 };
-
 export default TimeTable;

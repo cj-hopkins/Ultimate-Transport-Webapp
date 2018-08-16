@@ -8,6 +8,13 @@ import {
 } from "google-maps-react";
 import db2 from "./db2.png";
 import MapMarker from "./MapMarker.png";
+import ReactTooltip from 'react-tooltip'
+import CustomGeolocation from './Geolocation';
+import A from './green_MarkerA.png';
+import B from './red_MarkerB.png';
+import red from './redStop.png';
+import green from './greenStop.png';
+
 
 export class MapContainer extends Component {
   constructor(props) {
@@ -22,42 +29,38 @@ export class MapContainer extends Component {
         lng: -6.2603
       },
       nextBuses: [],
-      polylineCoordinates: [
-        { lat: 53.378, lng: -6.057 },
-        { lat: 53.378, lng: -6.056 },
-        { lat: 53.378, lng: -6.056 }
-      ]
     };
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
+  
 
-  async componentWillMount() {
-    const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
-    const endpoint = `https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`;
-    try {
-      fetch(endpoint, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          homeMobileCountryCode: 353
-        })
-      })
-        .then(response => response.json())
-        .then(resp => {
-          this.setState({
-            currentPosition: {
-              lat: resp.location.lat,
-              lng: resp.location.lng
-            }
-          });
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // async componentWillMount() {
+  //   const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
+  //   const endpoint = `https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`;
+  //   try {
+  //     fetch(endpoint, {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: JSON.stringify({
+  //         homeMobileCountryCode: 353
+  //       })
+  //     })
+  //       .then(response => response.json())
+  //       .then(resp => {
+  //         this.setState({
+  //           currentPosition: {
+  //             lat: resp.location.lat,
+  //             lng: resp.location.lng
+  //           }
+  //         });
+  //       });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   fetchRealTime(stopid) {
     const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
@@ -71,22 +74,22 @@ export class MapContainer extends Component {
             <tr key={i}>
               <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
               <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-              <td>{post.duetime} minutes </td>
+              <td>{post.duetime} minute(s)</td>
             </tr>
           ))
         });
+        console.log(this.state.nextBuses)
       })
       .catch(error => console.log("parsing failed", error));
   }
 
-  onMarkerClick(props, marker, e) {
+  onMarkerClick (props, marker, e){
     this.setState({
-      selectedPlace: props,
+      currentPosition: { lat: parseFloat(props.position.lat),lng: parseFloat(props.position.lng)},
       activeMarker: marker,
       showingInfoWindow: true,
       nextBuses: this.fetchRealTime(marker.title)
     });
-
     //    console.log('selectedPlace',this.state.selectedPlace.title);
     //    console.log('activeMarker', this.state.activeMarker.title);
   }
@@ -100,10 +103,12 @@ export class MapContainer extends Component {
   render() {
     if (!this.props.loaded) return <div>Loading...</div>;
 
+    const endPoint = (this.props.polylineCoordinates.length < 1)? null: this.props.polylineCoordinates.length-1
+    //console.log('endPoint')
+    //console.log(endPoint)
     const google = window.google;
-    const im = "https://www.robotwoods.com/dev/misc/bluecircle.png";
     return (
-      <Map
+      <Map data-tip='Dublin'
         google={this.props.google}
         className="map"
         zoom={12}
@@ -112,33 +117,90 @@ export class MapContainer extends Component {
           lat: 53.3498,
           lng: -6.2603
         }}
-      >
+        centerAroundCurrentLocation={true}
+      ><ReactTooltip />
+
+        <CustomGeolocation onLocationUpdate={this.props.onLocationUpdate}/>
+
         <Polyline
-          fillColor="#0000FF"
+          fillColor="#2979ff"
           fillOpacity={0.35}
           path={this.props.polylineCoordinates}
-          strokeColor="#0000FF"
-          strokeOpacity={0.8}
-          strokeWeight={2}
+          strokeColor="#2979ff"
+          // strokeOpacity={0.8}
+          strokeWeight={3}
         />
         
-        <Marker
+        <Marker data-tip='You are here'
           name={"Current location"}
           // position={this.props.currentPosition} />
           position={{
-            lat: this.state.currentPosition.lat,
-            lng: this.state.currentPosition.lng
+            lat: this.props.currentPosition.lat,
+            lng: this.props.currentPosition.lng
           }}
           icon={{
             url: MapMarker,
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(64, 64)
           }}
-        />
-
-        {this.props.selectedStops.map(item => (
-          <Marker
+        /><ReactTooltip />
+        {this.props.polylineCoordinates.length < 1? null:
+        <Marker
+          onClick={this.onMarkerClick}
+          name={""}
+          title="Start"
+          position={{
+            lat: this.props.polylineCoordinates[0].lat,
+            lng: this.props.polylineCoordinates[0].lng
+          }}
+          icon={{
+            url: A,
+          }}
+        />}
+        {this.props.polylineCoordinates.length < 1? null:
+        <Marker
+          onClick={this.onMarkerClick}
+          name=""
+          title="End"
+          position={{
+            lat: this.props.polylineCoordinates[endPoint].lat,
+            lng: this.props.polylineCoordinates[endPoint].lng
+          }}
+          icon={{
+            url: B,
+          }}
+        />}
+        {(this.props.polylineCoordinates.length < 1) ? null: 
+        this.props.busCoords.map((item,i) => (
+        (i<2)? 
+        <Marker
+            onClick={this.onMarkerClick}
+            title="Bus Journey 1"
+            name={item.name}
             icon={db2}
+            position={{ lat: item.lat, lng: item.lng }}
+          /> : (i<4) ? 
+          <Marker
+            onClick={this.onMarkerClick}
+            title="Bus Journey 2"
+            name={item.name}
+            icon={green}
+            position={{ lat: item.lat, lng: item.lng }}
+          /> :<Marker
+            onClick={this.onMarkerClick}
+            title="Bus Journey 3"
+            name={item.name}
+            icon={red}
+            position={{ lat: item.lat, lng: item.lng }}
+          />  
+        ))
+        }
+
+
+
+        {this.props.selectedStops.map((item,i) => (
+          <Marker
+            icon={i===0 ? A : i===(this.props.selectedStops.length-1)? B : db2} 
             key={item.identifier}
             onClick={this.onMarkerClick}
             title={item.stop_id.toString()}
@@ -151,14 +213,16 @@ export class MapContainer extends Component {
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
         >
-          <div>
-            <h1>Stop {this.state.activeMarker.title}</h1>
+          {this.state.nextBuses===undefined ? null : (this.state.nextBuses.length===0) ? 
+          <div><h1>{this.state.activeMarker.title}</h1>
+            <p>Stop {this.state.activeMarker.name}</p>
+            <p>No Real Time Information Currently Available</p></div> :
+            <div><h1>Stop {this.state.activeMarker.title}</h1>
             <p>{this.state.activeMarker.name}</p>
-            <p>Real time Information:</p>
+            <p>Real Time Information:</p>
             <ul>
               <table>{this.state.nextBuses}</table>
-            </ul>
-          </div>
+            </ul></div>}
         </InfoWindow>
       </Map>
     );

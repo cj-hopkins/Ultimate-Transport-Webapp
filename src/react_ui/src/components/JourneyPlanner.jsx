@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import LocationSearchInput from "./LocationSearchInput";
 import {Collapse} from 'react-collapse';
-import { Button } from 'react-bootstrap';
+import { Button, Grid, Row, Col } from 'react-bootstrap';
+import ReactTooltip from 'react-tooltip'
 
 class JourneyPlanner extends Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class JourneyPlanner extends Component {
       destinationLatLng: null,
       // directionsObject: null,
       possibleRoutes: [],
-      selectedRoute: null
+      selectedRoute: null,
+      busStart: null,
+      busFinish: null,
     };
   }
 
@@ -45,8 +48,6 @@ class JourneyPlanner extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      // (this.state.originLatLng !== prevState.originLatLng && this.state.originLatLng !== null) && 
-      // (this.state.destinationLatLng !== prevState.destinationLatLng && this.state.destinationLatLng !== null)
       (this.state.originLatLng !== null && this.state.destinationLatLng !== null) &&
       (this.state.originLatLng !== prevState.originLatLng || this.state.destinationLatLng !== prevState.destinationLatLng)
     ) {
@@ -75,7 +76,6 @@ class JourneyPlanner extends Component {
       travelMode: "TRANSIT",
       provideRouteAlternatives: true,
       transitOptions: {
-        // departureTime: new Date(1337675679473),
         modes: ["BUS"],
         routingPreference: "FEWER_TRANSFERS"
       }
@@ -84,7 +84,7 @@ class JourneyPlanner extends Component {
     // when we want to use setState
     const me = this;
     directionsService.route(request, (result, status) => {
-      if (status == "OK") {
+      if (status === "OK") {
         me.setState({
           directionsObject: result,
         });
@@ -94,11 +94,20 @@ class JourneyPlanner extends Component {
   }
 
   selectRoute = (key) => {
-    // console.log(key)
     this.setState({
       selectedRoute: key
     })
     const route = this.state.directionsObject.routes[key].legs[0].steps;
+    console.log("hi",route)
+    const busPoints =[]
+    for (var i =0; i < route.length; i++){
+      console.log(route[i])
+      if (route[i].travel_mode==="TRANSIT"){
+        busPoints.push({lat:route[i].transit.arrival_stop.location.lat(), lng: route[i].transit.arrival_stop.location.lng(), name: route[i].transit.arrival_stop.name})
+        busPoints.push({lat:route[i].transit.departure_stop.location.lat(), lng: route[i].transit.departure_stop.location.lng(), name: route[i].transit.departure_stop.name})
+      }
+    }
+    console.log(busPoints,"hi")
     let coordinates = []
 
     for (let i = 0; i < route.length; i++) {
@@ -109,9 +118,7 @@ class JourneyPlanner extends Component {
     }
     // const parser = array => array.reduce((item, acc) => acc.push({lat: item.lat(), lng: item.lng()}), []);
     // const coords = parser(data);
-
-    // console.log(coords)
-    console.log(coordinates)
+    this.props.getBusCoords(busPoints)
     this.props.getPolyCoordinates(coordinates)
     this.getMultiRoutePrediction(key)
 
@@ -159,8 +166,6 @@ class JourneyPlanner extends Component {
       );
       console.log(journeyObject)
 
-
-
     try {
       fetch(endpoint, {
         method: 'POST',
@@ -187,18 +192,36 @@ class JourneyPlanner extends Component {
       }
     console.log(journeyObject)
   }
+  escapeRegExp(str) {
+    var regex = /<[^>]*>/g
+    var reg2= "&nbsp;"
+    return str.replace(regex, " ").replace(reg2, "");
+  }
+
 
   parseSingleJourney = (journey, index) => {
     // console.log(journey)
     return (
-      <div>
-      <Button onClick={() => this.selectRoute(index)}>route</Button>
+    
+     <div>
+     <Button data-tip='Select a route to take' style={{padding: '5px', margin: '5px', marginLeft:'5%'}} bsStyle="primary" onClick={() => this.selectRoute(index)}>{'Journey ' + (index+1)}</Button>
+<ReactTooltip />
       {/* <Button onClick={this.setState({selectedRoute: index})}>route</Button> */}
-      <Collapse isOpened={(this.state.selectedRoute === index) ? true : false} onClick={this.isOpened = !this.isOpened}>
-      <div>
+      <Collapse style={{ border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px', color: '#606060'}} isOpened={(this.state.selectedRoute === index) ? true : false} onClick={this.isOpened = !this.isOpened}>
+       <div>
         {journey.legs[0].steps.map(item => {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
-          return <p>{item.instructions} {routeName}</p>
+          const instructions = []
+          if (item.travel_mode === 'TRANSIT'){
+            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops"}</p>)
+            instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}</p>)
+            } 
+          else {
+            for(var i=0; i<item.steps.length;i++){
+                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions) + "(" + item.steps[i].distance.text + "/ "+ item.steps[i].duration.text + " walk)"}</p>)
+            }} 
+          return instructions
+          
         })}
         </div>
       </Collapse>
@@ -230,10 +253,9 @@ class JourneyPlanner extends Component {
   componentWillMount() {
     this.props.onSelectedJourneyUpdate([])
   }
-
   render() {
     return (
-      <div>
+      <div style={{minHeight:'50%', maxHeight:'1000px'}} >
         <LocationSearchInput
           value1={this.state.origin}
           value2={this.state.destination}
@@ -241,6 +263,7 @@ class JourneyPlanner extends Component {
           onChangeAddress2={this.onChangeAddress2.bind(this)}
           getOriginGeolocation={this.getOriginGeolocation.bind(this)}
           getDestinationGeolocation={this.getDestinationGeolocation.bind(this)}
+          currentPosition={this.props.currentPosition}
         />
         {/* <button onClick={this.onClick.bind(this)}>TEST</button> */}
         {/* <p>{this.parseJourney}</p> */}

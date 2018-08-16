@@ -1,40 +1,31 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button , Grid, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 
 class RouteSelect extends Component {
   constructor(props){
     super(props);
-
     // Use props instead of state - the only thing that RouteSelect
     // needs that isn't controlled by ContentBlock is the array of route names
     this.state = {
       routes: [],
-//      start:this.props.route_origin,
-//      end:this.props.route_destination
+      chosenDirection: this.props.route_destination
     }
   }
   handleSelect = (event) => {
-//    console.log()
     if (event === this.state.chosenRoute) {
       return;
     }
     else if (event === null) {
-      // console.log(event, "event null")
       this.props.routeReset()
       return;
     }
-    // console.log("getting new route")
     this.props.onChosenRouteUpdate(event.value)
     //default to 'I' direction when new route is chosen
     this.getStopsForRoute(event.value, 'I');
-    
-//    this.setState ({
-//      start:this.props.route_origin,
-//      end:this.props.route_destination
-//      
-//    });
-    
+    this.setState ({
+      chosenDirection:this.props.route_origin,
+    });
   }
   getStopsForRoute = (routeName, direction) => {
     const endpoint = '/api/getStopsForRoute' 
@@ -93,14 +84,26 @@ class RouteSelect extends Component {
               options={this.state.routesAsOptions}
               value={this.props.chosenRoute}
               onChange={this.handleSelect}  
-              placeholder={"Select route"}
-          />
+              placeholder={"Select route"}/>
           {/* Only show the change direction buttons when a route has already been selected */}
-          <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
-          <Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large">Towards: {this.props.route_origin}</Button>
-          <Button onClick={this.props.onDirectionUpdate}   bsSize="large"> Towards {this.props.route_destination}</Button>
+            <div className={ `${this.props.route_destination === null ? "d-none" : "d-block"}` }>
+              <Grid>
+                <Row>
+                  <Col xs={2}></Col>
+                  <Col xs={8}><p> Towards: {this.props.route_destination}</p></Col>
+                  <Col xs={2}></Col>
+                </Row>
+                <Row>
+                  <Col xs={2}></Col>
+                  <Col xs={8}>
+                    <Button onClick={this.props.onDirectionUpdate} bsStyle="primary"  bsSize="large" block>
+                       Change Direction
+                      </Button></Col>
+                  <Col xs={2}></Col>
+                </Row>  
+              </Grid>
+            </div>
           </div>
-          </div>
-            )}
-    }
+          )}
+  }
 export default RouteSelect;
