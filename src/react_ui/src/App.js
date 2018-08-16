@@ -374,6 +374,7 @@ var defaultStyles = {
     willChange: 'transform',
     overflowY: 'auto',
     backgroundColor: "white",
+    maxWidth:'540px'
   },
   content: {
     position: 'absolute',
