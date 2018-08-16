@@ -244,7 +244,7 @@ class JourneyPlanner extends Component {
         })} */}
         <div style={{marginTop: '2em'}}> </div>
         {this.parseAllJournies(this.state.directionsObject, this.parseSingleJourney)}
-
+        <div style={{marginTop: '2em'}}> </div>
       </div>
     );
   }
