@@ -138,7 +138,10 @@ class NNModel:
             theta2 = np.deg2rad(float(nextItem['stop_lon']))
             phi1 = np.deg2rad(90 - float(item['stop_lat']))
             phi2 = np.deg2rad(90 - float(nextItem['stop_lat']))
-            distance = math.acos(math.sin(phi1) * math.sin(phi2) * math.cos(
+            if item['stop_lon'] =='0.0' or nextItem['stop_lon'] =='0.0':
+                distance= 0 
+            else:
+                distance = math.acos(math.sin(phi1) * math.sin(phi2) * math.cos(
                 theta1 - theta2) + math.cos(phi1) * math.cos(phi2)) * radius_earth
             # print(distance)
             distances.append(distance)
@@ -146,18 +149,36 @@ class NNModel:
             
 
     def makePrediction(self, model_path, df):
-        # print("isRaining", isRaining)
-        # df_test = pd.DataFrame([[isRaining,'20',1,0, 0, 1,0,0]]) #5-7pm
-        #['raining','air_temp','weekday','10am-1pm', '1pm-5pm', '5pm-7pm', '8am-10am','before_8am']
-        # cols_names = ['dayofservice','tripid'] + list(X_test.columns)
-        # df_test.columns = cols_names
-        # df_test.set_index(['dayofservice','tripid'], inplace=True)
-        # result = rf_model.predict(df_test) # prediction for time between stops 
+        '''Returns a prediction for journey time
+        
+        Try/catch block to adjust dataframe size if new stops were added'''
         nn_model = pickle.load(open(model_path, "rb"))
-        result = nn_model.predict(df)
-        print(result)
-        sum = reduce(lambda x, acc: x+acc, result)
-        print(sum / 60)
+        try:
+            result = nn_model.predict(df)
+            print(result)
+            sum = reduce(lambda x, acc: x+acc, result)
+            print(sum / 60)
+        except ValueError as e:
+            dimesnsions = [int(s) for s in str(e).split() if s.isdigit()]
+            our_df_size, model_df_size  = dimesnsions[0] , dimesnsions[1]
+            print('our_df_size\t', our_df_size, 'model_df_size\t', model_df_size)
+            if our_df_size > model_df_size:
+                num_cols_to_remove = our_df_size - model_df_size
+                df = df.iloc[:, :-(num_cols_to_remove)]
+            else:
+                num_cols_to_add =  model_df_size - our_df_size 
+                num_rows_our_df = df.shape[0]
+                cols_zeros =pd.DataFrame(np.zeros((num_rows_our_df, num_cols_to_add )))
+                df = pd.concat([df,cols_zeros], axis=1)
+                
+                
+            result = nn_model.predict(df)
+            sum = reduce(lambda x, acc: x+acc, result)
+            time = abs( sum/60)
+            print (time)
+            return time
+                
+                
         # startCols = createStopArray()
         # finishCols = createStopArray()
 
