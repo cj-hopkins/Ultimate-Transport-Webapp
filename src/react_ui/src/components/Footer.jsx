@@ -13,7 +13,7 @@ class FooterPage extends React.Component {
             <StickyFooter bottomThreshold={50}
     normalStyles={{
     backgroundColor: "#2196f3",
-    padding: "2rem"
+    padding: "2rem", position:'relative', height:'150px'
     }}
     stickyStyles={{
     backgroundColor: "#2196f3'",

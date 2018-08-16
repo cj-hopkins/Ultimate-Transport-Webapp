@@ -237,7 +237,7 @@ class ContentBlock extends Component {
   
   render(){
     return (
-        <div style={{height:'100%', backgroundColor:'white'}}>
+        <div style={{minHeight: '50%', maxHeight:'600px', backgroundColor:'white'}}>
       <Grid fluid={true}>
       {/*         <ErrorBoundary> */}
         <RouteSelect 

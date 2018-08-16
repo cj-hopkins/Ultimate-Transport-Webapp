@@ -224,7 +224,7 @@ class JourneyPlanner extends Component {
   }
   render() {
     return (
-      <div style={{height:'100%'}} >
+      <div style={{minHeight:'50%', maxHeight:'800px'}} >
         <LocationSearchInput
           value1={this.state.origin}
           value2={this.state.destination}
