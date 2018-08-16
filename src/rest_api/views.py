@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.conf.urls.static import static
 from django.core import serializers
-from .models import Stop, Route, Composite, Currentweather, FiveDayWeather, Timetable 
+from .models import Stop, Route, Composite, Currentweather, FiveDayWeather, Timetable, Modelstops 
 from .serializers import StopSerializer, RouteSerializer, RouteStopSerializer, TimeTableSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -146,12 +146,34 @@ def getModelPrediction(request):
     # stops = [item for index, item in enumerate(stops) if item['stop_id'] not in uniqueStops[index + 1:]]
     stops = sorted(list({item["stop_id"]: item for item in stops}.values()), key = lambda x: x['stop_id'])
     print("STOPS LIST", len(stops))
+    directionChanger ={'I':2, 'O':1}
+    stopsmodel = Modelstops.objects.filter(route=route).filter(direction=directionChanger[direction]).order_by('stopids').values()
+    print("Stops",stopsmodel)
+    requiredStops = stopsmodel[0]['stopids']
+    print(type(requiredStops))
+    stopArray = [int(x) for x in requiredStops.split(' ')]
+    print("Sophie stops", len(stopArray))
+    actualStops = []
+    interArray = []
+    for stop in stops:
+        if stop['stop_id'] in stopArray:
+            actualStops.append(stop)
+            interArray.append(stop['stop_id'])
+    for stop in stopArray:
+        print(stop)
+        if stop in interArray:
+            continue
+        newItem={'identifier': 0, 'stop_id': stop, 'location_text': '', 'address': '', 'name': route, 'route_direction': direction, 'sequence': 0.0, 'is_stage_point': 'N', 'stage_number': 0.0, 'journey_pattern_id': '0', 'rtpi_destination': '', 'rtpi_origin': '', 'rtpi_via': '', 'sequence_number': 0, 'fare': 0.0, 'stop_lat': '0.0', 'stop_lon': '0.0'}
+        print(newItem)
+        actualStops.append(newItem)
+    #print("InterArray____",interArray)
 
-    
+    print('ACTUAL STOPS _______', len(actualStops))
+
     # startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start !== 'start' else stops[0]
-    startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start != 'start' else stops[0]
+    startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start != 'start' else actualStops[0]
     # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0]
-    finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish != 'finish' else stops[-1]
+    finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish != 'finish' else actualStops[-1]
     print("FINSIH", type(finishStop))
     print("FINSIH", finishStop)
     print("START", startStop)
@@ -159,7 +181,7 @@ def getModelPrediction(request):
     # stops = Composite.objects.filter()
     
     
-    nn_model = NNModel(route, direction, startStop, finishStop, stops, rain)
+    nn_model = NNModel(route, direction, startStop, finishStop, actualStops, rain)
     pkl = nn_model.parseRequest(nn_model.route, nn_model.direction)
     stopDf = nn_model.createStopDf()
     distances = nn_model.calculateDistances()
@@ -183,7 +205,7 @@ def getModelPrediction(request):
         print(i)
 
     # print(comined_df.shape[0])
-    print(comined_df.head(5))
+    print(comined_df)
     print(comined_df.shape)
     # Implement this 
     # startStopArray = createStopArray(route, direction getNumStopsInJourney(start, finish, route, direction))

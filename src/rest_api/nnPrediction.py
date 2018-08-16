@@ -134,14 +134,14 @@ class NNModel:
         for i in range(len(self.stopsInJourney) - 1):
             item = self.stopsInJourney[i]
             nextItem = self.stopsInJourney[i + 1]
-            theta1 = np.deg2rad(item['stop_lon'])
-            theta2 = np.deg2rad(nextItem['stop_lon'])
-            phi1 = np.deg2rad(90 - item['stop_lat'])
-            phi2 = np.deg2rad(90 - nextItem['stop_lat'])
+            theta1 = np.deg2rad(float(item['stop_lon']))
+            theta2 = np.deg2rad(float(nextItem['stop_lon']))
+            phi1 = np.deg2rad(90 - float(item['stop_lat']))
+            phi2 = np.deg2rad(90 - float(nextItem['stop_lat']))
             distance = math.acos(math.sin(phi1) * math.sin(phi2) * math.cos(
                 theta1 - theta2) + math.cos(phi1) * math.cos(phi2)) * radius_earth
             # print(distance)
-            distances.append(distance * 1000)
+            distances.append(distance)
         return distances
             
 
