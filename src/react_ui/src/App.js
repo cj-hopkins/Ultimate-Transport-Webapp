@@ -164,7 +164,8 @@ class App extends Component {
             getPolyCoordinates={this.getPolyCoordinates.bind(this)}
             />;
         case 3:
-          return <RealTimePage key={3} 
+          return <div style={{minHeight:'50%', maxHeight:'800px'}}> 
+             <RealTimePage key={3} 
                       getPolyCoordinates={this.getPolyCoordinates.bind(this)}
                       onStopSelectGetRealTime= {this.onStopSelectGetRealTime.bind(this)}
                       selectedRealTimeStop= {this.state.selectedRealTimeStop}
@@ -178,7 +179,7 @@ class App extends Component {
                 <Table>  {this.state.nextBuses}  </Table>
               </div>
                }
-            
+            </div>
         case 4.1:
           return  <a href={"http://www.dublinbus.ie"}>Dub</a>;
      case 4.3:
