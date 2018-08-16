@@ -237,7 +237,7 @@ class ContentBlock extends Component {
   
   render(){
     return (
-        <div style={{minHeight: '50%', maxHeight:'600px', backgroundColor:'white'}}>
+        <div style={{minHeight: '55%', maxHeight:'90%', backgroundColor:'white'}}>
       <Grid fluid={true}>
       {/*         <ErrorBoundary> */}
         <RouteSelect 
@@ -266,7 +266,6 @@ class ContentBlock extends Component {
           onSelectStartDisplayRealTimeButton={this.onSelectStartDisplayRealTimeButton.bind(this)}
                     />
        {/*    </ErrorBoundary>    */} 
-        <div style={{marginTop: '2em'}}> </div>
         <div style={{marginTop: '2em'}}> </div>
         <Row>
           <Col xs={0}></Col>
@@ -323,7 +322,7 @@ class ContentBlock extends Component {
                 bsSize='large' 
                 block>Get Real Time Information for Stop {this.state.startStop}
               </Button>
-               
+               <div style={{marginTop: '2em'}}> </div>
             </div>
             }
               {!this.state.isRealTimeHidden && <div> <Table striped bordered condensed hover>{this.state.nextBuses}</Table> </div>} 
