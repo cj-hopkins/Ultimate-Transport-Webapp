@@ -51,11 +51,13 @@ class JourneyPlanner extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       (this.state.originLatLng !== null && this.state.destinationLatLng !== null) &&
-      (this.state.originLatLng !== prevState.originLatLng || this.state.destinationLatLng !== prevState.destinationLatLng)
+      (this.state.originLatLng !== prevState.originLatLng || this.state.destinationLatLng !== 
+       prevState.destinationLatLng)
     ) {
         this.setState({directionsObject: undefined, selectedRoute: null})
         this.makeDirectionsRequest()
-    } else if (this.state.originLatLng !== prevState.originLatLng || this.state.destinationLatLng !== prevState.destinationLatLng) {
+    } else if (this.state.originLatLng !== prevState.originLatLng || this.state.destinationLatLng
+               !== prevState.destinationLatLng) {
         this.setState({directionsObject: undefined, selectedRoute: null})
         this.props.getPolyCoordinates([])
     }
@@ -105,8 +107,12 @@ class JourneyPlanner extends Component {
     for (var i =0; i < route.length; i++){
       console.log(route[i])
       if (route[i].travel_mode==="TRANSIT"){
-        busPoints.push({lat:route[i].transit.arrival_stop.location.lat(), lng: route[i].transit.arrival_stop.location.lng(), name: route[i].transit.arrival_stop.name})
-        busPoints.push({lat:route[i].transit.departure_stop.location.lat(), lng: route[i].transit.departure_stop.location.lng(), name: route[i].transit.departure_stop.name})
+        busPoints.push({lat:route[i].transit.arrival_stop.location.lat(), 
+                        lng: route[i].transit.arrival_stop.location.lng(), 
+                        name: route[i].transit.arrival_stop.name})
+          busPoints.push({lat:route[i].transit.departure_stop.location.lat(),
+                        lng: route[i].transit.departure_stop.location.lng(), 
+                        name: route[i].transit.departure_stop.name})
       }
     }
     console.log(busPoints,"hi")
@@ -209,34 +215,42 @@ class JourneyPlanner extends Component {
     return (
     
      <div>
-     <Button data-tip='Select a route to take' style={{padding: '5px', margin: '5px', marginLeft:'5%'}} bsStyle="primary" onClick={() => this.selectRoute(index)}>{'Journey ' + (index+1)}</Button>
+     <Button data-tip='Select a route to take' style={{padding: '5px', margin: '5px', marginLeft:'5%'}}
+         bsStyle="primary" onClick={() => this.selectRoute(index)}>{'Journey ' + (index+1)}</Button>
 <ReactTooltip />
       {/* <Button onClick={this.setState({selectedRoute: index})}>route</Button> */}
-      <Collapse style={{ border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px', color: '#606060'}} isOpened={(this.state.selectedRoute === index) ? true : false} onClick={this.isOpened = !this.isOpened}>
+      <Collapse style={{ border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px',
+                    color: '#606060'}} isOpened={(this.state.selectedRoute === index) ? true : false} 
+                    onClick={this.isOpened = !this.isOpened}>
        <ScrollArea style={{maxHeight:'100px'}}>
         {journey.legs[0].steps.map(item => {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
           const instructions = []
           if (item.travel_mode === 'TRANSIT'){
-            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops"}</p>)
-            instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}</p>)
+            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " 
+                        + item.transit.headsign + " for "+ item.transit.num_stops  + " stops"}</p>)
+            instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}
+                </p>)
             } 
           else if (item.steps !== undefined) {
             for(var i=0; i<item.steps.length;i++){
                 var walking= item.steps[i].duration.text
                 walkingTime+= parseInt(walking.match(numberPattern))
-                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions) + "(" + item.steps[i].distance.text + ")"}</p>)
+                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions)
+                            + "(" + item.steps[i].distance.text + ")"}</p>)
             }} 
           return instructions
           
         })}
-        <p style={{textAlign:'left'}}>{"Total travel time: "+ (this.state.prediction +  walkingTime) +" minutes"}</p>
+        <p style={{textAlign:'left'}}>{"Total travel time: "+ (this.state.prediction +  walkingTime)
+                +" minutes"}</p>
         </ScrollArea>
       </Collapse>
       </div>
     )}
 
-  parseAllJournies = (object, fn) => {if (object !== undefined) return object.routes.map((item, index) => fn(item, index))}
+  parseAllJournies = (object, fn) => {if (object !== undefined) return object.routes.map((item, index) => 
+                                                                                         fn(item, index))}
 
   // parseJourneys(result) {
   //   if (result === undefined) return;
