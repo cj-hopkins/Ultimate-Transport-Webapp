@@ -173,11 +173,37 @@ class NNModel:
                 df = pd.concat([df,cols_zeros], axis=1)
                 
                 
+#            result = nn_model.predict(df)
+#            sum = reduce(lambda x, acc: x+acc, result)
+#            time = abs( sum/60)
+#            print (time)
+#            return time
+
             result = nn_model.predict(df)
             sum = reduce(lambda x, acc: x+acc, result)
-            time = abs( sum/60)
-            print (time)
-            return time
+#            time = abs(sum/60)
+#            print(time)
+#            return(time)
+            totalSeconds = abs(sum)
+            seconds = int(round((totalSeconds), 0))
+            minutes = int(totalSeconds // 60)
+            hours = int(minutes // 60)
+            if hours == 1:
+                minutes = int(minutes - 60)
+            elif hours == 2:
+                minutes = int(minutes - 120)
+            elif hours == 3:
+                minutes = int(minutes - 180)
+            elif hours == 4:
+                minutes = int(minutes - 240)
+            
+            if hours == 0:
+                result = '{} minutes'.format(abs(minutes))
+            else:
+                result = '{} hours, {} minutes'.format(abs(hours), abs(minutes))
+    
+            print (result)
+            return ("Duration: ", result)
                 
                 
         # startCols = createStopArray()

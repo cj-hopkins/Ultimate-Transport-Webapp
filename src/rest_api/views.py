@@ -227,7 +227,7 @@ def getMultiRoutePrediction(request):
         total += makeModelPrediction(route, closestStart, closestFinish, direction, selectedTime, selectedDate, isDefaultTime, True)
         print("RUNNING TOTAL", total)
 
-    return JsonResponse({'prediction': 'total'})
+    return JsonResponse({'prediction': total})
 
 def getNumStopsInJourney(start, finish, route, direction):
     stops = Composite.objects.filter(name=route).filter(route_direction = direction)
