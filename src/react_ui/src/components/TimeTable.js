@@ -207,7 +207,7 @@ class TimeTable extends Component {
       } 
     }
     return (
-      <div style={{minHeight:'50%', maxHeight:'500px'}}>
+      <div style={{minHeight:'50%', maxHeight:'90%'}}>
       <Grid fluid={true}>
       <RouteSelect 
             className="mb-3" onRouteUpdate={this.routeUpdate.bind(this)}
@@ -244,10 +244,11 @@ class TimeTable extends Component {
           <Col xs={4}>{!(this.state.times===null) && <div className='timetable'>
     <Table 
     emptyText="Please ensure all options are selected to see a valid timetable"
-    columns={columns} data={table} style={{fontSize: '12px', borderColor: '#000' }} /><div>&nbsp</div></div>
+    columns={columns} data={table} style={{fontSize: '12px', backgroundColor: '#dcedf2'}} /><div></div></div>
           }
           </Col><Col xs={4}></Col></Row>
         </Grid>
+        <div style={{marginTop: '2em'}}> </div>
       </div>
     );
   }

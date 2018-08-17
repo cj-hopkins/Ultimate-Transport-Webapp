@@ -44,7 +44,7 @@ class RealTimePage extends Component {
   } 
   render(){
     return (
-      <div style={{minHeight:'50%', maxHeight:'600px'}}>
+      <div style={{minHeight:'55%', maxHeight:'90%'}}>
       <Grid fluid={true}>        
       {/* <p style={{fontSize:'16px'}}>Search by stop number or address:</p>  */} 
       <VirtualizedSelect ref="citySelect"
@@ -58,6 +58,7 @@ class RealTimePage extends Component {
 					searchable
 				/>
       </Grid>
+      <div style={{marginTop: '2em'}}> </div>
      </div>
     );
   }

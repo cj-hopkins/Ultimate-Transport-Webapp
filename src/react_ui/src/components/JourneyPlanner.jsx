@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import LocationSearchInput from "./LocationSearchInput";
 import {Collapse} from 'react-collapse';
 import { Button, Grid, Row, Col } from 'react-bootstrap';
-import ReactTooltip from 'react-tooltip'
+import ReactTooltip from 'react-tooltip';
+import ScrollArea from 'react-scrollbar';
 
 class JourneyPlanner extends Component {
   constructor(props) {
@@ -209,7 +210,7 @@ class JourneyPlanner extends Component {
 <ReactTooltip />
       {/* <Button onClick={this.setState({selectedRoute: index})}>route</Button> */}
       <Collapse style={{ border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px', color: '#606060'}} isOpened={(this.state.selectedRoute === index) ? true : false} onClick={this.isOpened = !this.isOpened}>
-       <div>
+       <ScrollArea style={{maxHeight:'100px'}}>
         {journey.legs[0].steps.map(item => {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
           const instructions = []
@@ -224,7 +225,7 @@ class JourneyPlanner extends Component {
           return instructions
           
         })}
-        </div>
+        </ScrollArea>
       </Collapse>
       </div>
     )}
@@ -256,7 +257,7 @@ class JourneyPlanner extends Component {
   }
   render() {
     return (
-      <div style={{minHeight:'50%', maxHeight:'1000px'}} >
+      <div style={{minHeight:'50%', maxHeight:'90%'}} >
         <LocationSearchInput
           value1={this.state.origin}
           value2={this.state.destination}
@@ -272,7 +273,9 @@ class JourneyPlanner extends Component {
           <h1>route</h1>
           {route}
         })} */}
+        <div style={{marginTop: '2em'}}> </div>
         {this.parseAllJournies(this.state.directionsObject, this.parseSingleJourney)}
+        <div style={{marginTop: '2em'}}> </div>
       </div>
     );
   }
