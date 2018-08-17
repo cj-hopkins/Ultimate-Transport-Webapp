@@ -12,7 +12,7 @@ class PredictionContainer extends Component {
       return(<div></div>)
     }
     return (
-      <p>{this.props.prediction}</p>
+      <p>Estimate: {this.props.prediction} minutes </p>
     )
   }
 }
