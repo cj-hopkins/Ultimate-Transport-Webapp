@@ -223,6 +223,7 @@ class ContentBlock extends Component {
             predictionForJourney: prediction
           })
         })
+      .catch (e => console.log(e))
     } catch(e) {
         console.log(e)
       }
