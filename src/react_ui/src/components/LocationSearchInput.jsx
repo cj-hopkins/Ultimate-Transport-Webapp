@@ -1,12 +1,10 @@
 import React from 'react';
-import Select from 'react-select';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
 import ReactTooltip from 'react-tooltip'
-import {Button, Grid, Row, Col} from 'react-bootstrap';
-import { WSAEINVALIDPROVIDER } from 'constants';
+import {Button} from 'react-bootstrap';
 
 
 class LocationSearchInput extends React.Component {
@@ -71,7 +69,7 @@ class LocationSearchInput extends React.Component {
   useCurrentLocation = () => {
     console.log(this.props.currentPosition)
     const google = window.google;
-    const geocoder = new google.maps.Geocoder;
+    const geocoder = new google.maps.Geocoder();
     const me = this;
     geocoder.geocode({'location': this.props.currentPosition}, res => {
         me.handleSelect1(res[0].formatted_address)
@@ -96,7 +94,8 @@ class LocationSearchInput extends React.Component {
         searchOptions={searchOptions}  >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <input data-tip='Where are you going from?'  style={{border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px', color: '#606060'}}
+            <input data-tip='Where are you going from?'  style={{border: '1px solid rgba(192,192,192, .5)', 
+                          borderRadius: '5px', fontSize: '16px', color: '#606060'}}
               {...getInputProps({
                 placeholder: 'Choose origin',
                 className: 'location-search-input',
@@ -117,8 +116,10 @@ class LocationSearchInput extends React.Component {
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { fontSize: '13px', marginLeft:'30px', marginRight:'30px', backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
-                  : { fontSize: '12px', marginLeft:'30px', marginRight:'30px', backgroundColor: '#ffffff', cursor: 'pointer' };
+                  ? { fontSize: '13px', marginLeft:'30px', marginRight:'30px', 
+                     backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
+                  : { fontSize: '12px', marginLeft:'30px', marginRight:'30px', 
+                     backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
@@ -144,7 +145,8 @@ class LocationSearchInput extends React.Component {
         searchOptions={searchOptions}>
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <input data-tip='Where are you going to?' style={{border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize:'16px', color: '#606060'}}
+            <input data-tip='Where are you going to?' style={{border: '1px solid rgba(192,192,192, .5)',
+                          borderRadius: '5px', fontSize:'16px', color: '#606060'}}
               {...getInputProps({
                 placeholder: 'Choose destination',
                 className: 'location-search-input',
@@ -165,8 +167,10 @@ class LocationSearchInput extends React.Component {
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { fontSize: '15px', marginLeft:'30px', marginRight:'30px', backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
-                  : { fontSize: '12px', marginLeft:'30px', marginRight:'30px', backgroundColor: '#ffffff', cursor: 'pointer' };
+                  ? { fontSize: '15px', marginLeft:'30px', marginRight:'30px', 
+                     backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
+                  : { fontSize: '12px', marginLeft:'30px', marginRight:'30px', 
+                     backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {

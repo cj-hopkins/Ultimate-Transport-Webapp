@@ -7,7 +7,6 @@ import TimeButton from './TimeSelect';
 import PredictionContainer from './PredictionContainer';
 import moment from "moment";
 import ErrorBoundary from './ErrorBoundary';
-import ReactTooltip from 'react-tooltip'
 import "./../App.css";
 class ContentBlock extends Component {
   constructor(props) {
@@ -43,6 +42,8 @@ class ContentBlock extends Component {
         finishStop: "finish",
         predictionForJourney: null,
         direction: 'I',
+        isRealTimeButtonHidden: true,
+        isRealTimeHidden: true
     })
     this.props.onRouteUpdate([])
   }
@@ -67,6 +68,8 @@ class ContentBlock extends Component {
       chosenRoute: route,
       direction: 'I',
       predictionForJourney: null,
+      isRealTimeButtonHidden: true, 
+      isRealTimeHidden: true
     })
   }
   onDirectionUpdate(){   // Flip current direction
@@ -75,7 +78,9 @@ class ContentBlock extends Component {
       direction: newDirection,
       startStop: 'start',
       finishStop: 'finish',
-      predictionForJourney: null
+      predictionForJourney: null,
+      isRealTimeButtonHidden: true,
+      isRealTimeHidden: true
     })
   }
   onResetNowContentBlock(){
@@ -111,7 +116,7 @@ class ContentBlock extends Component {
   } 
   onStopDeselect(stop) {
     if (stop === 'start') {
-      this.setState({startStop: "start"})
+      this.setState({startStop: "start", isRealTimeButtonHidden: true, isRealTimeHidden: true})
       const newRoute = this.state.stops.slice(0, this.findStopIndex(this.state.finishStop))
       this.routeUpdate(newRoute, false)
     } else {
@@ -132,7 +137,6 @@ class ContentBlock extends Component {
   onPressRealTimeButtonSidebar(stopid){
     //Get the real time information for the start stop of the route selected
     this.setState({
-      isRealTimeHidden:false,
        isRealTimeHidden: !this.state.isRealTimeHidden
     })
      const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
@@ -329,7 +333,7 @@ class ContentBlock extends Component {
                  <tr key={i} className = 'real_time_box_sidebar'>
                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                  {(post.duetime == 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
+                  {(post.duetime === 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
                  </tr>
                     ))}
                  </Table> 

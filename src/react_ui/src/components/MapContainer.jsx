@@ -27,7 +27,8 @@ export class MapContainer extends Component {
   }
 
   fetchRealTime(stopid) {
-    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
+    const endpoint = 
+          `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
     fetch(endpoint)
       .then(response => response.json())
       .then(parsedJSON =>  {
@@ -50,7 +51,8 @@ export class MapContainer extends Component {
   render() {
     if (!this.props.loaded) return <div>Loading...</div>;
 
-    const endPoint = (this.props.polylineCoordinates.length < 1)? null: this.props.polylineCoordinates.length-1
+    const endPoint = 
+          (this.props.polylineCoordinates.length < 1)? null: this.props.polylineCoordinates.length-1
     const google = window.google;
     return (
       <Map data-tip='Dublin'
