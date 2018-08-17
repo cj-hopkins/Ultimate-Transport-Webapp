@@ -110,7 +110,8 @@ class App extends Component {
      this.setState({
       isRealTimeHidden:false
     })
-    const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stop}&format=json`;
+    const endpoint = 
+          `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stop}&format=json`;
     fetch(endpoint)
       .then (response => response.json())
       .then(parsedJSON => {
@@ -176,7 +177,8 @@ class App extends Component {
 
               {!this.state.isRealTimeHidden &&
               <div>
-                <p style ={{fontSize:'16px'}}>Real Time Information for Stop {this.state.selectedRealTimeStop} at  {(new moment()).format("HH:mm")}</p>
+                <p style ={{fontSize:'16px'}}>Real Time Information for Stop {this.state.selectedRealTimeStop}
+at  {(new moment()).format("HH:mm")}</p>
 
                 <Table>  { this.state.nextBuses.slice(0,4).map((post, i) => (
                  <tr key={i} className = 'real_time_box_sidebar'>
@@ -249,7 +251,8 @@ class App extends Component {
           <div style={{backgroundColor:"white", height:'100%'}}>
             <Grid fluid={true} style={{backgroundColor:'#3399ff'}}>
               <Row>
-                <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a></Col>
+                <Col xs={1}><a onClick={this.menuButtonClick} style={styles.contentHeaderMenuLink}>≡</a>
+                    </Col>
                 <Col xs={3}>
                   <img
                   src={'https://lh3.googleusercontent.com/MCtmcjOY4XwssTV-t8jH3___wE3xFlosfMtMBZd_deEKGG4gNv_V3z7-7KeRI7KAuSM=s180'}
@@ -257,7 +260,8 @@ class App extends Component {
                   alt="dublin_bus_icon"
                 /></Col>
                 <Col xs={3}>
-                  <h1 style={{fontFamily: 'Titillium Web, sans-serif', color:"white", marginTop:'5px'}}>ULTIMATE TRANSPORT DUBLIN</h1></Col><Col xs={3}>
+                  <h1 style={{fontFamily: 'Titillium Web, sans-serif', color:"white", marginTop:'5px'}}>
+                      ULTIMATE TRANSPORT DUBLIN</h1></Col><Col xs={3}>
                 </Col>
                 <Col xs={2}>
                 <div style={{position:'absolute', right:'0px'}}>
@@ -283,7 +287,8 @@ class App extends Component {
             <Grid style={{backgroundColor:"#3399ff"}}>
               <Row style={{margin:'auto'}}>
                   <Col xs={12}>
-                    <h2 style={{fontSize:'14px', color:"white", textAlign:'center'}}> Plan Your Journey with Dublin Bus </h2>
+                    <h2 style={{fontSize:'14px', color:"white", textAlign:'center'}}> 
+                        Plan Your Journey with Dublin Bus </h2>
                 </Col>
               </Row>
             </Grid>
@@ -306,7 +311,8 @@ class App extends Component {
             />
           </Col>
           <Col xs={3}>
-            <h1 style={{fontFamily: 'Titillium Web, sans-serif', marginTop:'5px'}}>ULTIMATE TRANSPORT DUBLIN</h1>
+            <h1 style={{fontFamily: 'Titillium Web, sans-serif', marginTop:'5px'}}>
+        ULTIMATE TRANSPORT DUBLIN</h1>
           </Col>
           <Col xs={5}>
                 <div style={{position:'absolute', right:'0px'}}>
@@ -317,7 +323,8 @@ class App extends Component {
         <Row style={{margin:'auto'}}>
           <Col xs={3}></Col>
           <Col xs={12}>
-            <h2 style={{fontSize:'14px', color: "white", textAlign:'center'}} >Plan Your Journey with Dublin Bus
+            <h2 style={{fontSize:'14px', color: "white", textAlign:'center'}} >
+        Plan Your Journey with Dublin Bus
             </h2>
           </Col>
         </Row>
