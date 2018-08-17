@@ -183,18 +183,13 @@ class JourneyPlanner extends Component {
         })
       })
         .then((response) => response.json())
-        // .then((resp) => {
-        //   const prediction = resp.prediction
-        //   this.setState({
-        //     predictionForJourney: prediction
-        //   })
-        // })
         .then((resp) => {
           const prediction = Math.round(resp.prediction)
           this.setState({
             prediction: prediction
           })
         })
+      .catch(error => console.log(error))
     } catch(e) {
         console.log(e)
       }
