@@ -177,8 +177,7 @@ class App extends Component {
 
               {!this.state.isRealTimeHidden &&
               <div>
-                <p style ={{fontSize:'16px'}}>Real Time Information for Stop {this.state.selectedRealTimeStop}
-at  {(new moment()).format("HH:mm")}</p>
+                <p style ={{fontSize:'16px'}}>Real Time Information for Stop {this.state.selectedRealTimeStop}  at  {(new moment()).format("HH:mm")}</p>
 
                 <Table>  { this.state.nextBuses.slice(0,4).map((post, i) => (
                  <tr key={i} className = 'real_time_box_sidebar'>
