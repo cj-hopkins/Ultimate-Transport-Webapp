@@ -172,7 +172,6 @@ class ContentBlock extends Component {
       const startIndex = 
             (this.state.startStop === "start") ? 0 : this.findStopIndex(this.state.startStop)
       const index = this.findStopIndex(stop);
-      console.log("Stop index", index)
       let newStops;
       if (isStart) {
         newStops = this.state.stops.slice(index, finishIndex)
@@ -190,11 +189,8 @@ class ContentBlock extends Component {
           predictionForJourney: null
         });
         const startIndex = this.findStopIndex(start);
-        console.log("start" + startIndex)
         const finishIndex = this.findStopIndex(finish);
-        console.log("finish" + finishIndex)
         let newStops = this.state.stops.slice(startIndex, finishIndex);
-        console.log(newStops);
         this.setState({chosenStops: newStops});
         this.props.onSelectedJourneyUpdate(newStops);
     }

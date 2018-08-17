@@ -14,23 +14,16 @@ class MainController extends Component {
     super(props);
     this.state = {
       activatedUI: 0,
-    //   UIkeys: {
-    //     0: "ContentBlock",
-    //     1: "JourneyPlanner",
-    //     2: "Timetables"
-    //   }
     };
   }
 
   swapUI(key) {
-    //   console.log(key)
     this.setState({
       activatedUI: key
     });
   }
   
   renderSwitch = () => {
-      console.log("render switch")
     switch (this.state.activatedUI) {
         case 0:
           return <ContentBlock key={0} 
@@ -48,10 +41,6 @@ class MainController extends Component {
   }
 
   render() {
-    // const key = this.state[this.state.activatedUI]
-    // console.log(key)
-    // const ChosenComponent = this.state.UIkeys[this.state.activatedUI];
-    // console.log(ChosenComponent);
     return (
       <div>
         <Media>

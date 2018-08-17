@@ -92,7 +92,6 @@ class JourneyPlanner extends Component {
         me.setState({
           directionsObject: result,
         });
-        console.log("DIRECTIONS OBJECT", result)
       }
     });
   }
@@ -102,10 +101,8 @@ class JourneyPlanner extends Component {
       selectedRoute: key
     })
     const route = this.state.directionsObject.routes[key].legs[0].steps;
-    console.log("hi",route)
     const busPoints =[]
     for (var i =0; i < route.length; i++){
-      console.log(route[i])
       if (route[i].travel_mode==="TRANSIT"){
         busPoints.push({lat:route[i].transit.arrival_stop.location.lat(), 
                         lng: route[i].transit.arrival_stop.location.lng(), 
@@ -115,7 +112,6 @@ class JourneyPlanner extends Component {
                         name: route[i].transit.departure_stop.name})
       }
     }
-    console.log(busPoints,"hi")
     let coordinates = []
 
     for (let i = 0; i < route.length; i++) {
@@ -140,9 +136,6 @@ class JourneyPlanner extends Component {
           lat: route[i].transit.arrival_stop.location.lat(),
           lng: route[i].transit.arrival_stop.location.lng()
         }
-        console.log("ROUTE", route[i].transit.line.short_name)
-        console.log("DEPART", startStop, route[i].transit.departure_stop.name);
-        console.log("ARRIVE", finishStop);
       }
     }
   }
@@ -173,7 +166,6 @@ class JourneyPlanner extends Component {
         }
         })
       );
-      console.log(journeyObject)
 
     try {
       fetch(endpoint, {
@@ -199,7 +191,6 @@ class JourneyPlanner extends Component {
     } catch(e) {
         console.log(e)
       }
-    console.log(journeyObject)
   }
   escapeRegExp(str) {
     var regex = /<[^>]*>/g
@@ -209,7 +200,6 @@ class JourneyPlanner extends Component {
 
 
   parseSingleJourney = (journey, index) => {
-    // console.log(journey)
     var walkingTime = 0
     const numberPattern = /\d+/g;
     return (
@@ -251,26 +241,6 @@ class JourneyPlanner extends Component {
 
   parseAllJournies = (object, fn) => {if (object !== undefined) return object.routes.map((item, index) => 
                                                                                          fn(item, index))}
-
-  // parseJourneys(result) {
-  //   if (result === undefined) return;
-  //   console.log(result.routes[0].legs[0].steps[0].instructions);
-  //   return;
-
-  //   const routes = this.parseAllJournies(result, this.parseSingleJourney)
-  //   console.log(routes);
-  //   // return routes
-  //   this.setState({ possibleRoutes: routes });
-  //   console.log(result);
-  // }
-
-  // componentWillUpdate(nextState) {
-  //   if (
-  //     (nextState.originLatLng !== null &&
-  //       nextState.originLatLng !== this.state.originLatLng) ||
-  //     (nextState.destinationLatLng !== null &&
-  //       nextState.destinationLatLng !== this.state.destinationLatLng)
-  //   ) {
 
   componentWillMount() {
     this.props.onSelectedJourneyUpdate([])
