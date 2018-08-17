@@ -48,8 +48,6 @@ class ContentBlock extends Component {
   //Save the list of stops to contentBlock's state before
   //Calling App.js setState function - pass stops to map
   routeUpdate (route) {
-    console.log("route update")
-    console.log(route)
     // TODO get rtpi dest and origin factoring in the time - currently
     // they are often incorrect
     const route_orig = route[0].rtpi_origin
@@ -61,15 +59,15 @@ class ContentBlock extends Component {
     })
     this.props.onRouteUpdate(route)
   }
-  // chosen route NAME: '31', '11' etc. - TODO make this clearer
-  async onChosenRouteUpdate(route) {
+ 
+  async onChosenRouteUpdate(route) {   // chosen route NAME: '31', '11' etc.
     this.setState({
       chosenRoute: route,
       direction: 'I',
       predictionForJourney: null,
     })
   }
-  onDirectionUpdate(){   // Flip the current direction
+  onDirectionUpdate(){   // Flip current direction
     const newDirection = (this.state.direction === 'I') ? 'O' : 'I'
     this.setState({
       direction: newDirection,
@@ -135,15 +133,10 @@ class ContentBlock extends Component {
       .then (response => response.json())
       .then(parsedJSON => {
             this.setState({   //slice(0,4) to limit to top 4 results 
-                nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-                  <tr key={i} className = 'real_time_box_sidebar'>
-                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.duetime} minutes </td>
-                  </tr>
-                ))
-            });
+               nextBuses: [...this.state.nextBuses, ...parsedJSON.results.slice(0, 4)]
+            }); 
      })
+      .then( console.log('this.state.nextBuses.route', this.state.nextBuses))
       .catch(error => console.log('parsing failed',error))
   }
   
@@ -236,6 +229,15 @@ class ContentBlock extends Component {
   }
   
   render(){
+    const rt_array =  this.state.nextBuses.map((post, i) => (
+                       <tr key={i} className = 'real_time_box_sidebar'>
+                          <td>{this.state.nextBuses.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                          <td>{this.state.nextBuses.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                          <td>{this.state.nextBuses.duetime} minutes </td>
+                      </tr>
+                    ));
+    
+    
     return (
         <div style={{minHeight: '50%', maxHeight:'600px', backgroundColor:'white'}}>
       <Grid fluid={true}>
@@ -326,12 +328,18 @@ class ContentBlock extends Component {
                
             </div>
             }
-              {!this.state.isRealTimeHidden && <div> <Table striped bordered condensed hover>{this.state.nextBuses}</Table> </div>} 
-              
-              
-              
-              
-              
+              {!this.state.isRealTimeHidden && 
+                <div> 
+                <Table striped bordered condensed hover>
+             { this.state.nextBuses.slice(0,4).map((post, i) => (
+                 <tr key={i} className = 'real_time_box_sidebar'>
+                   <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                   <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                  <td>{post.duetime} minutes </td>
+                 </tr>
+                    ))}
+                 </Table> 
+                </div>} 
             </div>
           </Col>
         </Row>
