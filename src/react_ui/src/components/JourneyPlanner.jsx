@@ -18,6 +18,7 @@ class JourneyPlanner extends Component {
       selectedRoute: null,
       busStart: null,
       busFinish: null,
+      prediction: "",
     };
   }
 
@@ -188,7 +189,12 @@ class JourneyPlanner extends Component {
         //     predictionForJourney: prediction
         //   })
         // })
-        .then((resp) => console.log(resp))
+        .then((resp) => {
+          const prediction = resp.prediction
+          this.setState({
+            prediction: prediction
+          })
+        })
     } catch(e) {
         console.log(e)
       }
@@ -215,7 +221,8 @@ class JourneyPlanner extends Component {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
           const instructions = []
           if (item.travel_mode === 'TRANSIT'){
-            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops"}</p>)
+            var prediction = (this.state.prediction==="") ? this.state.prediction : " (" +  this.state.prediction + ")"
+            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops" + prediction}</p>)
             instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}</p>)
             } 
           else if (item.steps.length[0] !== undefined) {
