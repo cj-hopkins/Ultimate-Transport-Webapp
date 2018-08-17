@@ -32,6 +32,7 @@ class ContentBlock extends Component {
     }
   }
   routeReset () {
+    //Reset the state when route is changed/removed
     this.setState({
         stops: [],
         chosenStops: null,
@@ -60,7 +61,8 @@ class ContentBlock extends Component {
     this.props.onRouteUpdate(route)
   }
  
-  async onChosenRouteUpdate(route) {   // chosen route NAME: '31', '11' etc.
+  async onChosenRouteUpdate(route) {
+    //Set route to one selected, using default direction
     this.setState({
       chosenRoute: route,
       direction: 'I',
@@ -128,6 +130,7 @@ class ContentBlock extends Component {
     })   
   }
   onPressRealTimeButtonSidebar(stopid){
+    //Get the real time information for the start stop of the route selected
     this.setState({
       isRealTimeHidden:false,
        isRealTimeHidden: !this.state.isRealTimeHidden
@@ -144,7 +147,7 @@ class ContentBlock extends Component {
   }
   
   async onStopUpdate(start = null, finish = null) {
-    // Here be dragons - leave this code for now
+    // Update the state when a stop has been changed/deleted in the dropdown
     if (start === null || finish === null) {
       const isStart = (finish === null) ? true : false;
       const stop = isStart ? start : finish;
@@ -179,6 +182,7 @@ class ContentBlock extends Component {
     }
   }
   findStopIndex = (stop) => {
+    //Get the index in the route sequence for the chosen stop
     if (stop === "start") { 
       return 0 
     } else if (stop === "finish") {
@@ -192,11 +196,11 @@ class ContentBlock extends Component {
   }
 
   handleClick = () => { 
+    //On press of button call getPrediction()
     this.getPrediction()
-    console.log('DAY OF TRAVEL STRING ______' + this.state.dayOfTravel)
   }
   getPrediction = () => {
-    // const endpoint = '/api/getPredictionForJourney' 
+    //Make a call to back end passing in user specified data to make a prediction 
     const endpoint = '/api/getModelPrediction' 
     try {
       fetch(endpoint, {
