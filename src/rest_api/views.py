@@ -211,6 +211,7 @@ def makeModelPrediction(route, start, finish, direction, selectedTime, selectedD
     print(combined_df)
     print(combined_df.shape)
     result = nn_model.makePrediction(pkl, combined_df)
+    print("MAKE MIDEL PREDICION", result)
     return result
 
 # 'busRoutes': [{'route': '31a', 'stops': 50, 'start': {'lat': 53.378335, 'lng': -6.056625299999951}, 'finish': {'lat': 53.3504505, 'lng': -6.255969999999934}}, {'route': '46a', 'stops': 18, 'start': {'lat': 53.3502073, 'lng': -6.260246000000052}, 'finish': {'lat': 53.3088387, 'lng': -6.216082700000015}}], 'isDefaultTime': True, 'direction': 'I'}
