@@ -1,3 +1,5 @@
+""" Get prediction using neural network model"""
+
 from rest_api.models import Modelstops
 
 import os
@@ -23,16 +25,26 @@ class NNModel:
         self.dayArray = ['Friday', 'Monday', 'Saturday', 'Sunday','Thursday', 'Tuesday', 'Wednesday']
         self.rainOptions = ['Precipitation_Moderate','Precipitation_None', 'Precipitation_Slight']
         self.timeIntervals = ['day_Friday', 'day_Monday', 'day_Saturday','day_Sunday', 'day_Thursday','day_Tuesday', 'day_Wednesday','time_interval_midnight-1am', 'time_interval_1-2am','time_interval_2-3am', 'time_interval_3-4am', 'time_interval_4-5am','time_interval_5-6am', 'time_interval_6-7am','time_interval_7-8am','time_interval_8-9am', 'time_interval_9-10am', 'time_interval_10-11am','time_interval_11-12midday', 'time_interval_12-1pm','time_interval_1-2pm', 'time_interval_2-3pm', 'time_interval_3-4pm','time_interval_4-5pm', 'time_interval_5-6pm','time_interval_6-7pm','time_interval_7-8pm', 'time_interval_8-9pm', 'time_interval_9-10pm','time_interval_10-11pm']
-        
+
+
     def parseRequest(self, route, direction):
+        """ Derive the route and direction from the pickle file 
+
+        Keyword arguments:
+        route -- bus number, e.g. 46A
+        direction -- can be 1 or 2, i.e. inbound or outbound
+        """
+        
         parseDir = lambda x: '1' if x == 'I' else '2'
         key = "bus{}_d{}.pkl".format(route, parseDir(direction))
         model_path = os.path.join(NNModel.current_file_dir, "objects/picklefiles/{}".format(key))
         print(key)
         return model_path
 
+    
     # def createStopArray(self, route, direction, startStop, finishStop, numStopsInJourney, numStopsInRoute, df = None ):
     def createStopDf(self):
+        """ Create a dataframe with all stops for a particular route """
         
         stopsInJourney = [i for i in self.stops if 
             (i['sequence_number'] >= self.startStop['sequence_number'])
@@ -124,7 +136,14 @@ class NNModel:
         print(finalStops)
         return df
 
+    
     def createTimeDf(self, hour, day):
+        """ Create dataframe of time and day 
+    
+        Keyword arguments:
+        hour -- whole number between 1 and 23 for all hours in the day
+        day -- whole number between 1 and 7 for day of the week
+        """
         # 7 days + 23 hour ranges
         print(hour)
         columnsList = [i for i in range(30)]
@@ -137,13 +156,22 @@ class NNModel:
         dayRow.extend(i for i in timeRow)
         self.timeRow = dayRow
         return dayRow
-      
+    
+    
     def createRainArray (self, rain):
+        """ Create array for rain options 
+        Keyword arguments:
+        rain -- float to describe amount of rain in millimetres
+        """
+        
         rain_arr = [0 for i in range(len(self.rainOptions))]
         rain_arr[self.rainOptions.index(rain)]=1
         return rain_arr
 
+    
     def calculateDistances(self):
+        """ Calculate distance between all stops in a route """
+        
         distances = []
         radius_earth = 6371
         print("stops length", len(self.stopsInJourney))
@@ -167,9 +195,15 @@ class NNModel:
             
 
     def makePrediction(self, model_path, df):
-        '''Returns a prediction for journey time
+        """ Make a prediction of the journey time based on the dataframe that has been created with all values
+        from __init__, i.e. route, direction, startStop, finishStop, stops, dayArray, rainOptions, timeIntervals.
+        Try/catch block to adjust dataframe size if new stops were added
         
-        Try/catch block to adjust dataframe size if new stops were added'''
+        Keyword arguments:
+        model_path -- name of the pickle file for specified bus route, defined in parseRequest above
+        df -- dataframe that has been created from all functions above
+        """
+        
         nn_model = pickle.load(open(model_path, "rb"))
         try:
             result = nn_model.predict(df)

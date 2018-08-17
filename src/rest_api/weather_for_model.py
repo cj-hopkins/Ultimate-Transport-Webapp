@@ -6,10 +6,12 @@ from rest_api.nnPrediction import NNModel
 from .models import Currentweather, FiveDayWeather
 
 def get_temp_and_rain_using_response(response,seconds_past_midnight, epoch_time):
-    """
-    response: json from the getFiveDayWeather view in Django
-    seconds_past_midnight:Time chosen (current time or from Django)
-    epoch_time:Date chosen (from calendar)
+    """ Function to get temperature and rain based on time selected by the user
+    
+    Keyword arguments:
+    response -- json from the getFiveDayWeather view in Django
+    seconds_past_midnight -- Time chosen (current time or from Django)
+    epoch_time -- Date chosen (from calendar)
     """
     def round_hour_nearest_3_hour(x):
         """
@@ -57,17 +59,24 @@ def getWeatherForPrediction(isDefaultTime , selectedTime, selectedDate):
     selectedDate -- epoch time (seconds past 1 Jan 1970)
     '''
     def getRainCategoryFuture(chosenTime, chosenDate):
+        """ Returns category for rain for future selected time
+        Keyword arguments:
+        chosenTime -- time in seconds past midnight
+        chosenDate -- unix time seconds past epoch
+        """
         future_weather = FiveDayWeather.objects.values()
         relevant_weather= get_temp_and_rain_using_response(future_weather ,chosenTime, chosenDate )
         rain_now = pd.cut(pd.DataFrame([float(relevant_weather['rain'] )])[0], bins= [0,0.01,0.5,20], include_lowest=True, labels = ['Precipitation_None', 'Precipitation_Slight', 'Precipitation_Moderate'])
         return rain_now.iloc[0]  
   
     def getTempNotNow(chosenTime, chosenDate):
+        """ Returns future temperature from five day forecast using inputs of time and date """
         future_weather = FiveDayWeather.objects.values()
         relevant_weather= get_temp_and_rain_using_response(future_weather ,chosenTime, chosenDate )
         return relevant_weather['temp']
 
     def getWeatherNow():
+        """ Returns current weather using first value from the five day weather forecast"""
         weather = Currentweather.objects.values()[0]
         weather_most_recent_entry = FiveDayWeather.objects.values().first()
         rain_now = pd.cut(pd.DataFrame([float(weather_most_recent_entry['rain'] )])[0], bins= [0,0.01,0.5,20], include_lowest=True, labels = ['Precipitation_None', 'Precipitation_Slight', 'Precipitation_Moderate'])

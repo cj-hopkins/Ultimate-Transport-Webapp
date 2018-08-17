@@ -1,3 +1,5 @@
+""" Data from database """
+
 from django.db import models
 
 # class Meta:
@@ -20,7 +22,7 @@ class Route(models.Model):
     route = models.CharField(primary_key=True, max_length=200)
 
 class Composite(models.Model):
-
+    """Data from composite table in the database - combination of stops and GTFS data"""
     # stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE)
     # name = models.CharField(max_length=50, primary_key=True)
     # stop = models.ForeignKey(Stop, primary_key=True, on_delete=models.CASCADE)
@@ -43,7 +45,6 @@ class Composite(models.Model):
     stop_lon = models.FloatField()
 
 class Modelstops(models.Model):
-
     route = models.CharField(max_length=50, primary_key=True)
     direction = models.IntegerField(primary_key = True)
     stopids = models.CharField(max_length=1000)
