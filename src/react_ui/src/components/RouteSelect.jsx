@@ -5,8 +5,6 @@ import Select from 'react-select';
 class RouteSelect extends Component {
   constructor(props){
     super(props);
-    // Use props instead of state - the only thing that RouteSelect
-    // needs that isn't controlled by ContentBlock is the array of route names
     this.state = {
       routes: [],
       chosenDirection: this.props.route_destination
@@ -42,8 +40,6 @@ class RouteSelect extends Component {
         })
       })
         .then((response) => response.json())
-        // onUpdate is a setState function in App.js the state is updated with an array of stops
-        // and then passed as a prop to MapContainer
         .then((resp) => this.props.onRouteUpdate(resp))
     } catch(e) {
         console.log(e)
@@ -70,13 +66,7 @@ class RouteSelect extends Component {
       
       
     }
-//    const routeItems = []    // Format routes to use with dropdown
-//    routeNames.forEach(item => (
-//      routeItems.push({value: item.route, 
-//                       label: item.route
-//                      })
-//    ))
-//    this.setState({routesAsOptions: routeItems})
+
   }
   componentWillReceiveProps(nextProps) {
     // Get new stops if direction changes, but only if a route reset has not been done
