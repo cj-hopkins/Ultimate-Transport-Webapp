@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import Select from "react-select";
 
+/* Page that will allow a user to choose a route, stop and day of travel. 
+Returns timetable for that stop */
+
 class TimeTableStop extends Component {
   handleStartSelect = start => {
     if (start === null) {
