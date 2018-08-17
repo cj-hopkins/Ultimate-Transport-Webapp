@@ -88,7 +88,7 @@ class JourneyPlanner extends Component {
         me.setState({
           directionsObject: result,
         });
-        console.log(result)
+        console.log("DIRECTIONS OBJECT", result)
       }
     });
   }
@@ -216,7 +216,7 @@ class JourneyPlanner extends Component {
             instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops"}</p>)
             instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}</p>)
             } 
-          else {
+          else if (item.steps.length[0] !== undefined) {
             for(var i=0; i<item.steps.length;i++){
                 instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions) + "(" + item.steps[i].distance.text + "/ "+ item.steps[i].duration.text + " walk)"}</p>)
             }} 

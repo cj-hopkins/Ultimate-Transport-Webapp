@@ -24,6 +24,7 @@ from rest_api.nnPrediction import NNModel
 from rest_api.weather_for_model import *
 from rest_api.time_for_model import *
 import decimal
+from math import cos, asin, sqrt
 
 class getAllStops(generics.ListCreateAPIView):
     queryset = Stop.objects.all()
@@ -157,14 +158,14 @@ def getModelPrediction(request):
     print("STOPS LIST", len(stops))
     directionChanger ={'I':2, 'O':1}
 
-    stopsmodel = Modelstops.objects.filter(route=route) .filter(direction=directionChanger[direction]).order_by('stopids').values()
+    stopsmodel = Modelstops.objects.filter(route=route) \
+                                   .filter(direction=directionChanger[direction]) \
+                                   .order_by('stopids') \
+                                   .values()
 
-    print("Stops",stopsmodel)
     
     startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start != 'start' else min(stops, key = lambda x:x['sequence_number'])
-    # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0]
     finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish != 'finish' else max(stops, key = lambda x: x['sequence_number'])
-    # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish != 'finish' else actualStops[-1]
     print("FINSIH", type(finishStop))
     print("FINSIH", finishStop)
     print("START", startStop)
@@ -178,35 +179,19 @@ def getModelPrediction(request):
     distances = nn_model.calculateDistances()
     print("STOP DF", stopDf.shape)
     
-  
-    #length = len(timeDf) + len(distances) + stopDf.shape[1] + 6
-    #print('Num of cols', length)
-    #df = pd.DataFrame(columns=[i for i in range(length)])
-    
-
     time_df = get_time_and_date_df(selectedTime,selectedDate, nn_model,stopDf)
     weather_df = create_weather_df(rain, temp, stopDf, nn_model)
     index_to_insert_distances = 1    #distances has to go in middle of weather 
     weather_df.insert(loc=index_to_insert_distances, column='distance', value=distances)
-    comined_df = pd.concat([weather_df, time_df,stopDf ], axis=1)
+    combined_df = pd.concat([weather_df, time_df,stopDf ], axis=1)
     # print ('combined df\n',comined_df )
     # print(comined_df.columns)
-    x = comined_df.columns
-    for i in x:
-        print(i)
-
-    # print(comined_df.shape[0])
-    print(comined_df)
-    print(comined_df.shape)
-    # Implement this 
-    # startStopArray = createStopArray(route, direction getNumStopsInJourney(start, finish, route, direction))
-    # makePrediction(pklFileName)cs 
-    result = nn_model.makePrediction(pkl, comined_df)
+    
+    # print(combined_df.shape[0])
+    print(combined_df)
+    print(combined_df.shape)
+    result = nn_model.makePrediction(pkl, combined_df)
     return JsonResponse({'prediction': result})
-
-    # def getStartFinishIndices(isStartstops):
-    #     stops = sorted(stops, key = lambda x: x['sequence_number'])
-    #     return stops[0], stops[-1]
 
 @api_view(['POST'])
 def getMultiRoutePrediction(request):
@@ -215,8 +200,19 @@ def getMultiRoutePrediction(request):
     totalPrediction = 0
     route = data[0]['route']
     direction = 'I'
-    startLat = str(round(decimal.Decimal(str(data[0]['start']['lat'])), 2))
-    startLng = str(round(decimal.Decimal(str(data[0]['start']['lng'])), 2))
+    print(data[0])
+    startDat = data[0]['start']
+    print("START", startDat['lat'])
+    # startLat = str(round(decimal.Decimal(str(data[0]['start']['lat'])), 2))
+    # startLng = str(round(decimal.Decimal(str(data[0]['start']['lng'])), 2))
+    start = {'stop_lat': startDat['lat'], 'stop_lon': startDat['lng']}
+    # finish = {lat: data[0]['start']['lat'], 'lng': data[0]['start']['lng']}
+    stops = Composite.objects.filter(name = route).filter(route_direction = direction).values()
+    for i in stops:
+        i['stop_lat'] = float(i['stop_lat'])
+        i['stop_lon'] = float(i['stop_lon'])
+    closestStart = closest(stops, start)
+    print(closestStart)
     # print(round(x,4))
     # print(round(y,5))
     print(startLat)
@@ -224,7 +220,10 @@ def getMultiRoutePrediction(request):
     # startStop = Composite.objects.filter(name=route).filter(route_direction = direction).filter(stop_lat = startLat).filter(stop_lon = startLng).values()
     # startStop = Composite.objects.filter(stop_lat = startLat).filter(stop_lon = startLng).values().filter(name = route).filter(route_direction = direction)
     # startStop = Composite.objects.filter(stop_lat = startLat).filter(stop_lon = startLng).filter(name = route).filter(route_direction = direction).values()
-    startStop = Composite.objects.filter(stop_lat__regex=r'^{}.*$'.format(startLat)).filter(stop_lon__regex=r'^{}.*$'.format(startLng)).filter(name = route).filter(route_direction = direction).values()
+    startStop = Composite.objects.filter(stop_lat__regex=r'^{}.*$'.format(startLat)) \
+                                 .filter(stop_lon__regex=r'^{}.*$'.format(startLng)) \
+                                 .filter(name = route).filter(route_direction = direction) \
+                                 .values()
     print(startStop)
     print(len(startStop))
     return JsonResponse({'test': 'val'})
@@ -243,3 +242,11 @@ def getNumStopsInJourney(start, finish, route, direction):
             break
     indicesFound = startIndex != -1 and finishIndex != -1 
     return finishIndex - startIndex if indicesFound else -1
+
+def distance(lat1, lon1, lat2, lon2):
+    p = 0.017453292519943295
+    a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p)*cos(lat2*p) * (1-cos((lon2-lon1)*p)) / 2
+    return 12742 * asin(sqrt(a))
+
+def closest(data, v):
+    return min(data, key=lambda p: distance(v['stop_lat'],v['stop_lon'],p['stop_lat'],p['stop_lon']))
