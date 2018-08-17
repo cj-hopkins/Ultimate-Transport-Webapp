@@ -3,6 +3,7 @@ import datetime
 import pandas as pd
 import numpy as np
 
+
 def get_time_and_date_df(selectedTime,selectedDate, nn_model,stopDf):
     '''Returns a dataframe of same length as stopDf with time and date in binary list 
     

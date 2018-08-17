@@ -1,7 +1,7 @@
 import React from 'react';
 import StickyFooter from 'react-sticky-footer';
 import { SocialIcon } from 'react-social-icons';
-import { Grid, Row, Col, Table } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 class FooterPage extends React.Component {
     render(){

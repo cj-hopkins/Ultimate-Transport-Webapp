@@ -6,7 +6,11 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.dialects.mysql import mysqldb
 
+
+
 def getJsonData():
+    """ Gets JSON data from Open Weather API """
+    
     apiKey = "2abe029b7b8d40e80d1ed447f4522f0d"
     file = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/forecast?q=Dublin,ie&appid=' + apiKey +'&units=metric')
     # https://stackoverflow.com/questions/2835559/parsing-values-from-a-json-file
@@ -16,6 +20,8 @@ def getJsonData():
 
 
 def connectDB():
+    """ Connect to our database """
+    
     try:
         engine = create_engine("mysql+mysqldb://root:@127.0.0.1:3306/maindb", echo = False)
         return engine
@@ -25,8 +31,9 @@ def connectDB():
         print(e)
 
 
-
 def createTable():
+    """ Create table in database for five day weather forecast """
+    
     sqlcreate = "CREATE TABLE FiveDayWeather (number INTEGER UNIQUE, timeofday TIMESTAMP,  temperature INTEGER, description VARCHAR (128), icon VARCHAR (128), rain VARCHAR (128))"
     
     try:
@@ -36,9 +43,17 @@ def createTable():
         print("Error2:", type(e))
         print(e)
 
+        
 def populateTable(data):
+    """ Retrieve data from JSON and input into five day forecast table
+
+    Keyword arguments:
+    data -- weather information retrieved from the Open Weather API in JSON format
+    """
+    
     engine = connectDB()
 
+    # Weather is provided in 3 hour intervals - i.e. 8 times per 24 hours. 8 * 5 days = 40 values
     for i in range(0,40,1):
         iD = i
         time = data['list'][i]['dt_txt']

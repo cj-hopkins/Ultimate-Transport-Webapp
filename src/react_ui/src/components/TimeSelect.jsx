@@ -147,7 +147,7 @@ class TimeDropdown extends Component {
       .toString()
       .concat(moment().date())
       .toString();
-    if (this.props.dateOfMonthToTravel == this.state.todaysDate) {
+    if (this.props.dateOfMonthToTravel === this.state.todaysDate) {
       /* https://stackoverflow.com/questions/25323823/round-moment-js-object-time-to-nearest-30-minute-interval*/
       startingTime = moment(moment())
         .add(30 - (moment().minute() % 30), "minutes")

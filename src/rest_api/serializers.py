@@ -1,3 +1,5 @@
+""" Converts data from database into native Python datatypes to allow for easy rendering into JSON """
+
 from rest_framework import serializers
 from .models import Stop, Route, Composite, Timetable
 

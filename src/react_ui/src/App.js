@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Media } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import "./App.css";
 import moment from "moment";
 import MapContainer from "./components/MapContainer";
@@ -14,8 +14,6 @@ import JourneyPlanner from './components/JourneyPlanner';
 import { Table } from 'react-bootstrap';
 import TimeTable from "./components/TimeTable";
 import { TwitterFeed } from "./components/TwitterFeed";
-import {Badge} from "react-bootstrap";
-import ReactTooltip from 'react-tooltip'
 import FooterPage from './components/Footer';
 import ErrorBoundary from './components/ErrorBoundary';
 require("bootstrap/dist/css/bootstrap.css");
@@ -128,6 +126,7 @@ class App extends Component {
     })
   )
   getPolyCoordinates(data) {
+    //Get/update the coordinates for the Google Directions journey to make a polyline on the map
     const coords = this.parseCoords(data);
     this.setState({
       polylineCoordinates: coords
@@ -135,12 +134,14 @@ class App extends Component {
     // console.log("coords in App", coords)
   }
   getBusCoords(points){
+    //Get/update the coordinates needed to set bus stop markers for bus sections of Google journey
     console.log("points",points)
     this.setState({
       busCoords: points,
     })
   }
   renderSwitch = () => {
+    //Allow switching between the different views within the sidebar
     console.log(this.state.activatedUI)
     switch (this.state.activatedUI) {
         case 0:
@@ -181,7 +182,7 @@ class App extends Component {
                  <tr key={i} className = 'real_time_box_sidebar'>
                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                  {(post.duetime == 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
+                  {(post.duetime === 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
                  </tr>
                     ))} </Table>
               </div>
@@ -196,11 +197,13 @@ class App extends Component {
       }
     }
   onSetOpen(open) {
+    //Opens the side bar when on small screen
     this.setState({
       open: open
     });
   }
   menuButtonClick(ev) {
+    //Reverts the state of the sidebar when on small screen
     ev.preventDefault();
     this.onSetOpen(!this.state.open);
   }
@@ -231,6 +234,7 @@ class App extends Component {
   }
 
   onLocationUpdate(coords){
+    //Update the user coordinates
     console.log("updating location", coords)
     this.setState({
       currentPosition: {

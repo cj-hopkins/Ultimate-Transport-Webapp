@@ -7,7 +7,6 @@ import TimeButton from './TimeSelect';
 import PredictionContainer from './PredictionContainer';
 import moment from "moment";
 import ErrorBoundary from './ErrorBoundary';
-import ReactTooltip from 'react-tooltip'
 import "./../App.css";
 class ContentBlock extends Component {
   constructor(props) {
@@ -32,6 +31,7 @@ class ContentBlock extends Component {
     }
   }
   routeReset () {
+    //Reset the state when route is changed/removed
     this.setState({
         stops: [],
         chosenStops: null,
@@ -42,6 +42,8 @@ class ContentBlock extends Component {
         finishStop: "finish",
         predictionForJourney: null,
         direction: 'I',
+        isRealTimeButtonHidden: true,
+        isRealTimeHidden: true
     })
     this.props.onRouteUpdate([])
   }
@@ -60,11 +62,14 @@ class ContentBlock extends Component {
     this.props.onRouteUpdate(route)
   }
  
-  async onChosenRouteUpdate(route) {   // chosen route NAME: '31', '11' etc.
+  async onChosenRouteUpdate(route) {
+    //Set route to one selected, using default direction
     this.setState({
       chosenRoute: route,
       direction: 'I',
       predictionForJourney: null,
+      isRealTimeButtonHidden: true, 
+      isRealTimeHidden: true
     })
   }
   onDirectionUpdate(){   // Flip current direction
@@ -73,7 +78,9 @@ class ContentBlock extends Component {
       direction: newDirection,
       startStop: 'start',
       finishStop: 'finish',
-      predictionForJourney: null
+      predictionForJourney: null,
+      isRealTimeButtonHidden: true,
+      isRealTimeHidden: true
     })
   }
   onResetNowContentBlock(){
@@ -109,7 +116,7 @@ class ContentBlock extends Component {
   } 
   onStopDeselect(stop) {
     if (stop === 'start') {
-      this.setState({startStop: "start"})
+      this.setState({startStop: "start", isRealTimeButtonHidden: true, isRealTimeHidden: true})
       const newRoute = this.state.stops.slice(0, this.findStopIndex(this.state.finishStop))
       this.routeUpdate(newRoute, false)
     } else {
@@ -128,8 +135,8 @@ class ContentBlock extends Component {
     })   
   }
   onPressRealTimeButtonSidebar(stopid){
+    //Get the real time information for the start stop of the route selected
     this.setState({
-      isRealTimeHidden:false,
        isRealTimeHidden: !this.state.isRealTimeHidden
     })
      const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
@@ -144,7 +151,7 @@ class ContentBlock extends Component {
   }
   
   async onStopUpdate(start = null, finish = null) {
-    // Here be dragons - leave this code for now
+    // Update the state when a stop has been changed/deleted in the dropdown
     if (start === null || finish === null) {
       const isStart = (finish === null) ? true : false;
       const stop = isStart ? start : finish;
@@ -179,6 +186,7 @@ class ContentBlock extends Component {
     }
   }
   findStopIndex = (stop) => {
+    //Get the index in the route sequence for the chosen stop
     if (stop === "start") { 
       return 0 
     } else if (stop === "finish") {
@@ -192,11 +200,11 @@ class ContentBlock extends Component {
   }
 
   handleClick = () => { 
+    //On press of button call getPrediction()
     this.getPrediction()
-    console.log('DAY OF TRAVEL STRING ______' + this.state.dayOfTravel)
   }
   getPrediction = () => {
-    // const endpoint = '/api/getPredictionForJourney' 
+    //Make a call to back end passing in user specified data to make a prediction 
     const endpoint = '/api/getModelPrediction' 
     try {
       fetch(endpoint, {
@@ -325,7 +333,7 @@ class ContentBlock extends Component {
                  <tr key={i} className = 'real_time_box_sidebar'>
                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                  {(post.duetime == 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
+                  {(post.duetime === 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
                  </tr>
                     ))}
                  </Table> 
