@@ -16,6 +16,7 @@ import { TwitterFeed } from "./components/TwitterFeed";
 import {Badge} from "react-bootstrap";
 import ReactTooltip from 'react-tooltip'
 import FooterPage from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
 require("bootstrap/dist/css/bootstrap.css");
 require("react-select/dist/react-select.css");
 
@@ -256,17 +257,13 @@ class App extends Component {
               </Row>
               <Row style={{margin:'auto'}}>    <Col xs={3}></Col>
               <Col xs={12}>
-                {/*  <div style={{marginTop: '2em'}}> </div> */}
                     <h2 style={{fontSize:'14px', color:"white"}}>Plan Your Journey with Dublin Bus</h2>
-                  {/* <h2>
-                    <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus
-                    </Badge>
-                  </h2> */}
                 </Col>
-                
               </Row>
             </Grid>
+            <ErrorBoundary>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/> {this.renderSwitch()}
+              </ErrorBoundary>
      <FooterPage/>
     </div>;
     
@@ -275,19 +272,14 @@ class App extends Component {
             <ContentHeader/>
             <Grid style={{backgroundColor:"#3399ff"}}>
               <Row style={{margin:'auto'}}>
-                
                   <Col xs={12}>
-                   {/* <div style={{marginTop: '2em'}}> </div> */}
                     <h2 style={{fontSize:'14px', color:"white", textAlign:'center'}}> Plan Your Journey with Dublin Bus </h2>
-                {/*  <h2>
-                   <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge>
-                </h2> */}
                 </Col>
-                
               </Row>
             </Grid>
-         
+           <ErrorBoundary>
             <CustomNavbar swapUI={this.swapUI.bind(this)}/>{this.renderSwitch()}
+            </ErrorBoundary>
         <FooterPage/>   
           </div>;
 
@@ -315,9 +307,7 @@ class App extends Component {
         <Row style={{margin:'auto'}}>
           <Col xs={3}></Col>
           <Col xs={12}>
-           {/* <div style={{marginTop: '2em'}}> </div> */}
             <h2 style={{fontSize:'14px', color: "white", textAlign:'center'}} >Plan Your Journey with Dublin Bus
-              {/*  <Badge bsStyle="warning"  style ={{fontSize:'17px'}} >Plan Your Journey With Dublin Bus</ Badge> */}
             </h2>
           </Col>
         </Row>

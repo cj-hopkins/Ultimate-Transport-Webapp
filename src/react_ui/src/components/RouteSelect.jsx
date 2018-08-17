@@ -58,16 +58,25 @@ class RouteSelect extends Component {
       this.setState({
         routes: routeNames
       });
-    } catch(e) {
-      console.log(e);
-    }
-    const routeItems = []    // Format routes to use with dropdown
-    routeNames.forEach(item => (
+      const routeItems = []    // Format routes to use with dropdown
+      routeNames.forEach(item => (
       routeItems.push({value: item.route, 
                        label: item.route
-                      })
+          })
     ))
     this.setState({routesAsOptions: routeItems})
+    } catch(e) {
+      console.log(e);
+      
+      
+    }
+//    const routeItems = []    // Format routes to use with dropdown
+//    routeNames.forEach(item => (
+//      routeItems.push({value: item.route, 
+//                       label: item.route
+//                      })
+//    ))
+//    this.setState({routesAsOptions: routeItems})
   }
   componentWillReceiveProps(nextProps) {
     // Get new stops if direction changes, but only if a route reset has not been done

@@ -21,7 +21,10 @@ class WeatherWidget extends Component{
           });
         },
       )
-  }
+    .catch((error) => <p> An error occurred </p> )
+      
+    }
+  
   render() {
     return(
       <div style={{marginRight:'10px'}}>  

@@ -236,7 +236,7 @@ class ContentBlock extends Component {
     return (
         <div style={{minHeight: '55%', maxHeight:'90%', backgroundColor:'white'}}>
       <Grid fluid={true}>
-      {/*         <ErrorBoundary> */}
+              <ErrorBoundary> 
         <RouteSelect 
             className="mb-3" 
             chosenRoute={this.state.chosenRoute}
@@ -249,8 +249,8 @@ class ContentBlock extends Component {
             onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
             routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-     {/*  </ErrorBoundary>
-        <ErrorBoundary>    */} 
+       </ErrorBoundary>
+    {/*    <ErrorBoundary>    */} 
         <StopSelect 
           stops={this.state.stops}
           startStop={this.state.startStop}
