@@ -1,12 +1,10 @@
 import React from 'react';
-import Select from 'react-select';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
 import ReactTooltip from 'react-tooltip'
-import {Button, Grid, Row, Col} from 'react-bootstrap';
-import { WSAEINVALIDPROVIDER } from 'constants';
+import {Button} from 'react-bootstrap';
 
 
 class LocationSearchInput extends React.Component {
