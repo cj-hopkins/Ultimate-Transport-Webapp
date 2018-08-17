@@ -67,12 +67,14 @@ class App extends Component {
     this.menuButtonClick = this.menuButtonClick.bind(this);
   }
   mediaQueryChanged() {
+    //Updates the the state if screen size has changed
     this.setState({
       mql: mql,
       docked: this.state.mql.matches,
     });
   }
   componentWillMount() {
+    //Checks the size of the screen and then listens for a change and updates if necessary
     mql.addListener(this.mediaQueryChanged);
     this.setState({
       mql: mql,
@@ -82,12 +84,14 @@ class App extends Component {
     this.state.mql.removeListener(this.mediaQueryChanged);
   }
   onRouteUpdate(data) {
+    //Update the stops and choice of route in the state when there is a changed
     this.setState({
       stopsInRoute: data,
       selectedJourney: data
     });
   }
   onSelectedJourneyUpdate(data) {
+    //
     this.setState({
       selectedJourney: data
     });
@@ -103,6 +107,7 @@ class App extends Component {
     });
   }
   onStopSelectGetRealTime(stop){
+    //Gets real time info for the start stop chosen for the specific bus route
      this.setState({
       isRealTimeHidden:false
     })
