@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Media } from 'react-bootstrap';
 import "./App.css";
+import moment from "moment";
 import MapContainer from "./components/MapContainer";
 import ContentBlock from "./components/ContentBlock";
 import ContentHeader from "./components/ContentHeader";
@@ -174,7 +175,7 @@ class App extends Component {
 
               {!this.state.isRealTimeHidden &&
               <div>
-                <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
+                <p style ={{fontSize:'16px'}}>Real Time Information for Stop {this.state.selectedRealTimeStop} at  {(new moment()).format("HH:mm")}</p>
 
                 <Table>  { this.state.nextBuses.slice(0,4).map((post, i) => (
                  <tr key={i} className = 'real_time_box_sidebar'>

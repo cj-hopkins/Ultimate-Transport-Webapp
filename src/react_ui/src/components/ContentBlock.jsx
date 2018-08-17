@@ -313,7 +313,7 @@ class ContentBlock extends Component {
                 onClick={this.onPressRealTimeButtonSidebar.bind(this,this.state.startStop )} 
                 style ={{backgroundColor:'LightGrey'}}
                 bsSize='large' 
-                block>Get Real Time Information for Stop {this.state.startStop}
+                block>Real Time Information for Stop {this.state.startStop} at  {(new moment()).format("HH:mm")}
               </Button>
                <div style={{marginTop: '2em'}}> </div>
             </div>
