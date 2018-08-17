@@ -20,10 +20,9 @@ class RealTimePage extends Component {
       this.setState({
         stops: stopIds
       });
-    } catch(e) {
-      console.log(e);
-    }
-    const stopItems = []  // Format stops to use with dropdown
+      
+      
+      const stopItems = []  // Format stops to use with dropdown
     stopIds.forEach(item => (
       stopItems.push({
         value: item.stop_id, 
@@ -34,9 +33,10 @@ class RealTimePage extends Component {
     this.setState({
       stopsAsOptions: stopItems
     })
-   
-   console.log('here')
-   
+    } catch(e) {
+      console.log(e);
+    }
+    
   }
    handleSelect = (stopNum) => {
     this.props.onRealTimeStopUpdate(stopNum)
