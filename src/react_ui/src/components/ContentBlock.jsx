@@ -72,6 +72,7 @@ class ContentBlock extends Component {
       isRealTimeHidden: true
     })
   }
+    
   onDirectionUpdate(){   // Flip current direction
     const newDirection = (this.state.direction === 'I') ? 'O' : 'I'
     this.setState({
@@ -83,18 +84,21 @@ class ContentBlock extends Component {
       isRealTimeHidden: true
     })
   }
+    
   onResetNowContentBlock(){
     this.setState({
       isHidden: !this.state.isHidden,
       isDefaultTime: true
     })
-  }               
+  }
+
   onSelectTime(time){  //on change of time (time dropdown) 
     this.setState({
       plannedTime:time,
       isDefaultTime: false, 
     })
   }
+
    onSelectDate(date){  //on change of date (calendar) 
     this.setState({
       plannedDate:date,
@@ -102,18 +106,21 @@ class ContentBlock extends Component {
       dateOfMonthToTravel: ((date.month()).toString().concat(date.date()).toString())
      })
    }
+
   onPageLoadSetTime(time){  //on load of page set time = now
     this.setState({
       plannedTime:time,
       isDefaultTime: true,
     })
   }
+
   onPageLoadSetDate(date){  //on load of page set date = now
     this.setState({
       plannedDate:date,
       isDefaultTime: true
     })
-  } 
+  }
+
   onStopDeselect(stop) {
     if (stop === 'start') {
       this.setState({startStop: "start", isRealTimeButtonHidden: true, isRealTimeHidden: true})
@@ -121,25 +128,29 @@ class ContentBlock extends Component {
       this.routeUpdate(newRoute, false)
     } else {
       this.setState({finishStop: "finish"})
-      const newRoute = this.state.stops.slice(this.findStopIndex(this.state.startStop, this.state.stops.length))
+      const newRoute = 
+            this.state.stops.slice(this.findStopIndex(this.state.startStop, this.state.stops.length))
       this.routeUpdate(newRoute, false)
     }
     this.setState({
       predictionForJourney: null
     })
   }
+
   onSelectStartDisplayRealTimeButton(stopid){ //get Real time info when user picks start stop 
      this.setState({
        isRealTimeButtonHidden:false,
        isRealTimeHidden: true
     })   
   }
+
   onPressRealTimeButtonSidebar(stopid){
     //Get the real time information for the start stop of the route selected
     this.setState({
        isRealTimeHidden: !this.state.isRealTimeHidden
     })
-     const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
+     const endpoint = 
+           `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
     fetch(endpoint)
       .then (response => response.json())
       .then(parsedJSON => {
@@ -149,14 +160,17 @@ class ContentBlock extends Component {
      })
       .catch(error => console.log('parsing failed',error))
   }
-  
+
   async onStopUpdate(start = null, finish = null) {
     // Update the state when a stop has been changed/deleted in the dropdown
     if (start === null || finish === null) {
       const isStart = (finish === null) ? true : false;
       const stop = isStart ? start : finish;
-      const finishIndex = (this.state.finishStop === "finish") ? this.state.stops.length : this.findStopIndex(this.state.finishStop)
-      const startIndex = (this.state.startStop === "start") ? 0 : this.findStopIndex(this.state.startStop)
+      const finishIndex = 
+            (this.state.finishStop === "finish") ? 
+            this.state.stops.length : this.findStopIndex(this.state.finishStop)
+      const startIndex = 
+            (this.state.startStop === "start") ? 0 : this.findStopIndex(this.state.startStop)
       const index = this.findStopIndex(stop);
       console.log("Stop index", index)
       let newStops;
@@ -185,6 +199,7 @@ class ContentBlock extends Component {
         this.props.onSelectedJourneyUpdate(newStops);
     }
   }
+
   findStopIndex = (stop) => {
     //Get the index in the route sequence for the chosen stop
     if (stop === "start") { 
@@ -203,6 +218,7 @@ class ContentBlock extends Component {
     //On press of button call getPrediction()
     this.getPrediction()
   }
+
   getPrediction = () => {
     //Make a call to back end passing in user specified data to make a prediction 
     const endpoint = '/api/getModelPrediction' 
@@ -240,25 +256,25 @@ class ContentBlock extends Component {
   componentWillMount() {
     this.props.getPolyCoordinates([])
   }
-  
+
   render(){
     return (
         <div style={{minHeight: '55%', maxHeight:'90%', backgroundColor:'white'}}>
-      <Grid fluid={true}>
+            <Grid fluid={true}>
               <ErrorBoundary> 
-        <RouteSelect 
-            className="mb-3" 
-            chosenRoute={this.state.chosenRoute}
-            direction={this.state.direction}
-            route_destination={this.state.route_destination}
-            route_origin={this.state.route_origin}
-            onRouteUpdate={this.routeUpdate.bind(this)}
-            onDirectionUpdate={this.onDirectionUpdate.bind(this)}
-            onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
-            onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
-            routeReset={this.routeReset.bind(this)}/>
+            <RouteSelect 
+                className="mb-3" 
+                chosenRoute={this.state.chosenRoute}
+                direction={this.state.direction}
+                route_destination={this.state.route_destination}
+                route_origin={this.state.route_origin}
+                onRouteUpdate={this.routeUpdate.bind(this)}
+                onDirectionUpdate={this.onDirectionUpdate.bind(this)}
+                onChosenRouteUpdate={this.onChosenRouteUpdate.bind(this)} 
+                onSelectedJourneyUpdate={this.props.onSelectedJourneyUpdate.bind(this)}
+                routeReset={this.routeReset.bind(this)}/>
 	     <div style={{marginTop: '2em'}}> </div>
-       </ErrorBoundary>
+               </ErrorBoundary>
     {/*    <ErrorBoundary>    */} 
         <StopSelect 
           stops={this.state.stops}
@@ -289,7 +305,8 @@ class ContentBlock extends Component {
           />
           </Col>
           <Col xs={0}></Col>
-        </Row>  
+        </Row>
+
         <div style={{marginTop: '2em'}}> </div>
         <Row>
          <Col xs={0}></Col>  
@@ -304,15 +321,14 @@ class ContentBlock extends Component {
           <Col xs={0}></Col>  
         </Row>
         <Row>
-       <Col xs={0}></Col>
-          <Col xs={12}>  
-            <PredictionContainer prediction={this.state.predictionForJourney} />
-         </Col>
-          <Col xs={0}></Col> 
+            <Col xs={0}></Col>
+                <Col xs={12}>  
+                    <PredictionContainer prediction={this.state.predictionForJourney} />
+                </Col>
+            <Col xs={0}></Col> 
         </Row>	
         <div style={{marginTop: '2em'}}> </div>
         <Row>
-      
           <Col xs={12}>
             <div>
             {(!this.state.isRealTimeButtonHidden && this.state.isDefaultTime ) &&            
@@ -321,7 +337,8 @@ class ContentBlock extends Component {
                 onClick={this.onPressRealTimeButtonSidebar.bind(this,this.state.startStop )} 
                 style ={{backgroundColor:'LightGrey'}}
                 bsSize='large' 
-                block>Real Time Information for Stop {this.state.startStop} at  {(new moment()).format("HH:mm")}
+                block>Real Time Information for Stop {this.state.startStop} at 
+                  {(new moment()).format("HH:mm")}
               </Button>
                <div style={{marginTop: '2em'}}> </div>
             </div>
@@ -339,9 +356,9 @@ class ContentBlock extends Component {
                  </Table> 
                 </div>} 
             </div>
-          </Col>
-        </Row>
-      </Grid>
+           </Col>
+          </Row>
+        </Grid>
       </div>
     )
   }
