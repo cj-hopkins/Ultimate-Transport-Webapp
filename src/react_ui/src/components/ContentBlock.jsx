@@ -140,7 +140,6 @@ class ContentBlock extends Component {
                nextBuses: [...[], ...parsedJSON.results.slice(0, 4)]
             }); 
      })
-      .then( console.log('this.state.nextBuses.route', this.state.nextBuses))
       .catch(error => console.log('parsing failed',error))
   }
   
