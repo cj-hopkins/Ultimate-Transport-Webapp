@@ -45,14 +45,9 @@ class Composite(models.Model):
     stop_lon = models.FloatField()
 
 class Modelstops(models.Model):
-<<<<<<< HEAD
-    route = models.CharField(max_length=50, primary_key=True)
-    direction = models.IntegerField(primary_key = True)
-=======
 
     route = models.CharField(max_length=50)
     direction = models.IntegerField()
->>>>>>> 74e803d6fb8df5637a78c03d2c6fca4bdad257f3
     stopids = models.CharField(max_length=1000)
     modelstopsindex = models.IntegerField(primary_key=True)
 
