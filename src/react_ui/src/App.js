@@ -128,6 +128,7 @@ class App extends Component {
     })
   )
   getPolyCoordinates(data) {
+    //Get/update the coordinates for the Google Directions journey to make a polyline on the map
     const coords = this.parseCoords(data);
     this.setState({
       polylineCoordinates: coords
@@ -135,12 +136,14 @@ class App extends Component {
     // console.log("coords in App", coords)
   }
   getBusCoords(points){
+    //Get/update the coordinates needed to set bus stop markers for bus sections of Google journey
     console.log("points",points)
     this.setState({
       busCoords: points,
     })
   }
   renderSwitch = () => {
+    //Allow switching between the different views within the sidebar
     console.log(this.state.activatedUI)
     switch (this.state.activatedUI) {
         case 0:
@@ -196,11 +199,13 @@ class App extends Component {
       }
     }
   onSetOpen(open) {
+    //Opens the side bar when on small screen
     this.setState({
       open: open
     });
   }
   menuButtonClick(ev) {
+    //Reverts the state of the sidebar when on small screen
     ev.preventDefault();
     this.onSetOpen(!this.state.open);
   }
@@ -231,6 +236,7 @@ class App extends Component {
   }
 
   onLocationUpdate(coords){
+    //Update the user coordinates
     console.log("updating location", coords)
     this.setState({
       currentPosition: {
