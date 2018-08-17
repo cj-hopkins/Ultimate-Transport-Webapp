@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import LocationSearchInput from "./LocationSearchInput";
 import {Collapse} from 'react-collapse';
-import { Button, Grid, Row, Col } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import ReactTooltip from 'react-tooltip';
 import ScrollArea from 'react-scrollbar';
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Media } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import "./App.css";
 import moment from "moment";
 import MapContainer from "./components/MapContainer";
@@ -14,8 +14,6 @@ import JourneyPlanner from './components/JourneyPlanner';
 import { Table } from 'react-bootstrap';
 import TimeTable from "./components/TimeTable";
 import { TwitterFeed } from "./components/TwitterFeed";
-import {Badge} from "react-bootstrap";
-import ReactTooltip from 'react-tooltip'
 import FooterPage from './components/Footer';
 import ErrorBoundary from './components/ErrorBoundary';
 require("bootstrap/dist/css/bootstrap.css");
@@ -184,7 +182,7 @@ class App extends Component {
                  <tr key={i} className = 'real_time_box_sidebar'>
                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                  {(post.duetime == 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
+                  {(post.duetime === 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
                  </tr>
                     ))} </Table>
               </div>
