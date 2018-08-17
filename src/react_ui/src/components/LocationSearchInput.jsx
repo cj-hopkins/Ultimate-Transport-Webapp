@@ -1,8 +1,5 @@
 import React from 'react';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng} from 'react-places-autocomplete';
 import ReactTooltip from 'react-tooltip'
 import {Button} from 'react-bootstrap';
 
@@ -12,12 +9,15 @@ class LocationSearchInput extends React.Component {
     super(props);
     this.state = { address1: '', address2: ''};
   }
+    
   getAddress1() {
     return(this.state.address1)
   };
+    
   getAddress2() {
     return(this.state.address2)
   };
+    
   handleChange1 = address1 => {
     this.setState({ address1 })
     this.props.onChangeAddress1(address1)
@@ -33,6 +33,7 @@ class LocationSearchInput extends React.Component {
       })
       .catch(error => console.error('Error', error));
   };
+
   handleCloseClick1 = () => {
     this.setState({
       address1: '',
@@ -42,40 +43,43 @@ class LocationSearchInput extends React.Component {
     this.props.onChangeAddress1(null)
     this.props.getOriginGeolocation(null)
   };
+
   handleChange2 = address2 => {
     this.setState({ address2 })
     this.props.onChangeAddress2(address2)
   };
+
   handleSelect2 = address2 => {
-    this.setState({ address2: address2 });
-    geocodeByAddress(address2)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => {
-        console.log('Destination', latLng, address2);
-        this.props.getDestinationGeolocation(latLng);
-      })
-      .catch(error => console.error('Error', error));
-  };
+	this.setState({
+		address2: address2
+	});
+	geocodeByAddress(address2).then(results => getLatLng(results[0])).then(latLng => {
+		console.log('Destination', latLng, address2);
+		this.props.getDestinationGeolocation(latLng);
+	}).catch(error => console.error('Error', error));
+};
+
   handleCloseClick2 = () => {
-    this.setState({
-      address2: '',
-      latitude: null,
-      longitude: null,
-    });
-    this.props.onChangeAddress2(null)
-    this.props.getDestinationGeolocation(null)
-  };
+	this.setState({
+		address2: '',
+		latitude: null,
+		longitude: null,
+	});
+	this.props.onChangeAddress2(null)
+	this.props.getDestinationGeolocation(null)
+};
 
   useCurrentLocation = () => {
-    console.log(this.props.currentPosition)
-    const google = window.google;
-    const geocoder = new google.maps.Geocoder();
-    const me = this;
-    geocoder.geocode({'location': this.props.currentPosition}, res => {
-        me.handleSelect1(res[0].formatted_address)
-      }
-    )
-  }
+	console.log(this.props.currentPosition)
+	const google = window.google;
+	const geocoder = new google.maps.Geocoder();
+	const me = this;
+	geocoder.geocode({
+		'location': this.props.currentPosition
+	}, res => {
+		me.handleSelect1(res[0].formatted_address)
+	})
+}
 
   render() {
     const google = window.google
@@ -94,7 +98,8 @@ class LocationSearchInput extends React.Component {
         searchOptions={searchOptions}  >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <input data-tip='Where are you going from?'  style={{border: '1px solid rgba(192,192,192, .5)', 
+            <input data-tip='Where are you going from?'
+                style={{border: '1px solid rgba(192,192,192, .5)', 
                           borderRadius: '5px', fontSize: '16px', color: '#606060'}}
               {...getInputProps({
                 placeholder: 'Choose origin',
@@ -120,6 +125,7 @@ class LocationSearchInput extends React.Component {
                      backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
                   : { fontSize: '12px', marginLeft:'30px', marginRight:'30px', 
                      backgroundColor: '#ffffff', cursor: 'pointer' };
+                
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
@@ -134,6 +140,7 @@ class LocationSearchInput extends React.Component {
           </div>
         )}
       </PlacesAutocomplete>
+            
       <div style={{marginLeft:'5%'}}><Button
         bsStyle='warning'  
         bsSize='large' 
@@ -145,7 +152,8 @@ class LocationSearchInput extends React.Component {
         searchOptions={searchOptions}>
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <input data-tip='Where are you going to?' style={{border: '1px solid rgba(192,192,192, .5)',
+            <input data-tip='Where are you going to?' 
+                style={{border: '1px solid rgba(192,192,192, .5)',
                           borderRadius: '5px', fontSize:'16px', color: '#606060'}}
               {...getInputProps({
                 placeholder: 'Choose destination',
