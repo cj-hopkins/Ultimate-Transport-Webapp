@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
 import ReactTooltip from 'react-tooltip'
 
+{/* Displays navigation bar for page with links to other views */}
+
 class CustomNavbar extends Component {
   render() {
     return (

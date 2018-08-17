@@ -1,3 +1,4 @@
+/* Weather icon and temperature at the top of every page */
 import React, {Component} from "react";
 import {Badge} from "react-bootstrap";
 import ReactTooltip from 'react-tooltip'
@@ -21,15 +22,14 @@ class WeatherWidget extends Component{
           });
         },
       )
-    .catch((error) => <p> An error occurred </p> )
-      
+    .catch((error) => <p> An error occurred </p> ) 
     }
   
   render() {
     return(
       <div style={{marginRight:'10px'}}>  
         <p></p> {/* empty paragraph for space at top*/}
-      <img data-tip="Current weather" src={`https://openweathermap.org/img/w/${this.state.icon}.png`} alt={this.state.description}/><ReactTooltip />  
+      <img  src={`https://openweathermap.org/img/w/${this.state.icon}.png`} alt={this.state.description}/>
       <h3><Badge pullRight={true} bsStyle="warning">{this.state.temperature}°C</ Badge></h3>
       </div>
       );

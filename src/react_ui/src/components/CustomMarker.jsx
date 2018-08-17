@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Marker } from "google-maps-react";
 import db2 from "./db2.png";
 
+{/* Dispplays bus stops as map markers */}
+
 export default class CustomMarker extends Component {
   shouldComponentUpdate(nextProps) {
     if (this.props.route !== nextProps.route) return true;
