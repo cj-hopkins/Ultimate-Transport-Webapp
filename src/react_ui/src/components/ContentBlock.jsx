@@ -72,7 +72,8 @@ class ContentBlock extends Component {
     this.setState({
       direction: newDirection,
       startStop: 'start',
-      finishStop: 'finish'
+      finishStop: 'finish',
+      predictionForJourney: null
     })
   }
   onResetNowContentBlock(){
@@ -116,6 +117,9 @@ class ContentBlock extends Component {
       const newRoute = this.state.stops.slice(this.findStopIndex(this.state.startStop, this.state.stops.length))
       this.routeUpdate(newRoute, false)
     }
+    this.setState({
+      predictionForJourney: null
+    })
   }
   onSelectStartDisplayRealTimeButton(stopid){ //get Real time info when user picks start stop 
      this.setState({
@@ -193,7 +197,8 @@ class ContentBlock extends Component {
     console.log('DAY OF TRAVEL STRING ______' + this.state.dayOfTravel)
   }
   getPrediction = () => {
-    const endpoint = '/api/getPredictionForJourney' 
+    // const endpoint = '/api/getPredictionForJourney' 
+    const endpoint = '/api/getModelPrediction' 
     try {
       fetch(endpoint, {
         method: 'POST',
@@ -239,7 +244,7 @@ class ContentBlock extends Component {
     
     
     return (
-        <div style={{minHeight: '50%', maxHeight:'600px', backgroundColor:'white'}}>
+        <div style={{minHeight: '55%', maxHeight:'90%', backgroundColor:'white'}}>
       <Grid fluid={true}>
       {/*         <ErrorBoundary> */}
         <RouteSelect 
@@ -268,7 +273,6 @@ class ContentBlock extends Component {
           onSelectStartDisplayRealTimeButton={this.onSelectStartDisplayRealTimeButton.bind(this)}
                     />
        {/*    </ErrorBoundary>    */} 
-        <div style={{marginTop: '2em'}}> </div>
         <div style={{marginTop: '2em'}}> </div>
         <Row>
           <Col xs={0}></Col>
@@ -325,7 +329,7 @@ class ContentBlock extends Component {
                 bsSize='large' 
                 block>Get Real Time Information for Stop {this.state.startStop}
               </Button>
-               
+               <div style={{marginTop: '2em'}}> </div>
             </div>
             }
               {!this.state.isRealTimeHidden && 

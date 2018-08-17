@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import LocationSearchInput from "./LocationSearchInput";
 import {Collapse} from 'react-collapse';
 import { Button, Grid, Row, Col } from 'react-bootstrap';
-import ReactTooltip from 'react-tooltip'
+import ReactTooltip from 'react-tooltip';
+import ScrollArea from 'react-scrollbar';
 
 class JourneyPlanner extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class JourneyPlanner extends Component {
       selectedRoute: null,
       busStart: null,
       busFinish: null,
+      prediction: "",
     };
   }
 
@@ -88,7 +90,7 @@ class JourneyPlanner extends Component {
         me.setState({
           directionsObject: result,
         });
-        console.log(result)
+        console.log("DIRECTIONS OBJECT", result)
       }
     });
   }
@@ -121,17 +123,48 @@ class JourneyPlanner extends Component {
     this.props.getBusCoords(busPoints)
     this.props.getPolyCoordinates(coordinates)
     this.getMultiRoutePrediction(key)
+
+    for (let i = 0; i < route.length; i++) {
+      if (route[i].travel_mode === 'TRANSIT') {
+        let startStop = {
+          lat: route[i].transit.departure_stop.location.lat(),
+          lng: route[i].transit.departure_stop.location.lng()
+        }
+        let finishStop = {
+          lat: route[i].transit.arrival_stop.location.lat(),
+          lng: route[i].transit.arrival_stop.location.lng()
+        }
+        console.log("ROUTE", route[i].transit.line.short_name)
+        console.log("DEPART", startStop, route[i].transit.departure_stop.name);
+        console.log("ARRIVE", finishStop);
+      }
+    }
   }
 
   getMultiRoutePrediction = chosenRouteKey => {
+  //  let startStop = {
+  //         lat: route[i].transit.departure_stop.location.lat(),
+  //         lng: route[i].transit.departure_stop.location.lng()
+  //       }
+  //   let finishStop = {
+  //     lat: route[i].transit.arrival_stop.location.lat(),
+  //     lng: route[i].transit.arrival_stop.location.lng()
+  //   } 
     const endpoint = '/api/getMultiRoutePrediction' 
     const journeyObject = this.state.directionsObject.routes[chosenRouteKey].legs[0].steps
       .filter(item => item.travel_mode === 'TRANSIT')
       .map(item => ({
         route: item.transit.line.short_name,
         stops: item.transit.num_stops,
-        start: item.transit.departure_stop,
-        finish: item.transit.arrival_stop
+        headsign: item.transit.headsign,
+        start: {
+          lat: item.transit.departure_stop.location.lat(),
+          lng: item.transit.departure_stop.location.lng()
+        },
+        finish: {
+          lat: item.transit.arrival_stop.location.lat(),
+          lng: item.transit.arrival_stop.location.lng()
+        }
         })
       );
       console.log(journeyObject)
@@ -156,7 +189,12 @@ class JourneyPlanner extends Component {
         //     predictionForJourney: prediction
         //   })
         // })
-        .then((resp) => console.log(resp))
+        .then((resp) => {
+          const prediction = resp.prediction
+          this.setState({
+            prediction: prediction
+          })
+        })
     } catch(e) {
         console.log(e)
       }
@@ -164,7 +202,8 @@ class JourneyPlanner extends Component {
   }
   escapeRegExp(str) {
     var regex = /<[^>]*>/g
-    return str.replace(regex, "");
+    var reg2= "&nbsp;"
+    return str.replace(regex, " ").replace(reg2, "");
   }
 
 
@@ -177,22 +216,23 @@ class JourneyPlanner extends Component {
 <ReactTooltip />
       {/* <Button onClick={this.setState({selectedRoute: index})}>route</Button> */}
       <Collapse style={{ border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px', color: '#606060'}} isOpened={(this.state.selectedRoute === index) ? true : false} onClick={this.isOpened = !this.isOpened}>
-       <div>
+       <ScrollArea style={{maxHeight:'100px'}}>
         {journey.legs[0].steps.map(item => {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
           const instructions = []
           if (item.travel_mode === 'TRANSIT'){
-            instructions.push(<p style={{textAlign:'left'}}>{"Take Dublin Bus, route number " + routeName + ", towards " + item.transit.headsign}</p>)
-            instructions.push(<p style={{textAlign:'left'}}>{"Exit bus at "+item.transit.arrival_stop.name}</p>)
+            var prediction = (this.state.prediction==="") ? this.state.prediction : " (" +  this.state.prediction + ")"
+            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops" + prediction}</p>)
+            instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}</p>)
             } 
-          else {
+          else if (item.steps.length[0] !== undefined) {
             for(var i=0; i<item.steps.length;i++){
-                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions)}</p>)
+                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions) + "(" + item.steps[i].distance.text + "/ "+ item.steps[i].duration.text + " walk)"}</p>)
             }} 
           return instructions
           
         })}
-        </div>
+        </ScrollArea>
       </Collapse>
       </div>
     )}
@@ -224,7 +264,7 @@ class JourneyPlanner extends Component {
   }
   render() {
     return (
-      <div style={{minHeight:'50%', maxHeight:'800px'}} >
+      <div style={{minHeight:'50%', maxHeight:'90%'}} >
         <LocationSearchInput
           value1={this.state.origin}
           value2={this.state.destination}
@@ -240,7 +280,9 @@ class JourneyPlanner extends Component {
           <h1>route</h1>
           {route}
         })} */}
+        <div style={{marginTop: '2em'}}> </div>
         {this.parseAllJournies(this.state.directionsObject, this.parseSingleJourney)}
+        <div style={{marginTop: '2em'}}> </div>
       </div>
     );
   }

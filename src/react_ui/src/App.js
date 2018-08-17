@@ -131,7 +131,7 @@ class App extends Component {
     this.setState({
       polylineCoordinates: coords
     });
-    console.log("coords in App", coords)
+    // console.log("coords in App", coords)
   }
   getBusCoords(points){
     console.log("points",points)
@@ -374,6 +374,7 @@ var defaultStyles = {
     willChange: 'transform',
     overflowY: 'auto',
     backgroundColor: "white",
+    maxWidth:'550px'
   },
   content: {
     position: 'absolute',

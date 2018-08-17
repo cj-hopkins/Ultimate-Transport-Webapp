@@ -78,6 +78,8 @@ img {
     margin-right: auto;
 }
 .timetable{
+  width:110px;
+  border-radius:10px; 
   max-height: 150px;
   overflow: auto;
   text-align: center;

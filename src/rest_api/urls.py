@@ -18,4 +18,5 @@ urlpatterns = [
    path('getMultiRoutePrediction', views.getMultiRoutePrediction, name='getMultiRoutePrediction'),
    path('getAllStopNumbers', views.getAllStopNumbers, name='getAllStopNumbers'),
    path('getTimeTable', views.getTimeTable, name='getTimeTable'),
+   path('getModelPrediction', views.getModelPrediction, name='getModelPrediction'),
 ]

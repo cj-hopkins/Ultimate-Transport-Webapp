@@ -42,6 +42,12 @@ class Composite(models.Model):
     stop_lat = models.FloatField()
     stop_lon = models.FloatField()
 
+class Modelstops(models.Model):
+
+    route = models.CharField(max_length=50, primary_key=True)
+    direction = models.IntegerField(primary_key = True)
+    stopids = models.CharField(max_length=1000)
+
 class Currentweather(models.Model):
     identifier = models.IntegerField(primary_key=True)
     temperature = models.IntegerField()

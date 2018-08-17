@@ -117,7 +117,7 @@ class LocationSearchInput extends React.Component {
                   : 'suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { fontSize: '15px', marginLeft:'30px', marginRight:'30px', backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
+                  ? { fontSize: '13px', marginLeft:'30px', marginRight:'30px', backgroundColor: 'rgba(192,192,192, .5)', cursor: 'pointer' }
                   : { fontSize: '12px', marginLeft:'30px', marginRight:'30px', backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
