@@ -154,6 +154,7 @@ class JourneyPlanner extends Component {
       .map(item => ({
         route: item.transit.line.short_name,
         stops: item.transit.num_stops,
+        headsign: item.transit.headsign,
         start: {
           lat: item.transit.departure_stop.location.lat(),
           lng: item.transit.departure_stop.location.lng()

@@ -110,6 +110,7 @@ def getPredictionForJourney(request):
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
     isDefaultTime = request.data.get('isDefaultTime')
+
     current_time = time.time()
     epoch = datetime.datetime.utcfromtimestamp(0)
     time_in_5days_since_epoch = (datetime.datetime.now() + datetime.timedelta(days=5) - epoch).total_seconds() 
@@ -145,6 +146,11 @@ def getModelPrediction(request):
     selectedTime = request.data.get('selectedTime')
     selectedDate = request.data.get('selectedDate')
     isDefaultTime = request.data.get('isDefaultTime')
+
+    result = makeModelPrediction(route, start, finish, direction, selectedTime, selectedDate, isDefaultTime)
+    return JsonResponse({'prediction': result})
+
+def makeModelPrediction(route, start, finish, direction, selectedTime, selectedDate, isDefaultTime, isMulti=False):
     weather_dictionary = getWeatherForPrediction(isDefaultTime , selectedTime, selectedDate)
     rain = weather_dictionary['rain']
     temp = weather_dictionary['temp']
@@ -191,42 +197,37 @@ def getModelPrediction(request):
     print(combined_df)
     print(combined_df.shape)
     result = nn_model.makePrediction(pkl, combined_df)
-    return JsonResponse({'prediction': result})
+    return result
+
+# 'busRoutes': [{'route': '31a', 'stops': 50, 'start': {'lat': 53.378335, 'lng': -6.056625299999951}, 'finish': {'lat': 53.3504505, 'lng': -6.255969999999934}}, {'route': '46a', 'stops': 18, 'start': {'lat': 53.3502073, 'lng': -6.260246000000052}, 'finish': {'lat': 53.3088387, 'lng': -6.216082700000015}}], 'isDefaultTime': True, 'direction': 'I'}
 
 @api_view(['POST'])
 def getMultiRoutePrediction(request):
     print("REQUEST", request.data)
     data = request.data['busRoutes']
-    totalPrediction = 0
-    route = data[0]['route']
-    direction = 'I'
-    print(data[0])
-    startDat = data[0]['start']
-    print("START", startDat['lat'])
-    # startLat = str(round(decimal.Decimal(str(data[0]['start']['lat'])), 2))
-    # startLng = str(round(decimal.Decimal(str(data[0]['start']['lng'])), 2))
-    start = {'stop_lat': startDat['lat'], 'stop_lon': startDat['lng']}
-    # finish = {lat: data[0]['start']['lat'], 'lng': data[0]['start']['lng']}
-    stops = Composite.objects.filter(name = route).filter(route_direction = direction).values()
-    for i in stops:
-        i['stop_lat'] = float(i['stop_lat'])
-        i['stop_lon'] = float(i['stop_lon'])
-    closestStart = closest(stops, start)
-    print(closestStart)
-    # print(round(x,4))
-    # print(round(y,5))
-    print(startLat)
-    print(startLng)
-    # startStop = Composite.objects.filter(name=route).filter(route_direction = direction).filter(stop_lat = startLat).filter(stop_lon = startLng).values()
-    # startStop = Composite.objects.filter(stop_lat = startLat).filter(stop_lon = startLng).values().filter(name = route).filter(route_direction = direction)
-    # startStop = Composite.objects.filter(stop_lat = startLat).filter(stop_lon = startLng).filter(name = route).filter(route_direction = direction).values()
-    startStop = Composite.objects.filter(stop_lat__regex=r'^{}.*$'.format(startLat)) \
-                                 .filter(stop_lon__regex=r'^{}.*$'.format(startLng)) \
-                                 .filter(name = route).filter(route_direction = direction) \
-                                 .values()
-    print(startStop)
-    print(len(startStop))
-    return JsonResponse({'test': 'val'})
+    total = 0
+    for step in data:
+        selectedTime = 0
+        selectedDate = 0
+        isDefaultTime = True
+        route = step['route']
+        direction = Composite.objects.filter(name = route).filter(rtpi_destination = step['headsign']).values()[0]['route_direction']
+        direction = 'I' if len(direction) == 0 else direction
+        startLatLng = {'stop_lat': step['start']['lat'], 'stop_lon': step['start']['lng']}
+        finishLatLng = {'stop_lat': step['finish']['lat'], 'stop_lon': step['finish']['lng']}
+
+        stops = Composite.objects.filter(name = route).filter(route_direction = direction).values()
+        for i in stops:
+            i['stop_lat'] = float(i['stop_lat'])
+            i['stop_lon'] = float(i['stop_lon'])
+        closestStart = closest(stops, startLatLng)['stop_id']
+        closestFinish = closest(stops, finishLatLng)['stop_id']
+        print("START", closestStart)
+        print("FINISH", closestFinish)
+        total += makeModelPrediction(route, closestStart, closestFinish, direction, selectedTime, selectedDate, isDefaultTime, True)
+        print("RUNNING TOTAL", total)
+
+    return JsonResponse({'prediction': 'total'})
 
 def getNumStopsInJourney(start, finish, route, direction):
     stops = Composite.objects.filter(name=route).filter(route_direction = direction)
@@ -248,5 +249,4 @@ def distance(lat1, lon1, lat2, lon2):
     a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p)*cos(lat2*p) * (1-cos((lon2-lon1)*p)) / 2
     return 12742 * asin(sqrt(a))
 
-def closest(data, v):
-    return min(data, key=lambda p: distance(v['stop_lat'],v['stop_lon'],p['stop_lat'],p['stop_lon']))
+closest = lambda data, v: min(data, key=lambda p: distance(v['stop_lat'],v['stop_lon'],p['stop_lat'],p['stop_lon']))
