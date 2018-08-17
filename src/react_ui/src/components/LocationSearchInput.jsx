@@ -69,7 +69,7 @@ class LocationSearchInput extends React.Component {
   useCurrentLocation = () => {
     console.log(this.props.currentPosition)
     const google = window.google;
-    const geocoder = new google.maps.Geocoder;
+    const geocoder = new google.maps.Geocoder();
     const me = this;
     geocoder.geocode({'location': this.props.currentPosition}, res => {
         me.handleSelect1(res[0].formatted_address)
