@@ -190,7 +190,7 @@ class JourneyPlanner extends Component {
         //   })
         // })
         .then((resp) => {
-          const prediction = resp.prediction
+          const prediction = Math.round(resp.prediction)
           this.setState({
             prediction: prediction
           })
@@ -221,7 +221,7 @@ class JourneyPlanner extends Component {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
           const instructions = []
           if (item.travel_mode === 'TRANSIT'){
-            var prediction = (this.state.prediction==="") ? this.state.prediction : " (" +  this.state.prediction + ")"
+            var prediction = (this.state.prediction==="") ? this.state.prediction : " (" +  this.state.prediction + " minutes)"
             instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops" + prediction}</p>)
             instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}</p>)
             } 

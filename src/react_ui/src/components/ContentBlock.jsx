@@ -218,7 +218,7 @@ class ContentBlock extends Component {
         .then(
         (response) => response.json())
         .then((resp) => {
-          const prediction = resp.prediction
+          const prediction = Math.round(resp.prediction)
           this.setState({
             predictionForJourney: prediction
           })
