@@ -140,7 +140,6 @@ class ContentBlock extends Component {
                nextBuses: [...[], ...parsedJSON.results.slice(0, 4)]
             }); 
      })
-      .then( console.log('this.state.nextBuses.route', this.state.nextBuses))
       .catch(error => console.log('parsing failed',error))
   }
   
@@ -234,15 +233,6 @@ class ContentBlock extends Component {
   }
   
   render(){
-    const rt_array =  this.state.nextBuses.map((post, i) => (
-                       <tr key={i} className = 'real_time_box_sidebar'>
-                          <td>{this.state.nextBuses.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                          <td>{this.state.nextBuses.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                          <td>{this.state.nextBuses.duetime} minutes </td>
-                      </tr>
-                    ));
-    
-    
     return (
         <div style={{minHeight: '55%', maxHeight:'90%', backgroundColor:'white'}}>
       <Grid fluid={true}>
@@ -317,12 +307,7 @@ class ContentBlock extends Component {
           <Col xs={12}>
             <div>
             {(!this.state.isRealTimeButtonHidden && this.state.isDefaultTime ) &&            
-            <div> 
-                   {/* 
-                    <p  >Real Time Information for Stop {this.state.startStop}</p>
-                   <Table striped bordered condensed hover>{this.state.nextBuses}
-                  </Table>
-                  */}
+            <div>
               <Button 
                 onClick={this.onPressRealTimeButtonSidebar.bind(this,this.state.startStop )} 
                 style ={{backgroundColor:'LightGrey'}}

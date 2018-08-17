@@ -209,6 +209,8 @@ class JourneyPlanner extends Component {
 
   parseSingleJourney = (journey, index) => {
     // console.log(journey)
+    var walkingTime = 0
+    const numberPattern = /\d+/g;
     return (
     
      <div>
@@ -221,17 +223,19 @@ class JourneyPlanner extends Component {
           const routeName = (item.travel_mode === 'TRANSIT') ? item.transit.line.short_name : null
           const instructions = []
           if (item.travel_mode === 'TRANSIT'){
-            var prediction = (this.state.prediction==="") ? this.state.prediction : " (" +  this.state.prediction + " minutes)"
-            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops" + prediction}</p>)
+            instructions.push(<p style={{textAlign:'left'}}>{"Take route number " + routeName + ", towards " + item.transit.headsign + " for "+ item.transit.num_stops  + " stops"}</p>)
             instructions.push(<p style={{textAlign:'left'}}>{"Get off at "+item.transit.arrival_stop.name}</p>)
             } 
-          else if (item.steps.length[0] !== undefined) {
+          else if (item.steps !== undefined) {
             for(var i=0; i<item.steps.length;i++){
-                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions) + "(" + item.steps[i].distance.text + "/ "+ item.steps[i].duration.text + " walk)"}</p>)
+                var walking= item.steps[i].duration.text
+                walkingTime+= parseInt(walking.match(numberPattern))
+                instructions.push(<p style={{textAlign:'left'}}>{this.escapeRegExp(item.steps[i].instructions) + "(" + item.steps[i].distance.text + ")"}</p>)
             }} 
           return instructions
           
         })}
+        <p style={{textAlign:'left'}}>{"Total travel time: "+ (this.state.prediction +  walkingTime) +" minutes"}</p>
         </ScrollArea>
       </Collapse>
       </div>

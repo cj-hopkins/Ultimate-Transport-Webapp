@@ -109,15 +109,9 @@ class App extends Component {
     fetch(endpoint)
       .then (response => response.json())
       .then(parsedJSON => {
-            this.setState({   
-                nextBuses: parsedJSON.results.slice(0, 10).map((post, i) => (
-                  <tr key={i} className = 'real_time_box_sidebar'>
-                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>{post.duetime} minutes </td>
-                  </tr>
-                ))
-            });
+           this.setState({   //slice(0,4) to limit to top 4 results 
+               nextBuses: [...[], ...parsedJSON.results.slice(0, 4)]
+            }); 
      })
       .catch(error => console.log('parsing failed',error))
   }
@@ -176,7 +170,13 @@ class App extends Component {
               <div>
                 <p>Real Time Information for Stop {this.state.selectedRealTimeStop}</p>
 
-                <Table>  {this.state.nextBuses}  </Table>
+                <Table>  { this.state.nextBuses.slice(0,4).map((post, i) => (
+                 <tr key={i} className = 'real_time_box_sidebar'>
+                   <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                   <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                  {(post.duetime == 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
+                 </tr>
+                    ))} </Table>
               </div>
                }
             </div>

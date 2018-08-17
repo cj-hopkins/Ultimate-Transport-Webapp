@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-  Map,
-  InfoWindow,
-  Marker,
-  GoogleApiWrapper,
-  Polyline
-} from "google-maps-react";
+import {Map,InfoWindow,Marker, GoogleApiWrapper, Polyline} from "google-maps-react";
 import db2 from "./db2.png";
 import MapMarker from "./MapMarker.png";
 import ReactTooltip from 'react-tooltip'
@@ -24,62 +18,23 @@ export class MapContainer extends Component {
       showingInfoWindow: false,
       activeMarker: {},
       currentPosition: {
-        //dublin city centre co-ordinates
-        lat: 53.3498,
+        lat: 53.3498,   //dublin city centre co-ordinates
         lng: -6.2603
       },
       nextBuses: [],
     };
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
-  
-
-  // async componentWillMount() {
-  //   const apiKey = "AIzaSyAhsVJ4JtBv4r532Hns_zR7PeT_1jEX468";
-  //   const endpoint = `https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`;
-  //   try {
-  //     fetch(endpoint, {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json"
-  //       },
-  //       body: JSON.stringify({
-  //         homeMobileCountryCode: 353
-  //       })
-  //     })
-  //       .then(response => response.json())
-  //       .then(resp => {
-  //         this.setState({
-  //           currentPosition: {
-  //             lat: resp.location.lat,
-  //             lng: resp.location.lng
-  //           }
-  //         });
-  //       });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
 
   fetchRealTime(stopid) {
     const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
     fetch(endpoint)
       .then(response => response.json())
-      .then(parsedJSON => {
-        //            console.log(parsedJSON.results)
-        this.setState({
-          //slice(0,4) to limit to top 4 results
-          nextBuses: parsedJSON.results.slice(0, 4).map((post, i) => (
-            <tr key={i}>
-              <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-              <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-              <td>{post.duetime} minute(s)</td>
-            </tr>
-          ))
-        });
-        console.log(this.state.nextBuses)
-      })
+      .then(parsedJSON =>  {
+           this.setState({   //slice(0,4) to limit to top 4 results 
+               nextBuses: [...[], ...parsedJSON.results.slice(0, 4)]
+            }); 
+     })
       .catch(error => console.log("parsing failed", error));
   }
 
@@ -90,22 +45,12 @@ export class MapContainer extends Component {
       showingInfoWindow: true,
       nextBuses: this.fetchRealTime(marker.title)
     });
-    //    console.log('selectedPlace',this.state.selectedPlace.title);
-    //    console.log('activeMarker', this.state.activeMarker.title);
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.polylineCoordinates !== this.state.polylineCoordinates) {
-  //     this.setState({ polylineCoordinates: this.props.polylineCoordinates });
-  //   }
-  // }
 
   render() {
     if (!this.props.loaded) return <div>Loading...</div>;
 
     const endPoint = (this.props.polylineCoordinates.length < 1)? null: this.props.polylineCoordinates.length-1
-    //console.log('endPoint')
-    //console.log(endPoint)
     const google = window.google;
     return (
       <Map data-tip='Dublin'
@@ -127,13 +72,11 @@ export class MapContainer extends Component {
           fillOpacity={0.35}
           path={this.props.polylineCoordinates}
           strokeColor="#2979ff"
-          // strokeOpacity={0.8}
           strokeWeight={3}
         />
         
         <Marker data-tip='You are here'
           name={"Current location"}
-          // position={this.props.currentPosition} />
           position={{
             lat: this.props.currentPosition.lat,
             lng: this.props.currentPosition.lng
@@ -195,9 +138,6 @@ export class MapContainer extends Component {
           />  
         ))
         }
-
-
-
         {this.props.selectedStops.map((item,i) => (
           <Marker
             icon={i===0 ? A : i===(this.props.selectedStops.length-1)? B : db2} 
@@ -221,14 +161,19 @@ export class MapContainer extends Component {
             <p>{this.state.activeMarker.name}</p>
             <p>Real Time Information:</p>
             <ul>
-              <table>{this.state.nextBuses}</table>
+              <table> { this.state.nextBuses.slice(0,4).map((post, i) => (
+                 <tr key={i} className = 'real_time_box_sidebar'>
+                   <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                   <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                  {(post.duetime == 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
+                 </tr>
+                    ))} </table>
             </ul></div>}
         </InfoWindow>
       </Map>
     );
   }
 }
-
 export default GoogleApiWrapper({
   apiKey: "AIzaSyBRUrdJ4Tz9rLrHrOkwJWpA9QSYNJbWQ0Q",
   libraries: ["places", "visualisation"]
