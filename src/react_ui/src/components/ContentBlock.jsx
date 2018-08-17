@@ -74,7 +74,8 @@ class ContentBlock extends Component {
     this.setState({
       direction: newDirection,
       startStop: 'start',
-      finishStop: 'finish'
+      finishStop: 'finish',
+      predictionForJourney: null
     })
   }
   onResetNowContentBlock(){
@@ -118,6 +119,9 @@ class ContentBlock extends Component {
       const newRoute = this.state.stops.slice(this.findStopIndex(this.state.startStop, this.state.stops.length))
       this.routeUpdate(newRoute, false)
     }
+    this.setState({
+      predictionForJourney: null
+    })
   }
   onSelectStartDisplayRealTimeButton(stopid){ //get Real time info when user picks start stop 
      this.setState({
