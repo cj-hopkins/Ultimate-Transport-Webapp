@@ -43,6 +43,8 @@ class ContentBlock extends Component {
         finishStop: "finish",
         predictionForJourney: null,
         direction: 'I',
+        isRealTimeButtonHidden: true,
+        isRealTimeHidden: true
     })
     this.props.onRouteUpdate([])
   }
@@ -67,6 +69,8 @@ class ContentBlock extends Component {
       chosenRoute: route,
       direction: 'I',
       predictionForJourney: null,
+      isRealTimeButtonHidden: true, 
+      isRealTimeHidden: true
     })
   }
   onDirectionUpdate(){   // Flip current direction
@@ -75,7 +79,9 @@ class ContentBlock extends Component {
       direction: newDirection,
       startStop: 'start',
       finishStop: 'finish',
-      predictionForJourney: null
+      predictionForJourney: null,
+      isRealTimeButtonHidden: true,
+      isRealTimeHidden: true
     })
   }
   onResetNowContentBlock(){
@@ -111,7 +117,7 @@ class ContentBlock extends Component {
   } 
   onStopDeselect(stop) {
     if (stop === 'start') {
-      this.setState({startStop: "start"})
+      this.setState({startStop: "start", isRealTimeButtonHidden: true, isRealTimeHidden: true})
       const newRoute = this.state.stops.slice(0, this.findStopIndex(this.state.finishStop))
       this.routeUpdate(newRoute, false)
     } else {
@@ -132,7 +138,6 @@ class ContentBlock extends Component {
   onPressRealTimeButtonSidebar(stopid){
     //Get the real time information for the start stop of the route selected
     this.setState({
-      isRealTimeHidden:false,
        isRealTimeHidden: !this.state.isRealTimeHidden
     })
      const endpoint = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopid}&format=json`;
