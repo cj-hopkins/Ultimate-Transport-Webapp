@@ -137,7 +137,7 @@ class ContentBlock extends Component {
       .then (response => response.json())
       .then(parsedJSON => {
             this.setState({   //slice(0,4) to limit to top 4 results 
-               nextBuses: [...this.state.nextBuses, ...parsedJSON.results.slice(0, 4)]
+               nextBuses: [...[], ...parsedJSON.results.slice(0, 4)]
             }); 
      })
       .then( console.log('this.state.nextBuses.route', this.state.nextBuses))
@@ -339,7 +339,7 @@ class ContentBlock extends Component {
                  <tr key={i} className = 'real_time_box_sidebar'>
                    <td>{post.route}&nbsp;&nbsp;&nbsp;&nbsp;</td>
                    <td>{post.destination}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                  <td>{post.duetime} minutes </td>
+                  {(post.duetime == 'Due') ? <td>{post.duetime}</td>:<td>{post.duetime} minutes </td> }
                  </tr>
                     ))}
                  </Table> 
