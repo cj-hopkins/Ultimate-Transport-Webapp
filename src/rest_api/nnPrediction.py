@@ -36,8 +36,9 @@ class NNModel:
         """
         
         parseDir = lambda x: '1' if x == 'I' else '2'
-        key = "bus{}_d{}.pkl".format(route, parseDir(direction))
+        key = "bus{}_d{}.pkl".format(route.upper(), parseDir(direction))
         model_path = os.path.join(NNModel.current_file_dir, "objects/picklefiles/{}".format(key))
+        print("PICKLE", model_path)
         print(key)
         return model_path
 
@@ -225,11 +226,11 @@ class NNModel:
                 df = pd.concat([df,cols_zeros], axis=1)
                 
                 
-            result = nn_model.predict(df)
-            sum = reduce(lambda x, acc: x+acc, result)
-            time = abs( sum/60)
-            print (time)
-            return time
+        result = nn_model.predict(df)
+        sum = reduce(lambda x, acc: x+acc, result)
+        time = abs( sum/60)
+        print ("NN MODEL", time)
+        return time
                 
                 
         # startCols = createStopArray()
