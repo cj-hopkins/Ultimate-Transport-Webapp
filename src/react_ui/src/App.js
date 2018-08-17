@@ -8,7 +8,7 @@ import ContentHeader from "./components/ContentHeader";
 import RealTimePage from "./components/RealTimePage";
 import CustomNavbar from './components/CustomNavbar';
 import Sidebar from 'react-sidebar';
-import MaterialTitlePanel from './components/examples/MaterialTitlePanel';
+import MaterialTitlePanel from './components/MaterialTitlePanel';
 import WeatherWidget from "./components/Weather";
 import JourneyPlanner from './components/JourneyPlanner';
 import { Table } from 'react-bootstrap';
