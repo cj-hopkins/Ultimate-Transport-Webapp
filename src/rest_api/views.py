@@ -156,33 +156,15 @@ def getModelPrediction(request):
     stops = sorted(list({item["stop_id"]: item for item in stops}.values()), key = lambda x: x['stop_id'])
     print("STOPS LIST", len(stops))
     directionChanger ={'I':2, 'O':1}
-    stopsmodel = Modelstops.objects.filter(route=route).filter(direction=directionChanger[direction]).order_by('stopids').values()
+
+    stopsmodel = Modelstops.objects.filter(route=route) .filter(direction=directionChanger[direction]).order_by('stopids').values()
+
     print("Stops",stopsmodel)
-    requiredStops = stopsmodel[0]['stopids']
-    print(type(requiredStops))
-    stopArray = [int(x) for x in requiredStops.split(' ')]
-    print("Sophie stops", len(stopArray))
-    actualStops = []
-    interArray = []
-    for stop in stops:
-        if stop['stop_id'] in stopArray:
-            actualStops.append(stop)
-            interArray.append(stop['stop_id'])
-    for stop in stopArray:
-        print(stop)
-        if stop in interArray:
-            continue
-        newItem={'identifier': 0, 'stop_id': stop, 'location_text': '', 'address': '', 'name': route, 'route_direction': direction, 'sequence': 0.0, 'is_stage_point': 'N', 'stage_number': 0.0, 'journey_pattern_id': '0', 'rtpi_destination': '', 'rtpi_origin': '', 'rtpi_via': '', 'sequence_number': 0, 'fare': 0.0, 'stop_lat': '0.0', 'stop_lon': '0.0'}
-        print(newItem)
-        actualStops.append(newItem)
-    #print("InterArray____",interArray)
-
-    print('ACTUAL STOPS _______', len(actualStops))
-
-    # startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start !== 'start' else stops[0]
-    startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start != 'start' else actualStops[0]
+    
+    startStop = Composite.objects.filter(stop_id=start).filter(name=route).values()[0] if start != 'start' else min(stops, key = lambda x:x['sequence_number'])
     # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0]
-    finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish != 'finish' else actualStops[-1]
+    finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish != 'finish' else max(stops, key = lambda x: x['sequence_number'])
+    # finishStop = Composite.objects.filter(stop_id=finish).filter(name=route).values()[0] if finish != 'finish' else actualStops[-1]
     print("FINSIH", type(finishStop))
     print("FINSIH", finishStop)
     print("START", startStop)
@@ -190,7 +172,7 @@ def getModelPrediction(request):
     # stops = Composite.objects.filter()
     
     
-    nn_model = NNModel(route, direction, startStop, finishStop, actualStops, rain)
+    nn_model = NNModel(route, direction, startStop, finishStop, stops, rain)
     pkl = nn_model.parseRequest(nn_model.route, nn_model.direction)
     stopDf = nn_model.createStopDf()
     distances = nn_model.calculateDistances()
@@ -219,9 +201,12 @@ def getModelPrediction(request):
     # Implement this 
     # startStopArray = createStopArray(route, direction getNumStopsInJourney(start, finish, route, direction))
     # makePrediction(pklFileName)cs 
-    nn_model.makePrediction(pkl, comined_df)
-    return JsonResponse({'test': 'val'})
+    result = nn_model.makePrediction(pkl, comined_df)
+    return JsonResponse({'prediction': result})
 
+    # def getStartFinishIndices(isStartstops):
+    #     stops = sorted(stops, key = lambda x: x['sequence_number'])
+    #     return stops[0], stops[-1]
 
 @api_view(['POST'])
 def getMultiRoutePrediction(request):

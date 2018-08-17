@@ -94,15 +94,15 @@ class NNModel:
                 errorCount += 1
                 continue
             # print("ERRORS", errorCount)
-            print(startIndex, finishIndex)
-            print(type(startIndex), type(finishIndex))
+            # print(startIndex, finishIndex)
+            # print(type(startIndex), type(finishIndex))
 
             row = [0 for i in range(len(stopsColsList) * 2)]
             # row = [0 for i in range(len(stopsColsList) * 2)]
             row[startIndex] = 1
             # print(row)
             row[len(stopsColsList) + finishIndex] = 1
-            print(row)
+            # print(row)
             df.loc[i] = row
 
         print("ERRORS", errorCount)
@@ -160,6 +160,7 @@ class NNModel:
             print(sum / 60)
         except ValueError as e:
             dimesnsions = [int(s) for s in str(e).split() if s.isdigit()]
+            print("DIMENSIONS", dimesnsions)
             our_df_size, model_df_size  = dimesnsions[0] , dimesnsions[1]
             print('our_df_size\t', our_df_size, 'model_df_size\t', model_df_size)
             if our_df_size > model_df_size:
