@@ -192,11 +192,11 @@ class NNModel:
                 df = pd.concat([df,cols_zeros], axis=1)
                 
                 
-            result = nn_model.predict(df)
-            sum = reduce(lambda x, acc: x+acc, result)
-            time = abs( sum/60)
-            print (time)
-            return time
+        result = nn_model.predict(df)
+        sum = reduce(lambda x, acc: x+acc, result)
+        time = abs( sum/60)
+        print ("NN MODEL", time)
+        return time
                 
                 
         # startCols = createStopArray()
