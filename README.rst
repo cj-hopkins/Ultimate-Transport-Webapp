@@ -1,21 +1,46 @@
-Installation:
+=========Ultimate Transport App=========
 
-~~ Clone the repository
+To view the web application visit 'ultimate-transport.win' or install using the below instructions.
+
+===============================
+Installation (via terminal):
+
+~~ Clone the repository using one of the links below:
+	
+	SSH: git@git.ucd.ie:Conor2/ultimate_transport.git
+	HTTPS: https://git.ucd.ie/Conor2/ultimate_transport.git
 
 ~~ Activate your conda environment
 
-~~ cd ultimate_transport && pip install -r requirements.txt
+~~ Navigate to the project folder and install the required modules using the commands below:
+	
+	'cd ultimate_transport'
+	'pip install -r requirements.txt'
 
-~~ cd src/reactify-ui && npm install
+~~ Navigate to the React folder and install the required node modules using the commands below:
 
-~~ npm run collect
+	'cd src/react-ui'
+	'npm install'
 
-~~ ../manage.py runserver
+~~ Run the Django server using the command below:
+	
+	'python ../manage.py runserver'
 
-----------------------
+~~ Start the NodeJS server (separate terminal tab/window) using the command below: 
+	
+	'npm start'
+
+~~ The project should now be running locally!
+
+~~ Visit localhost:3000 in browser to view!
+
+
+*** NodeJs is required to run the application locally. It can be downloaded from the link below:
+	
+	https://nodejs.org/en/
+
+----------------------====
 Development:
-
-~~ each time you make a change to App.js, you must rerun npm run collect
 
 ~~ The Django server typically does not need to be restarted
 
