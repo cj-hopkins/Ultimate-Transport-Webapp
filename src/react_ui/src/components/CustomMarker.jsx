@@ -4,14 +4,11 @@ import db2 from "./db2.png";
 
 export default class CustomMarker extends Component {
   shouldComponentUpdate(nextProps) {
-    console.log(this.props.renderKey, nextProps.renderKey);
     if (this.props.route !== nextProps.route) return true;
     if (this.props.direction !== nextProps.direction) return true;
     return false;
   }
   render() {
-    console.log("rendering marker");
-    console.log(this.props.title);
     return (
       <Marker
         google={this.props.google}

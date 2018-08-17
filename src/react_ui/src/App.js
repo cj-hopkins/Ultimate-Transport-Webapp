@@ -132,18 +132,15 @@ class App extends Component {
     this.setState({
       polylineCoordinates: coords
     });
-    // console.log("coords in App", coords)
   }
   getBusCoords(points){
     //Get/update the coordinates needed to set bus stop markers for bus sections of Google journey
-    console.log("points",points)
     this.setState({
       busCoords: points,
     })
   }
   renderSwitch = () => {
     //Allow switching between the different views within the sidebar
-    console.log(this.state.activatedUI)
     switch (this.state.activatedUI) {
         case 0:
         // this.setState({polylineCoordinates: []});
@@ -236,7 +233,6 @@ class App extends Component {
 
   onLocationUpdate(coords){
     //Update the user coordinates
-    console.log("updating location", coords)
     this.setState({
       currentPosition: {
         lat: coords.latitude,

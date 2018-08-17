@@ -28,7 +28,6 @@ class LocationSearchInput extends React.Component {
     geocodeByAddress(address1)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        console.log('Origin', latLng, address1);
         this.props.getOriginGeolocation(latLng);
       })
       .catch(error => console.error('Error', error));
@@ -54,7 +53,6 @@ class LocationSearchInput extends React.Component {
 		address2: address2
 	});
 	geocodeByAddress(address2).then(results => getLatLng(results[0])).then(latLng => {
-		console.log('Destination', latLng, address2);
 		this.props.getDestinationGeolocation(latLng);
 	}).catch(error => console.error('Error', error));
 };
@@ -70,7 +68,6 @@ class LocationSearchInput extends React.Component {
 };
 
   useCurrentLocation = () => {
-	console.log(this.props.currentPosition)
 	const google = window.google;
 	const geocoder = new google.maps.Geocoder();
 	const me = this;

@@ -7,7 +7,6 @@ Returns timetable for that stop */
 class TimeTableStop extends Component {
   handleStartSelect = start => {
     if (start === null) {
-      console.log('resetting start')
       this.props.onStopDeselect("start");
     } else {
       this.props.onStopUpdate(start.value, null);
