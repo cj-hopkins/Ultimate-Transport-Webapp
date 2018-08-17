@@ -5,6 +5,8 @@ import { Button } from 'react-bootstrap';
 import ReactTooltip from 'react-tooltip';
 import ScrollArea from 'react-scrollbar';
 
+{/* View of journey planner page */}
+
 class JourneyPlanner extends Component {
   constructor(props) {
     super(props);
@@ -22,21 +24,21 @@ class JourneyPlanner extends Component {
     };
   }
 
-  onChangeAddress1(address1) {
+  onChangeAddress1(address1) { //when address changed, set to origin
     this.setState({ origin: address1 });
   }
 
-  onChangeAddress2(address2) {
+  onChangeAddress2(address2) { // when address changed, set to destination
     this.setState({ destination: address2 });
   }
 
-  getOriginGeolocation(latLng) {
+  getOriginGeolocation(latLng) { //set lat and long of origin
     this.setState({
       originLatLng: latLng
     });
   }
 
-  getDestinationGeolocation(latLng) {
+  getDestinationGeolocation(latLng) { //set lat and long of destination
     this.setState({
       destinationLatLng: latLng
     });
@@ -63,7 +65,7 @@ class JourneyPlanner extends Component {
     }
   }
 
-  makeDirectionsRequest = () => {
+  makeDirectionsRequest = () => { //use Google Maps direction rendering to get directions between origin and destination
     const google = window.google;
     const directionsService = new google.maps.DirectionsService();
     const start = new google.maps.LatLng(
