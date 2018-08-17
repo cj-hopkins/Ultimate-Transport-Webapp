@@ -53,27 +53,30 @@ def createCurrentTable():
         print(e)
 
 def populate5DayTable(FiveDayData):
-    engine = connectDB()
+  engine = connectDB()
 
-    for i in range(0,40,1):
-        iD = i
-        time = FiveDayData['list'][i]['dt_txt']
-        temperature = FiveDayData['list'][i]['main']['temp']
-        description = FiveDayData['list'][i]['weather'][0]['description']
-        icon = FiveDayData['list'][i]['weather'][0]['icon']
-        rain = FiveDayData['list'][i]['rain']
-        if not rain:
-            rain = {"3h":0}
-        #print("Rain is" + str(rain['3h']))
-        sqlpopulate = "REPLACE INTO rest_api_fivedayweather VALUES (" + str(iD) + ",'" + str(time) + "','"+ str(temperature) + "','" + str(description) +  "','" + str(icon) + "','" +  str(rain['3h']) + "');"
+  for i in range(len(FiveDayData['list'])):
+    iD = i
+    time = FiveDayData['list'][i]['dt_txt']
+    temperature = FiveDayData['list'][i]['main']['temp']
+    description = FiveDayData['list'][i]['weather'][0]['description']
+    icon = FiveDayData['list'][i]['weather'][0]['icon']
+    try:
+      rain = FiveDayData['list'][i]['rain']
+      if not rain:
+        rain = {"3h":0}
+    except:
+      rain = {"3h":0}
 
-        try:
-            engine.execute(sqlpopulate)
+    sqlpopulate = "REPLACE INTO rest_api_fivedayweather VALUES (" + str(iD) + ",'" + str(time) + "','"+ str(temperature) + "','" + str(description) + "','" + str(icon)+ "','" + str(rain['3h'])+ "');"
 
-        except Exception as e:
-            # if there is an error in carrying out the above, print the error
-            print("Error3:", type(e))
-            print(e)
+    try:
+        engine.execute(sqlpopulate)
+
+    except Exception as e:
+        # if there is an error in carrying out the above, print the error
+        print("Error3:", type(e))
+        print(e)
 
 def populateCurrentTable(CurrentData):
     engine = connectDB()
@@ -95,14 +98,18 @@ if __name__ == '__main__':
     
     engine = connectDB()
     starttime=time.time()        
+    count = 0
     
     while True: 
+        count += 1
        # create5DayTable()
        # createCurrentTable()
 
         CurrentData = getCurrentJsonData()
         FiveDayData = get5DayJsonData()
+        print(len(FiveDayData['list']))
         populateCurrentTable(CurrentData)
         populate5DayTable(FiveDayData)
 
+        print("sleeping now", count)
         time.sleep(3600.0 - ((time.time() - starttime) % 3600.0))

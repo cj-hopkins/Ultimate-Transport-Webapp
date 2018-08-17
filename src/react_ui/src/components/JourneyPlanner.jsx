@@ -120,8 +120,6 @@ class JourneyPlanner extends Component {
         coordinates.push(nextSegment[j])
       }
     }
-    // const parser = array => array.reduce((item, acc) => acc.push({lat: item.lat(), lng: item.lng()}), []);
-    // const coords = parser(data);
     this.props.getBusCoords(busPoints)
     this.props.getPolyCoordinates(coordinates)
     this.getMultiRoutePrediction(key)
@@ -141,14 +139,6 @@ class JourneyPlanner extends Component {
   }
 
   getMultiRoutePrediction = chosenRouteKey => {
-  //  let startStop = {
-  //         lat: route[i].transit.departure_stop.location.lat(),
-  //         lng: route[i].transit.departure_stop.location.lng()
-  //       }
-  //   let finishStop = {
-  //     lat: route[i].transit.arrival_stop.location.lat(),
-  //     lng: route[i].transit.arrival_stop.location.lng()
-  //   } 
     const endpoint = '/api/getMultiRoutePrediction' 
     const journeyObject = this.state.directionsObject.routes[chosenRouteKey].legs[0].steps
       .filter(item => item.travel_mode === 'TRANSIT')
@@ -203,12 +193,10 @@ class JourneyPlanner extends Component {
     var walkingTime = 0
     const numberPattern = /\d+/g;
     return (
-    
      <div>
      <Button data-tip='Select a route to take' style={{padding: '5px', margin: '5px', marginLeft:'5%'}}
          bsStyle="primary" onClick={() => this.selectRoute(index)}>{'Journey ' + (index+1)}</Button>
 <ReactTooltip />
-      {/* <Button onClick={this.setState({selectedRoute: index})}>route</Button> */}
       <Collapse style={{ border: '1px solid rgba(192,192,192, .5)', borderRadius: '5px', fontSize: '16px',
                     color: '#606060'}} isOpened={(this.state.selectedRoute === index) ? true : false} 
                     onClick={this.isOpened = !this.isOpened}>
@@ -257,12 +245,6 @@ class JourneyPlanner extends Component {
           getDestinationGeolocation={this.getDestinationGeolocation.bind(this)}
           currentPosition={this.props.currentPosition}
         />
-        {/* <button onClick={this.onClick.bind(this)}>TEST</button> */}
-        {/* <p>{this.parseJourney}</p> */}
-        {/* {this.state.possibleRoutes.map(route => {
-          <h1>route</h1>
-          {route}
-        })} */}
         <div style={{marginTop: '2em'}}> </div>
         {this.parseAllJournies(this.state.directionsObject, this.parseSingleJourney)}
         <div style={{marginTop: '2em'}}> </div>
