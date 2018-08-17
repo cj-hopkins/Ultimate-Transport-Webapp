@@ -13,10 +13,10 @@ class CustomNavbar extends Component {
         <NavItem eventKey={1} onSelect={this.props.swapUI} data-tip="Plan using locations"><ReactTooltip />
           By Address
         </NavItem>
-        <NavItem eventKey={2} onSelect={this.props.swapUI} data-tip='For each stop'><ReactTooltip />
+        <NavItem eventKey={2} onSelect={this.props.swapUI} >
           Timetables
         </NavItem>
-        <NavItem eventKey={3} onSelect={this.props.swapUI} data-tip='For each stop'><ReactTooltip />
+        <NavItem eventKey={3} onSelect={this.props.swapUI} >
           Real Time Info
         </NavItem>
         <NavDropdown eventKey={4} title="More" id="basic-nav-dropdown">
