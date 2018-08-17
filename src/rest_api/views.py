@@ -187,8 +187,22 @@ def makeModelPrediction(route, start, finish, direction, selectedTime, selectedD
     
     time_df = get_time_and_date_df(selectedTime,selectedDate, nn_model,stopDf)
     weather_df = create_weather_df(rain, temp, stopDf, nn_model)
+    print("------------------------------")
+    print("TEST")
+    print(weather_df.shape)
+    print(len(distances))
+    # for i in range(weather_df.shape[0] - len(distances)):
+    #     print(i)
+    # if len(distances) != weather_df.shape[0]:
+    #     distances.append([0 for i in range((weather_df.shape[0] - len(distances)) - 5)])
+    # print(len(distances))
     index_to_insert_distances = 1    #distances has to go in middle of weather 
     weather_df.insert(loc=index_to_insert_distances, column='distance', value=distances)
+    print('stop', stopDf.shape)
+    print('weather', weather_df.shape)
+    print(weather_df)
+    print('time', time_df.shape)
+    print(time_df)
     combined_df = pd.concat([weather_df, time_df,stopDf ], axis=1)
     # print ('combined df\n',comined_df )
     # print(comined_df.columns)

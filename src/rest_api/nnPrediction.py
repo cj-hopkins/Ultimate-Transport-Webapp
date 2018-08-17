@@ -71,6 +71,8 @@ class NNModel:
         print(df.head())
         errorCount = 0
         stopsColsList = [int(i) for i in stopsColsList]
+        count = 0
+        finalStops = []
 
         for i in range(len(self.stopsInJourney) - 1):
             item = self.stopsInJourney[i]
@@ -84,6 +86,8 @@ class NNModel:
             # print(type(startStopId), type(finishStopId))
             try:
                 startIndex = stopsColsList.index(int(startStopId))
+                currentStop = next((stop for (index, stop) in enumerate(self.stops) if stop["stop_id"] == startStopId), None)
+                finalStops.append(currentStop)
             except ValueError as e:
                 print(e)
                 errorCount += 1
@@ -97,6 +101,7 @@ class NNModel:
             # print(startIndex, finishIndex)
             # print(type(startIndex), type(finishIndex))
 
+            count += 1
             row = [0 for i in range(len(stopsColsList) * 2)]
             # row = [0 for i in range(len(stopsColsList) * 2)]
             row[startIndex] = 1
@@ -106,6 +111,17 @@ class NNModel:
             df.loc[i] = row
 
         print("ERRORS", errorCount)
+        self.stopsDf = df
+        self.numStops = count
+        print(count)
+        print(df.shape)
+        print("STOPS DATA")
+        print(df)
+        df = df.reset_index()
+        print(df)
+        # finalStops = sorted(finalStops, key = lambda x: x['sequence_number'])
+        self.finalStops = finalStops
+        print(finalStops)
         return df
 
     def createTimeDf(self, hour, day):
@@ -131,9 +147,9 @@ class NNModel:
         distances = []
         radius_earth = 6371
         print("stops length", len(self.stopsInJourney))
-        for i in range(len(self.stopsInJourney) - 1):
-            item = self.stopsInJourney[i]
-            nextItem = self.stopsInJourney[i + 1]
+        for i in range(len(self.finalStops) - 1):
+            item = self.finalStops[i]
+            nextItem = self.finalStops[i + 1]
             theta1 = np.deg2rad(float(item['stop_lon']))
             theta2 = np.deg2rad(float(nextItem['stop_lon']))
             phi1 = np.deg2rad(90 - float(item['stop_lat']))
@@ -145,6 +161,8 @@ class NNModel:
                 theta1 - theta2) + math.cos(phi1) * math.cos(phi2)) * radius_earth
             # print(distance)
             distances.append(distance)
+        print(distances)
+        distances.append(0)
         return distances
             
 
