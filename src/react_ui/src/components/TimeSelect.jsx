@@ -189,8 +189,6 @@ class NowButton extends Component {
     this.props.onSelectTime(diffInSeconds);
     this.props.onSelectDate(newTime);
     this.props.onResetNow();
-
-    //this.props.onResetTime(newTime, diffInSeconds);
   }
   render() {
     return (
@@ -199,7 +197,6 @@ class NowButton extends Component {
           className="float-right"
           value={this.state.plannedTime}
           style={{ fontSize: "14px", textAlign: "left" }}
-          /*    bsStyle="primary"  */
           onClick={this.handleClick.bind(this)}
           block
         >

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Select from "react-select";
-// TODO: refactor to use a single handleSelect, pass the select name (start or finish)
 
 class StopSelect extends Component {
   handleFinishSelect = finish => {
@@ -25,15 +24,9 @@ class StopSelect extends Component {
   };
 
   render() {
-    // TODO put this in componentWillReceiveProps
-    // Format stops for the select elements
-    // console.log(this.props.stops);
     let stopsAsOptions = [];
     
       this.props.stops.forEach(item =>
-        // TODO: find out why defining a const/let inside map doesn't work
-        // let itemContent = {value: item.stop_id, label: item.stop_id.toString().concat
-        // (" ", item.location_text, " ", item.address)};
         stopsAsOptions.push({
           value: item.stop_id,
           label: item.stop_id.toString()
@@ -53,16 +46,12 @@ class StopSelect extends Component {
           placeholder={"Start stop"}
         />
 
-        {/* <Button onClick={this.handleToggle}> Swap start/finish</Button> */}
-
         <div style={{ marginTop: "1em" }}> </div>
         <Select
           id="finishSelect"
           name="form-field-name"
           options={[...stopsAsOptions].reverse()}
           value={this.props.finishStop}
-          // onChange={this.handleChange}
-          // onChange={stop => this.setState({ selectedOptionFinish: stop.value })}
           onChange={this.handleFinishSelect}
           placeholder={"Finish stop"}
         />

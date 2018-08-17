@@ -3,7 +3,6 @@ import React from "react";
 import { PageHeader } from "react-bootstrap";
 import WeatherWidget from "./Weather";
 import { Media } from "react-bootstrap";
-// import dublin_bus_icon from "./dublin_bus_icon.png";
 import ReactTooltip from 'react-tooltip'
 
 {/* When page first loaded, this is the default view of the page of the route section */}
