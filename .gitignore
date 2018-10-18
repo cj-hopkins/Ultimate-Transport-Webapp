@@ -156,3 +156,5 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+.vscode/
+ut-workspace.code-workspace
